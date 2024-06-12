@@ -10,6 +10,7 @@
 
 # backend dependencies
 /zenCafeBackend/node_modules
+zenCafeBackend/index.ts
 
 # production
 /build
