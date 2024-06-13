@@ -3,6 +3,9 @@ const Product = require("../models/product.model.ts");
 const router = express.Router();
 const controller = require('../controllers/productController');
 
+// connect to sse
+router.get('/events', controller.sseTest);
+
 // create a product
 router.post('/', controller.createProduct);
 

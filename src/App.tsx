@@ -3,6 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+
+  const eventSource = new EventSource('http://localhost:3000/api/products/events/');
+
+  eventSource.onmessage = function (event) {
+    console.log('sse received');
+  };
+
+  eventSource.onerror = function (event) {
+    console.error('EventSource error:', event);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
