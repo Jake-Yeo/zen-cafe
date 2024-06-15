@@ -8,11 +8,11 @@ const messageSchema = new mongoose.Schema({
         default: uuidv4,
         unique: true, // Ensure uniqueness
     },
-    username: { // person who sent message
+    senderUsername: { // person who sent message
         type: String,
         required: [true, "Please provide a username"],
     },
-    uid: { // uid of person who sent message
+    senderUid: { // uid of person who sent message
         type: String,
         required: [true, "Please provide a uid"],
     },

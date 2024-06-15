@@ -14,14 +14,14 @@ module.exports = {
                 return res.status(400).json({ message: 'Either forgot chatroomName, creatorUsername, or creatorUid' });
             }
 
-            const newChatJson =
+            const newChatData =
             {
                 chatroomName: chatroomName,
                 creatorUsername: creatorUsername,
                 creatorUid: creatorUid,
             }
 
-            const chatroom = await Chatroom.create(newChatJson);
+            const chatroom = await Chatroom.create(newChatData);
             res.status(200).json(chatroom);
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -36,21 +36,21 @@ module.exports = {
     sendMessage: async (req, res) => {
         try {
 
-            const { chatroomUid, username, userUid, message } = req.body;
+            const { chatroom_id, senderUsername, senderUid, message } = req.body;
 
-            if (!chatroomUid || !username || !userUid || !message) {
-                return res.status(400).json({ message: 'Either forgot chatroomName, creatorUsername, or creatorUid' });
+            if (!chatroom_id || !senderUsername || !senderUid || !message) {
+                return res.status(400).json({ message: 'Either forgot chatroom_id, creatorUsername, message, or creatorUid' });
             }
 
             const messageData =
             {
-                username: username,
-                uid: userUid,
+                senderUsername: senderUsername,
+                senderUid: senderUid,
                 message: message
             }
 
             const chatroom = await Chatroom.findByIdAndUpdate(
-                chatroomUid,
+                chatroom_id,
                 { $push: { messages: messageData } }, // The MongoDB $push operator adds messageJson to the messages array.
                 { new: true, useFindAndModify: false } // These options ensure that the updated document is returned and avoid deprecated warnings for useFindAndModify.
             );
