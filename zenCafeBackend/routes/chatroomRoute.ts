@@ -3,7 +3,12 @@ const Chatroom = require("../models/chatroomModel.ts");
 const chatroomRouter = express.Router();
 const controller = require('../controllers/chatroomController.ts');
 
+// reminder that order of the routes matter!
+
 // create a chatroom
-chatroomRouter.post('/', controller.createChatroom);
+chatroomRouter.post('/createChatroom', controller.createChatroom);
+
+// send a message to a chatroom
+chatroomRouter.patch('/sendMessage', controller.sendMessage);
 
 export default chatroomRouter;

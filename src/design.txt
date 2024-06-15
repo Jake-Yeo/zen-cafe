@@ -1,0 +1,7 @@
+UUID will be provided and generated on frontend whenever user creates a chatroom, then frontend will save UUID to the list of chatrooms the User created (in user document) 
+
+// nvm
+
+we can do that in the api instead
+
+i think it will be better to do most of the work in the api (because its the backend...)

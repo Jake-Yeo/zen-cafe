@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
+const { v4: uuidv4 } = require('uuid');
 
 const messageSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        required: true, // we may want to add the uuid ourselves and then store the uuid later instead of having it generate automatically via the default option
+        default: uuidv4,
+        unique: true, // Ensure uniqueness
+    },
     username: { // person who sent message
         type: String,
         required: [true, "Please provide a username"],
