@@ -11,4 +11,6 @@ chatroomRouter.post('/createChatroom', controller.createChatroom);
 // send a message to a chatroom
 chatroomRouter.patch('/sendMessage', controller.sendMessage);
 
+chatroomRouter.get('/changeStream', controller.chatroomChangeStream);
+
 export default chatroomRouter;

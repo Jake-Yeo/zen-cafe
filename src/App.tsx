@@ -1,10 +1,11 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Button, Stack, TextField } from '@mui/material';
 
 function App() {
 
-  const eventSource = new EventSource('http://localhost:3000/api/products/events/');
+  const eventSource = new EventSource('http://localhost:3000/chatrooms/changeStream');
 
   eventSource.onmessage = function (event) {
     console.log('sse received');
@@ -15,22 +16,13 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Stack>
+      <TextField helperText={"above is ur chatroom name"}></TextField>
+      <TextField helperText={"above is ur message to say to chatroom"}></TextField>
+      <TextField helperText={"above is ur username to use"}></TextField>
+      <Button>Create Room</Button>
+      <Button>Send Message</Button>
+    </Stack>
   );
 }
 

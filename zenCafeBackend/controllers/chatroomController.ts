@@ -14,14 +14,14 @@ module.exports = {
                 return res.status(400).json({ message: 'Either forgot chatroomName, creatorUsername, or creatorUid' });
             }
 
-            const newChatData =
+            const newChatJson =
             {
                 chatroomName: chatroomName,
                 creatorUsername: creatorUsername,
                 creatorUid: creatorUid,
             }
 
-            const chatroom = await Chatroom.create(newChatData);
+            const chatroom = await Chatroom.create(newChatJson);
             res.status(200).json(chatroom);
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -60,5 +60,34 @@ module.exports = {
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
-    }
+    },
+
+    chatroomChangeStream: async (req, res) => {
+        try {
+            const pipeline = []; // Optionally define aggregation pipeline
+
+            const changeStream = Chatroom.watch(pipeline);
+
+            res.setHeader('Content-Type', 'text/event-stream');
+            res.setHeader('Cache-Control', 'no-cache');
+            res.setHeader('Connection', 'keep-alive');
+
+            changeStream.on('change', (change) => {
+                const eventData = JSON.stringify(change);
+
+                // Send event to client using SSE format
+                res.write(`data: testing\n\n`);
+            });
+
+            // Handle client disconnection
+            req.on('close', () => {
+                changeStream.close(); // Close change stream when client disconnects
+                res.end(); // End response stream
+            });
+
+        } catch (error) {
+            console.error('Error in chatroomChangeStream:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
 }

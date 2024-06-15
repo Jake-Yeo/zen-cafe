@@ -2,3 +2,4 @@ https://stackoverflow.com/questions/35758584/cannot-redeclare-block-scoped-varia
 
 
 npm i uuid
+npm install @mui/material @emotion/react @emotion/styled
