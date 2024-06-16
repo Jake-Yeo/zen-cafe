@@ -25,3 +25,4 @@ zenCafeBackend/index.ts
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+src/firebase/firebase.ts

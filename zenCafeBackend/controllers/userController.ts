@@ -25,5 +25,45 @@ module.exports = {
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
+    },
+
+    // requires: googleId
+    doesUserExist: async (req, res) => {
+        try {
+            const { google_id } = req.params;
+
+            if (!google_id) {
+                return res.status(400).json({ message: 'Please provide google_id (from google auth!)' });
+            }
+
+            const user = await User.findById(google_id);
+
+            if (!user) {
+                res.status(200).json({ doesUserExist: false });
+            } else {
+                res.status(200).json({ doesUserExist: true });
+            }
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
+    // requires: googleId
+    getUser: async (req, res) => {
+        try {
+            const { google_id } = req.params;
+
+            if (!google_id) {
+                return res.status(400).json({ message: 'Please provide google_id (from google auth!)' });
+            }
+
+            const user = await User.findById(google_id);
+
+            res.status(200).json(user);
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
 }

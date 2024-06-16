@@ -4,6 +4,8 @@ https://stackoverflow.com/questions/35758584/cannot-redeclare-block-scoped-varia
 For frontend:
 npm i uuid
 npm install @mui/material @emotion/react @emotion/styled
+npm install -g firebase-tools
+npm install firebase
 
 for backend:
 npm i uuid

@@ -2,7 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Button, Stack, TextField } from '@mui/material';
-import { sendMessage } from './functions/zenCafeApi';
+import { doesUserExist, sendMessage } from './functions/zenCafeApi';
+import { logout, signInWithGoogle } from './firebase/firebaseApi';
 const { v4: uuidv4 } = require('uuid');
 
 var username: string = '';
@@ -40,8 +41,10 @@ function App() {
           console.log(username);
         }}
       ></TextField>
-      <Button>Create Room</Button>
+      <Button onClick={signInWithGoogle}>Login</Button>
+      <Button onClick={logout}>Logout</Button>
       <Button onClick={onSendMessageClick}>Send Message</Button>
+      <Button onClick={async () => {console.log(await doesUserExist("fakegoogleid"))}}>test userExists</Button>
     </Stack>
   );
 }
