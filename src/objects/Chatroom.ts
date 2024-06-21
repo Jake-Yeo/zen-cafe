@@ -1,6 +1,5 @@
 import Message from "./Message";
 
-
 class Chatroom {
     private ownerUsername: string;
     private ownerUid: string;
@@ -34,3 +33,5 @@ class Chatroom {
         this.messages.push(message);
     }
 }
+
+export default Chatroom;

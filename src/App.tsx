@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Button, Stack, TextField } from '@mui/material';
-import { doesUserExist, sendMessage } from './functions/zenCafeApi';
-import { logout, signInWithGoogle } from './firebase/firebaseApi';
+import { Button, Stack, TextField, Typography } from '@mui/material';
+import { sendMessage } from './functions/zenCafeChatroomsApi';
+import FirebaseApi, { logout, signInWithGoogle } from './firebase/FirebaseApi';
+import { doesUserExist, getUser } from './functions/zenCafeUsersApi';
+import User from './objects/User';
+import TestComponent from './components/TestComponent';
 const { v4: uuidv4 } = require('uuid');
 
 var username: string = '';
 var chatroom_id: string = '';
 var message: string = '';
 var uid: string = uuidv4();
+
 
 function App() {
 
@@ -28,24 +32,28 @@ function App() {
   }
 
   return (
-    <Stack>
-      <TextField helperText={"above is ur chatroom _id to send to"}
-        onChange={(e) => { chatroom_id = e.target.value; }}
-      ></TextField>
-      <TextField helperText={"above is ur message to say to chatroom"}
-        onChange={(e) => { message = e.target.value; }}
-      ></TextField>
-      <TextField helperText={"above is ur username to use"}
-        onChange={(e) => {
-          username = e.target.value;
-          console.log(username);
-        }}
-      ></TextField>
-      <Button onClick={signInWithGoogle}>Login</Button>
-      <Button onClick={logout}>Logout</Button>
-      <Button onClick={onSendMessageClick}>Send Message</Button>
-      <Button onClick={async () => {console.log(await doesUserExist("fakegoogleid"))}}>test userExists</Button>
-    </Stack>
+    <FirebaseApi>
+      <Stack>
+        <TextField helperText={"above is ur chatroom _id to send to"}
+          onChange={(e) => { chatroom_id = e.target.value; }}
+        ></TextField>
+        <TextField helperText={"above is ur message to say to chatroom"}
+          onChange={(e) => { message = e.target.value; }}
+        ></TextField>
+        <TextField helperText={"above is ur username to use"}
+          onChange={(e) => {
+            username = e.target.value;
+            console.log(username);
+          }}
+        ></TextField>
+        <TestComponent></TestComponent>
+        <Button onClick={signInWithGoogle}>Login</Button>
+        <Button onClick={logout}>Logout</Button>
+        <Button onClick={onSendMessageClick}>Send Message</Button>
+        <Button onClick={async () => { console.log(await doesUserExist("fakegoogleid")) }}>test userExists</Button>
+        <Button onClick={async () => { console.log(await getUser("fakegoogleid")) }}>test getUser</Button>
+      </Stack>
+    </FirebaseApi>
   );
 }
 
