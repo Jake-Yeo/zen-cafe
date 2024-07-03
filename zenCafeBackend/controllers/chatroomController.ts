@@ -39,7 +39,7 @@ module.exports = {
             const { chatroom_id, senderUsername, senderUid, message } = req.body;
 
             if (!chatroom_id || !senderUsername || !senderUid || !message) {
-                return res.status(400).json({ message: 'Either forgot chatroom_id, creatorUsername, message, or creatorUid' });
+                return res.status(400).json({ message: 'Either forgot chatroom_id, senderUsername, message, or senderUid' });
             }
 
             const messageData =

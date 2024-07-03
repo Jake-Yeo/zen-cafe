@@ -76,7 +76,8 @@ const FirebaseApi = ({ children }: Props) => { // We will wrap all components in
                 console.log("logged in");
             } else {
                 // reset the local user object
-                console.log("not logged in");
+                console.log("not logged in/possible logged out");
+                setUser(null as unknown as User);
             }
         });
     }, [])
