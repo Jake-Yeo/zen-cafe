@@ -50,9 +50,8 @@ const FirebaseApi = ({ children }: Props) => { // We will wrap all components in
                         throw new Error("userFromDB must not be null");
                     }
 
-                    const { _id, legalName, username } = userFromDB;
 
-                    setUser(new User(_id, legalName, username));
+                    setUser(userFromDB);
 
                 } else {
                     // then add the user to the database
@@ -67,9 +66,7 @@ const FirebaseApi = ({ children }: Props) => { // We will wrap all components in
                         throw new Error("createdUserFromDB must not be null");
                     }
 
-                    const { _id, legalName, username } = createdUserFromDB;
-
-                    setUser(new User(_id, legalName, username));
+                    setUser(createdUserFromDB);
 
                 }
 

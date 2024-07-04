@@ -1,5 +1,14 @@
+import User from "../objects/User";
 
-export async function createUser(google_id: string, username: string, legalName: string): Promise<any | null> {
+function dataToUserObj(data: any): User {
+    const { _id, legalName, username } = data;
+
+    const userToReturn = new User(_id, legalName, username);
+
+    return userToReturn;
+}
+
+export async function createUser(google_id: string, username: string, legalName: string): Promise<User | null> {
     try {
         console.log(google_id);
         console.log(username);
@@ -17,16 +26,18 @@ export async function createUser(google_id: string, username: string, legalName:
         });
 
         if (!response.ok) {
-            console.error('Error:', 'Failed to fetch');
+            console.error('createUser Error:', 'Failed to fetch');
             return null;
         }
 
         const data = await response.json(); // data type any for json
 
-        return data;
+        const userToReturn = dataToUserObj(data);
+
+        return userToReturn;
 
     } catch (error) {
-        console.error('Error:', 'Failed to fetch');
+        console.error('createUser Error:', 'Failed to fetch');
         return null;
     }
 }
@@ -41,7 +52,7 @@ export async function doesUserExist(google_id: string): Promise<boolean | null> 
         });
 
         if (!response.ok) {
-            console.error('Error:', 'Failed to fetch');
+            console.error('doesUserExist Error:', 'Failed to fetch');
             return null;
         }
 
@@ -52,13 +63,13 @@ export async function doesUserExist(google_id: string): Promise<boolean | null> 
         return doesUserExist;
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('doesUserExist Error:', error);
         return null;
     }
 }
 
 // Expected: google_id user must already exist
-export async function getUser(google_id: string): Promise<any | null> {
+export async function getUser(google_id: string): Promise<User | null> {
     try {
         const response = await fetch(`http://localhost:3000/users/getUser/${google_id}`, {
             method: 'GET',
@@ -68,16 +79,18 @@ export async function getUser(google_id: string): Promise<any | null> {
         });
 
         if (!response.ok) {
-            console.error('Error:', 'Failed to fetch');
+            console.error('getUser Error:', 'Failed to fetch');
             return null;
         }
 
         const data = await response.json(); // data type any for json
 
-        return data;
+        const userToReturn = dataToUserObj(data);
+
+        return userToReturn;
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('getUser Error:', error);
         return null;
     }
 }
