@@ -10,6 +10,10 @@ chatroomRouter.post('/createChatroom', controller.createChatroom);
 // send a message to a chatroom
 chatroomRouter.patch('/sendMessage', controller.sendMessage);
 
+// Listen to the chatrooms
 chatroomRouter.get('/changeStream', controller.chatroomChangeStream);
+
+// Get a list of all the chatrooms
+chatroomRouter.get('/getChatrooms', controller.getChatrooms);
 
 export default chatroomRouter;

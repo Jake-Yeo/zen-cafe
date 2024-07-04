@@ -10,6 +10,7 @@ import TestComponent from './components/TestComponent';
 import TestPage from './pages/TestPage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginSignupPage from './pages/LoginSignupPage';
+import ChatroomsPage from './pages/ChatroomsPage';
 
 function App() {
   return (
@@ -18,7 +19,9 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route index element={<LoginSignupPage />} />
-            <Route path="/test" element={<TestPage />} />
+            <Route path="/loginSignupPage" element={<TestPage />} />
+            <Route path="/TestPage" element={<TestPage />} />
+            <Route path="/ChatroomsPage" element={<ChatroomsPage />} />
           </Routes>
         </BrowserRouter>
       </FirebaseApi>

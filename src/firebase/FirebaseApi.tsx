@@ -61,7 +61,7 @@ const FirebaseApi = ({ children }: Props) => { // We will wrap all components in
                         throw new Error("user.displayName must not be null");
                     }
 
-                    const createdUserFromDB = await createUser(user.uid, user.displayName, "Unknown");
+                    const createdUserFromDB = await createUser(user.uid, user.displayName, user.displayName); // username will be the same as their legal name for now
 
                     if (createdUserFromDB == null) {
                         throw new Error("createdUserFromDB must not be null");

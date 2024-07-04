@@ -62,6 +62,16 @@ module.exports = {
         }
     },
 
+    getChatrooms: async (req, res) => {
+        try {
+            const chatrooms = await Chatroom.find({}, {chatroomName: 1, creatorUsername: 1, creatorUid: 1});
+            res.status(200).json(chatrooms);
+        } catch (error) {
+            console.error('Failed to get chatrooms', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
     chatroomChangeStream: async (req, res) => {
         try {
             const pipeline = []; // Optionally define aggregation pipeline
