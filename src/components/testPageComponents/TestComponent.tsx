@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material"
-import { SingletonUserContext } from "../firebase/FirebaseApi"
+import { SingletonUserContext } from "../../firebase/FirebaseApi"
 import { useContext } from "react";
 
 

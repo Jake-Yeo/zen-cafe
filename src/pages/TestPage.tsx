@@ -1,6 +1,6 @@
 import { Button, Stack, TextField } from "@mui/material";
 import FirebaseApi, { logout, signInWithGoogle } from "../firebase/FirebaseApi";
-import TestComponent from "../components/TestComponent";
+import TestComponent from "../components/testPageComponents/TestComponent";
 import { doesUserExist, getUser } from "../functions/zenCafeUsersApi";
 import { sendMessage } from "../functions/zenCafeChatroomsApi";
 

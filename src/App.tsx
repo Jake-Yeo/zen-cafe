@@ -6,11 +6,12 @@ import { sendMessage } from './functions/zenCafeChatroomsApi';
 import FirebaseApi, { logout, signInWithGoogle } from './firebase/FirebaseApi';
 import { doesUserExist, getUser } from './functions/zenCafeUsersApi';
 import User from './objects/User';
-import TestComponent from './components/TestComponent';
+import TestComponent from './components/testPageComponents/TestComponent';
 import TestPage from './pages/TestPage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginSignupPage from './pages/LoginSignupPage';
 import ChatroomsPage from './pages/ChatroomsPage';
+import ChatroomPage from './pages/ChatroomPage';
 
 function App() {
   return (
@@ -19,9 +20,10 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route index element={<LoginSignupPage />} />
-            <Route path="/loginSignupPage" element={<TestPage />} />
+            <Route path="/loginSignupPage" element={<LoginSignupPage />} />
             <Route path="/TestPage" element={<TestPage />} />
             <Route path="/ChatroomsPage" element={<ChatroomsPage />} />
+            <Route path="/ChatroomPage/:chatroomId" element={<ChatroomPage />} />
           </Routes>
         </BrowserRouter>
       </FirebaseApi>
