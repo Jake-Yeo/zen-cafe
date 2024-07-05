@@ -1,16 +1,28 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Dialog, Slide, Stack, Typography } from "@mui/material";
 import { getChatrooms } from "../functions/zenCafeChatroomsApi"
 import { JsxElement } from "typescript";
 import { ReactElement, useEffect, useState } from "react";
 import Chatroom from "../objects/Chatroom";
 import ChatroomMetadata from "../objects/ChatroomMetadata";
 import { useNavigate } from "react-router-dom";
+import React from "react";
+import { TransitionProps } from "@mui/material/transitions";
 const { v4: uuidv4 } = require('uuid');
 
+const Transition = React.forwardRef(function Transition( // make sure this is not in the element itself or it will constantly be set again and again which ruins the sliding close animation!
+    props: TransitionProps & {
+        children: React.ReactElement;
+    },
+    ref: React.Ref<unknown>,
+) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const ChatroomsPage = () => {
 
     const navigate = useNavigate();
+
+    const [isDialogueOpen, setIsDialogueOpen] = useState(false);
 
     const [chatrooms, setChatrooms] = useState<ChatroomMetadata[]>([]);
 
@@ -44,7 +56,17 @@ const ChatroomsPage = () => {
     return (<>
         <Stack>
             {typographyArray}
-            <Button>Create Chatroom</Button>
+            <Button onClick={() => { setIsDialogueOpen(true) }}>Create Chatroom</Button>
+            <Dialog
+                fullScreen
+                open={isDialogueOpen}
+                TransitionComponent={Transition}
+                onClose={() => { setIsDialogueOpen(false) }}>
+                <Button onClick={(e) => {
+                    setIsDialogueOpen(false);
+                }}>Close</Button>
+
+            </Dialog>
         </Stack>
     </>)
 }
