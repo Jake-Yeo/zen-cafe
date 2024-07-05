@@ -1,12 +1,13 @@
-import { Button, Dialog, Slide, Stack, Typography } from "@mui/material";
-import { getChatrooms } from "../functions/zenCafeChatroomsApi"
+import { Button, Dialog, Slide, Stack, TextField, Typography } from "@mui/material";
+import { createChatroom, getChatrooms } from "../functions/zenCafeChatroomsApi"
 import { JsxElement } from "typescript";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useContext, useEffect, useState } from "react";
 import Chatroom from "../objects/Chatroom";
 import ChatroomMetadata from "../objects/ChatroomMetadata";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { TransitionProps } from "@mui/material/transitions";
+import { SingletonUserContext } from "../firebase/FirebaseApi";
 const { v4: uuidv4 } = require('uuid');
 
 const Transition = React.forwardRef(function Transition( // make sure this is not in the element itself or it will constantly be set again and again which ruins the sliding close animation!
@@ -22,9 +23,13 @@ const ChatroomsPage = () => {
 
     const navigate = useNavigate();
 
+    const singletonUserContext = useContext(SingletonUserContext);
+
     const [isDialogueOpen, setIsDialogueOpen] = useState(false);
 
     const [chatrooms, setChatrooms] = useState<ChatroomMetadata[]>([]);
+
+    var chatName = "";
 
     useEffect(() => {
         const setChatroomsFromDB = async () => {
@@ -65,7 +70,8 @@ const ChatroomsPage = () => {
                 <Button onClick={(e) => {
                     setIsDialogueOpen(false);
                 }}>Close</Button>
-
+                <TextField onChange={(e) => { chatName = e.target.value }} id="outlined-basic" label="Outlined" variant="outlined" />
+                <Button onClick={() => {createChatroom(chatName, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId())}}>Create Chatroom</Button>
             </Dialog>
         </Stack>
     </>)
