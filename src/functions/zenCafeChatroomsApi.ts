@@ -1,5 +1,6 @@
 import Chatroom from "../objects/Chatroom";
 import ChatroomMetadata from "../objects/ChatroomMetadata";
+import Message from "../objects/Message";
 
 function dataToChatroomMetadataObj(data: any): ChatroomMetadata {
     const { _id, chatroomName, creatorUsername, creatorUid } = data;
@@ -11,9 +12,30 @@ function dataToChatroomMetadataObj(data: any): ChatroomMetadata {
 
 
 function dataToChatroomObj(data: any): Chatroom {
+
+    function dataToMessageObj(data: any): Message {
+        const { _id, senderUsername, senderUid, message } = data;
+
+        const messageToReturn = new Message(message, senderUsername, senderUid, _id);
+
+        return messageToReturn;
+    }
+
+    function messagesJsonDataToMessagesArray(messagesJson: any): Message[] {
+        console.log(messagesJson);
+        const msgArrToReturn: Message[] = []
+
+        const dataArr = messagesJson as any[];
+
+        for (const data of dataArr) {
+            msgArrToReturn.push(dataToMessageObj(data));
+        }
+        return msgArrToReturn;
+    }
+
     const { _id, chatroomName, creatorUsername, creatorUid, messages } = data;
 
-    const newChatroomToReturn = new Chatroom(chatroomName, creatorUsername, creatorUid, _id, messages);
+    const newChatroomToReturn = new Chatroom(chatroomName, creatorUsername, creatorUid, messagesJsonDataToMessagesArray(messages), _id);
 
     return newChatroomToReturn;
 }

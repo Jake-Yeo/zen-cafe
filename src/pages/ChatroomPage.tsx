@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom";
 import Chatroom from "../objects/Chatroom";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { getChatroom } from "../functions/zenCafeChatroomsApi";
+import { Stack, Typography } from "@mui/material";
+const { v4: uuidv4 } = require('uuid');
 
 const ChatroomPage = () => {
 
@@ -30,8 +32,17 @@ const ChatroomPage = () => {
         fetchData();
     }, [])
 
+    const messages: ReactElement[] = [];
+
+    for (const message of chatroom.getMessages()) {
+        messages.push(<Typography key={uuidv4()}>{message.getMessage()}</Typography>);
+    }
+
     return (<>
-        {chatroom.getChatroomName()}
+        <Stack>
+            {chatroom.getChatroomName()}
+            {messages}
+        </Stack>
     </>)
 }
 

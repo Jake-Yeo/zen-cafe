@@ -7,7 +7,7 @@ class Chatroom {
     private chatroomName: string;
     private chatroomId: string;
 
-    constructor(chatroomName: string, creatorUsername: string, creatorUid: string, messages = [], chatroomId: string) {
+    constructor(chatroomName: string, creatorUsername: string, creatorUid: string, messages: Message[] = [], chatroomId: string) {
         this.chatroomName = chatroomName;
         this.creatorUsername = creatorUsername;
         this.creatorUid = creatorUid;
