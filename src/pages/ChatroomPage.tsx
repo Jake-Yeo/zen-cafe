@@ -16,7 +16,6 @@ const ChatroomPage = () => {
                 console.error('ChatroomPage Error:', 'Please provide a chatroomId url param');
                 return;
             }
-            console.assert(chatroomId, 'ChatroomPage Error:', 'Please provide a chatroomId url param');
 
             const chatroom = await getChatroom(chatroomId);
 
