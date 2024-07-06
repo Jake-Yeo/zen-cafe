@@ -16,4 +16,7 @@ chatroomRouter.get('/changeStream', controller.chatroomChangeStream);
 // Get a list of all the chatrooms
 chatroomRouter.get('/getChatrooms', controller.getChatrooms);
 
+// Get one chatroom via chatroom_id
+chatroomRouter.get('/getChatroom/:chatroom_id', controller.getChatroom);
+
 export default chatroomRouter;

@@ -1,11 +1,21 @@
+import Chatroom from "../objects/Chatroom";
 import ChatroomMetadata from "../objects/ChatroomMetadata";
 
 function dataToChatroomMetadataObj(data: any): ChatroomMetadata {
     const { _id, chatroomName, creatorUsername, creatorUid } = data;
 
-    const newChatroomMetadata = new ChatroomMetadata(chatroomName, creatorUsername, creatorUid, _id);
+    const chatroomMetadataToReturn = new ChatroomMetadata(chatroomName, creatorUsername, creatorUid, _id);
 
-    return newChatroomMetadata;
+    return chatroomMetadataToReturn;
+}
+
+
+function dataToChatroomObj(data: any): Chatroom {
+    const { _id, chatroomName, creatorUsername, creatorUid, messages } = data;
+
+    const newChatroomToReturn = new Chatroom(chatroomName, creatorUsername, creatorUid, _id, messages);
+
+    return newChatroomToReturn;
 }
 
 export function sendMessage(chatroom_id: string, senderUsername: string, senderUid: string, message: string): void { // remake this function
@@ -53,6 +63,32 @@ export async function createChatroom(chatroomName: string, creatorUsername: stri
 
     } catch (error) {
         console.error('getChatrooms Error:', 'Failed to fetch');
+        return null;
+    }
+}
+
+export async function getChatroom(chatroom_id: string): Promise<Chatroom | null> {
+    try {
+        const response = await fetch(`http://localhost:3000/chatrooms/getChatroom/${chatroom_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        if (!response.ok) {
+            console.error('getChatroom Error:', 'Failed to fetch');
+            return null;
+        }
+
+        const data = await response.json();
+
+        const newChatroom = dataToChatroomObj(data);
+
+        return newChatroom;
+
+    } catch (error) {
+        console.error('getChatroom Error:', 'Failed to fetch');
         return null;
     }
 }

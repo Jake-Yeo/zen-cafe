@@ -32,7 +32,7 @@ const ChatroomsPage = () => {
     var chatName = "";
 
     useEffect(() => {
-        const setChatroomsFromDB = async () => {
+        const fetchData = async () => {
             const chatrooms = await getChatrooms();
 
             if (!chatrooms) {
@@ -43,7 +43,7 @@ const ChatroomsPage = () => {
             setChatrooms(chatrooms);
         }
 
-        setChatroomsFromDB();
+        fetchData();
 
     }, []);
 

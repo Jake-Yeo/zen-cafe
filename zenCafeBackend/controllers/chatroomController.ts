@@ -64,10 +64,32 @@ module.exports = {
 
     getChatrooms: async (req, res) => {
         try {
-            const chatrooms = await Chatroom.find({}, {chatroomName: 1, creatorUsername: 1, creatorUid: 1});
+            const chatrooms = await Chatroom.find({}, { chatroomName: 1, creatorUsername: 1, creatorUid: 1 });
             res.status(200).json(chatrooms);
         } catch (error) {
             console.error('Failed to get chatrooms', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
+    getChatroom: async (req, res) => {
+        try {
+            const { chatroom_id } = req.params;
+
+            if (!chatroom_id) {
+                return res.status(400).json({ message: 'Please provide chatroom_id!' });
+            }
+
+            const chatroom = await Chatroom.findById(chatroom_id);
+
+            if (!chatroom) {
+                return res.status(400).json({ message: 'No chatroom exists with that id!' });
+            }
+
+            res.status(200).json(chatroom);
+
+        } catch (error) {
+            console.error('Failed to get chatroom', error);
             res.status(500).json({ message: 'Internal server error' });
         }
     },
