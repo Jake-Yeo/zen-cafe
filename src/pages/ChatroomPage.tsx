@@ -9,6 +9,13 @@ const ChatroomPage = () => {
 
     const { chatroomId } = useParams();
 
+    const eventSource = new EventSource(`http://localhost:3000/chatrooms/changeStream/${chatroomId}`);
+
+    eventSource.onmessage = function (event) {
+        console.log("event received");
+        console.log(event);
+      };
+
     const [chatroom, setChatroom] = useState(new Chatroom("", "", "", [], ""));
 
     useEffect(() => {

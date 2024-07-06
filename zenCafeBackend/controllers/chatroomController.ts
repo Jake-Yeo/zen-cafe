@@ -96,19 +96,37 @@ module.exports = {
 
     chatroomChangeStream: async (req, res) => {
         try {
-            const pipeline = []; // Optionally define aggregation pipeline
+            console.log("Someone connected");
+            const { chatroom_id } = req.params;
 
-            const changeStream = Chatroom.watch(pipeline);
+            const chatroomIdString = chatroom_id as string;
+
+            console.log(chatroomIdString);
+
+            const pipeline = [ // https://stackoverflow.com/questions/59449079/mongodb-changestream-pipeline-not-working
+                {
+                    "$match": {
+                        "fullDocument._id": chatroomIdString
+                    }
+                }]
+
+            const changeStream = Chatroom.watch(pipeline, { fullDocument: 'updateLookup' });
 
             res.setHeader('Content-Type', 'text/event-stream');
             res.setHeader('Cache-Control', 'no-cache');
             res.setHeader('Connection', 'keep-alive');
 
             changeStream.on('change', (change) => {
-                const eventData = JSON.stringify(change);
+                //  const eventData = JSON.stringify(change);
+                console.log("Something changed");
+                const updatedFields = change.updateDescription.updatedFields;
+                const updatedMessages = updatedFields.messages;
 
                 // Send event to client using SSE format
-                res.write(`data: testing\n\n`);
+                const eventData = JSON.stringify({ data: updatedMessages });
+
+                // Send event to client using SSE format
+                res.write(`data: ${eventData}\n\n`);
             });
 
             // Handle client disconnection

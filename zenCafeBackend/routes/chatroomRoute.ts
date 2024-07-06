@@ -11,7 +11,7 @@ chatroomRouter.post('/createChatroom', controller.createChatroom);
 chatroomRouter.patch('/sendMessage', controller.sendMessage);
 
 // Listen to the chatrooms
-chatroomRouter.get('/changeStream', controller.chatroomChangeStream);
+chatroomRouter.get('/changeStream/:chatroom_id', controller.chatroomChangeStream);
 
 // Get a list of all the chatrooms
 chatroomRouter.get('/getChatrooms', controller.getChatrooms);
