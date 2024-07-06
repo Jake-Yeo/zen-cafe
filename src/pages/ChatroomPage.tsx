@@ -3,6 +3,7 @@ import Chatroom from "../objects/Chatroom";
 import { ReactElement, useEffect, useState } from "react";
 import { getChatroom } from "../functions/zenCafeChatroomsApi";
 import { Stack, Typography } from "@mui/material";
+import Message from "../objects/Message";
 const { v4: uuidv4 } = require('uuid');
 
 const ChatroomPage = () => {
@@ -13,8 +14,21 @@ const ChatroomPage = () => {
 
     eventSource.onmessage = function (event) {
         console.log("event received");
-        console.log(event);
-      };
+        console.log(event.data);
+
+        const { newMessage } = JSON.parse(event.data)
+
+        console.log(JSON.parse(event.data));
+        console.log(newMessage);
+
+        const { senderUsername, senderUid, message, _id } = newMessage;
+
+        const newMessageObj = new Message(message, senderUsername, senderUid, _id);
+        console.log(newMessageObj);
+
+        chatroom.pushMessage(newMessageObj)
+        setChatroom(chatroom);
+    };
 
     const [chatroom, setChatroom] = useState(new Chatroom("", "", "", [], ""));
 
