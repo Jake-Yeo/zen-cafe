@@ -96,7 +96,6 @@ module.exports = {
 
     chatroomChangeStream: async (req, res) => {
         try {
-            console.log("Someone connected");
             const { chatroom_id } = req.params;
 
             const chatroomIdString = chatroom_id as string;
@@ -119,14 +118,16 @@ module.exports = {
             changeStream.on('change', (change) => {
                 //  const eventData = JSON.stringify(change);
                 console.log("Something changed");
-                const updatedFields = change.updateDescription.updatedFields;
-                const updatedMessages = updatedFields.messages;
+                const chatroomDocument = change.fullDocument;
+                const messages = chatroomDocument.messages;
+                const newMessage = messages[messages.length - 1];
+                console.log('New Message:', newMessage);
 
                 // Send event to client using SSE format
-                const eventData = JSON.stringify({ data: updatedMessages });
+                const eventData = JSON.stringify({ newMessage });
 
                 // Send event to client using SSE format
-                res.write(`data: ${eventData}\n\n`);
+                res.write(`data: ${eventData}\n\n`); // must say 'data' not something else or it will not work (has to be in format of sse)
             });
 
             // Handle client disconnection
