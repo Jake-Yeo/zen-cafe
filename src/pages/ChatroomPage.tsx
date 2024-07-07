@@ -15,25 +15,28 @@ const ChatroomPage = () => {
 
     const singletonUserContext = useContext(SingletonUserContext);
 
-    const eventSource = new EventSource(`http://localhost:3000/chatrooms/changeStream/${chatroomId}`);
+    // https://stackoverflow.com/questions/57982180/react-app-suddenly-stalling-in-dev-and-production always do the event source in the useEffect... or else there will be multiple open connections created which means you will not be able to send any requests (send messages) to the database!!!
+    useEffect(() => {
+        const eventSource = new EventSource(`http://localhost:3000/chatrooms/changeStream/${chatroomId}`);
 
-    eventSource.onmessage = function (event) {
-        console.log("event received");
-        console.log(event.data);
+        eventSource.onmessage = function (event) {
+            console.log("event received");
+            console.log(event.data);
 
-        const { newMessage } = JSON.parse(event.data)
+            const { newMessage } = JSON.parse(event.data)
 
-        console.log(JSON.parse(event.data));
-        console.log(newMessage);
+            console.log(JSON.parse(event.data));
+            console.log(newMessage);
 
-        const { senderUsername, senderUid, message, _id } = newMessage;
+            const { senderUsername, senderUid, message, _id } = newMessage;
 
-        const newMessageObj = new Message(message, senderUsername, senderUid, _id);
-        console.log(newMessageObj);
+            const newMessageObj = new Message(message, senderUsername, senderUid, _id);
+            console.log(newMessageObj);
 
-        chatroom.pushMessage(newMessageObj)
-        setChatroom(chatroom);
-    };
+            chatroom.pushMessage(newMessageObj)
+            setChatroom(chatroom);
+        };
+    }, [])
 
     const [chatroom, setChatroom] = useState(new Chatroom("", "", "", [], ""));
 
@@ -75,7 +78,7 @@ const ChatroomPage = () => {
             <Button onClick={() => {
                 console.log(messageToSend);
                 console.log(chatroomId);
-                sendMessage("2e6e0378-7b92-41e0-8e43-7501730f6fb3", singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId(), messageToSend)
+                sendMessage(chatroomId, "test1", "another test...", messageToSend)
             }}>Send Message</Button>
         </Stack>
     </>)

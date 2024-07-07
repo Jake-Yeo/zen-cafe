@@ -40,13 +40,16 @@ function dataToChatroomObj(data: any): Chatroom {
     return newChatroomToReturn;
 }
 
+// Make sure to look at the network debugging tool to see that requests are actually being send to ensure its not a backend or frontend problem...
+// Also for some reason edge is not letting me send my requests??? Maybe it might be because of the keep alive line? Idk...
+// https://stackoverflow.com/questions/25847083/chrome-just-doesnt-finish-loading-js-files
 export async function sendMessage(chatroom_id: string, senderUsername: string, senderUid: string, message: string): Promise<void> {
     try {
         console.log("before fetch");
-        const response = await fetch(`http://localhost:3000/chatrooms/sendMessage`, {
+        const response = await fetch("http://localhost:3000/chatrooms/sendMessage", {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 chatroom_id: chatroom_id,
@@ -56,7 +59,7 @@ export async function sendMessage(chatroom_id: string, senderUsername: string, s
             })
         });
         console.log("awefawefaw");
-        
+
         if (!response.ok) {
             console.error('createChatroom Error:', 'Failed to fetch');
         }

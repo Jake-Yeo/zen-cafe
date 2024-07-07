@@ -54,9 +54,8 @@ module.exports = {
                 { $push: { messages: messageData } }, // The MongoDB $push operator adds messageJson to the messages array.
                 { new: true, useFindAndModify: false } // These options ensure that the updated document is returned and avoid deprecated warnings for useFindAndModify.
             );
-
-            //res.status(200).json(chatroom);  // comment this out because too many messages to send back! Response never finishes! Tbh idk why getting things back from patch is so slow
-            res.status(200);
+            console.log("Chatroom found and updated with new message");
+            res.status(200).json(chatroom);  // comment this out because too many messages to send back! Response never finishes! Tbh idk why getting things back from patch is so slow
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -95,6 +94,7 @@ module.exports = {
     },
 
     chatroomChangeStream: async (req, res) => {
+        console.log("connection established");
         try {
             const { chatroom_id } = req.params;
 
