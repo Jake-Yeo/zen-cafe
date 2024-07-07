@@ -1,14 +1,19 @@
 import { useParams } from "react-router-dom";
 import Chatroom from "../objects/Chatroom";
-import { ReactElement, useEffect, useState } from "react";
-import { getChatroom } from "../functions/zenCafeChatroomsApi";
-import { Stack, Typography } from "@mui/material";
+import { ReactElement, useContext, useEffect, useState } from "react";
+import { getChatroom, sendMessage } from "../functions/zenCafeChatroomsApi";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import Message from "../objects/Message";
+import { SingletonUserContext } from "../firebase/FirebaseApi";
 const { v4: uuidv4 } = require('uuid');
+
+var messageToSend = "";
 
 const ChatroomPage = () => {
 
-    const { chatroomId } = useParams();
+    const { chatroomId = '' } = useParams();
+
+    const singletonUserContext = useContext(SingletonUserContext);
 
     const eventSource = new EventSource(`http://localhost:3000/chatrooms/changeStream/${chatroomId}`);
 
@@ -63,6 +68,15 @@ const ChatroomPage = () => {
         <Stack>
             {chatroom.getChatroomName()}
             {messages}
+            <TextField onChange={(e) => {
+                messageToSend = e.target.value;
+                console.log(messageToSend);
+            }}>Message to send</TextField>
+            <Button onClick={() => {
+                console.log(messageToSend);
+                console.log(chatroomId);
+                sendMessage("2e6e0378-7b92-41e0-8e43-7501730f6fb3", singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId(), messageToSend)
+            }}>Send Message</Button>
         </Stack>
     </>)
 }

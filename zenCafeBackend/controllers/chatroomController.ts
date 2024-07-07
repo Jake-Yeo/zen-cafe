@@ -35,7 +35,7 @@ module.exports = {
     // userUid: uid of the person sending the message
     sendMessage: async (req, res) => {
         try {
-
+            console.log("message received");
             const { chatroom_id, senderUsername, senderUid, message } = req.body;
 
             if (!chatroom_id || !senderUsername || !senderUid || !message) {
@@ -55,8 +55,8 @@ module.exports = {
                 { new: true, useFindAndModify: false } // These options ensure that the updated document is returned and avoid deprecated warnings for useFindAndModify.
             );
 
-            res.status(200).json(chatroom);
-
+            //res.status(200).json(chatroom);  // comment this out because too many messages to send back! Response never finishes! Tbh idk why getting things back from patch is so slow
+            res.status(200);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -100,8 +100,6 @@ module.exports = {
 
             const chatroomIdString = chatroom_id as string;
 
-            console.log(chatroomIdString);
-
             const pipeline = [ // https://stackoverflow.com/questions/59449079/mongodb-changestream-pipeline-not-working
                 {
                     "$match": {
@@ -117,11 +115,10 @@ module.exports = {
 
             changeStream.on('change', (change) => {
                 //  const eventData = JSON.stringify(change);
-                console.log("Something changed");
+                console.log("change detected");
                 const chatroomDocument = change.fullDocument;
                 const messages = chatroomDocument.messages;
                 const newMessage = messages[messages.length - 1];
-                console.log('New Message:', newMessage);
 
                 // Send event to client using SSE format
                 const eventData = JSON.stringify({ newMessage });

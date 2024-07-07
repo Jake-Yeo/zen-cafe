@@ -40,22 +40,30 @@ function dataToChatroomObj(data: any): Chatroom {
     return newChatroomToReturn;
 }
 
-export function sendMessage(chatroom_id: string, senderUsername: string, senderUid: string, message: string): void { // remake this function
-    fetch('http://localhost:3000/chatrooms/sendMessage', {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            chatroom_id: chatroom_id,
-            senderUsername: senderUsername,
-            senderUid: senderUid,
-            message: message,
-        })
-    })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error('Error:', error));
+export async function sendMessage(chatroom_id: string, senderUsername: string, senderUid: string, message: string): Promise<void> {
+    try {
+        console.log("before fetch");
+        const response = await fetch(`http://localhost:3000/chatrooms/sendMessage`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chatroom_id: chatroom_id,
+                senderUsername: senderUsername,
+                senderUid: senderUid,
+                message: message,
+            })
+        });
+        console.log("awefawefaw");
+        
+        if (!response.ok) {
+            console.error('createChatroom Error:', 'Failed to fetch');
+        }
+
+    } catch (error) {
+        console.error('sendMessage Error:', 'Failed to fetch');
+    }
 }
 
 export async function createChatroom(chatroomName: string, creatorUsername: string, creatorUid: string): Promise<ChatroomMetadata | null> {
