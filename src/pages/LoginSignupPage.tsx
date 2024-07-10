@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { logout, signInWithGoogle, SingletonUserContext } from "../firebase/FirebaseApi";
 import { useContext } from "react";
 import { getChatrooms } from "../functions/zenCafeChatroomsApi";
@@ -21,8 +21,18 @@ const LoginSignupPage = () => {
     console.log(getChatrooms());
 
     return (<>
-        <Background gifPath="/gif/cyberPunkCity.gif">
+        <Background useVignette={true} useBlur={true} gifPath="/gif/cyberPunkCity.gif">
             <Stack>
+            <Box
+            sx={{
+                backgroundImage: `url("/svg/ZenCafeVerticalLogo.svg")`, // Load background image
+                backgroundSize: 'contain', // Scale the background image to fit within the container while preserving its aspect ratio
+                backgroundRepeat: 'no-repeat',
+                width: '90vh', // Set the width of the container
+                height: '90vw', // Automatically adjust the height based on the aspect ratio
+                zIndex: 1
+            }}
+        />
                 <Typography>Login/Signup</Typography>
                 {buttonToShow}
             </Stack>
