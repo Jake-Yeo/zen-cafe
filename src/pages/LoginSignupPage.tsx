@@ -3,6 +3,7 @@ import { logout, signInWithGoogle, SingletonUserContext } from "../firebase/Fire
 import { useContext } from "react";
 import { getChatrooms } from "../functions/zenCafeChatroomsApi";
 import { useNavigate, useRoutes } from "react-router-dom";
+import Background from "../components/sharedComponents/Background";
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -20,10 +21,12 @@ const LoginSignupPage = () => {
     console.log(getChatrooms());
 
     return (<>
-        <Stack>
-            <Typography>Login/Signup</Typography>
-            {buttonToShow}
-        </Stack>
+        <Background gifPath="/gif/cyberPunkCity.gif">
+            <Stack>
+                <Typography>Login/Signup</Typography>
+                {buttonToShow}
+            </Stack>
+        </Background>
     </>);
 }
 

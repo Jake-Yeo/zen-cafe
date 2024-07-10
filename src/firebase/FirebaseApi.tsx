@@ -5,7 +5,7 @@ import User from "../objects/User";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface Props {
-    children?: ReactNode, // this allows us to pass in child elements
+    children: ReactNode, // this allows us to pass in child elements
 }
 
 const singletonUser = new User("", "", "");
