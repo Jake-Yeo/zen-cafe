@@ -24,7 +24,18 @@ const LoginSignupPage = () => {
                 backgroundColor: '#903487',
                 mixBlendMode: 'multiply',
                 backdropFilter: 'blur(10px)',
-                boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)"
+                boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)",
+                color: 'white',
+                '&:hover': {
+                    color: '#903487',
+                    backgroundColor: '#ffffff',
+                },
+                '&:hover .MuiTouchRipple-root': {
+                    color: 'Purple', // Change the ripple in color when clicked
+                  },
+                  '& .MuiTouchRipple-root': {
+                    color: 'Purple', // Change fade-out ripple color
+                  }
             }}
             onClick={logout}>Logout</Button>, <Button key={uuidv4()} onClick={() => { navigate("/ChatroomsPage") }}>Go to Chatroom List</Button>];   // else use this button
 
