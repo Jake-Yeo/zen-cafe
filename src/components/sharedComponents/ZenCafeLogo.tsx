@@ -17,7 +17,7 @@ const ZenCafeLogo = ({ horizontalLogo = false, vw, vh }: props) => {
     var zenCafeLogo = <></>;
 
     if (!horizontalLogo) {
-        const aspectRatio = 374 / 399;
+        const aspectRatio = 374 / 399; // height/width
 
         var localVh = 0;
         var localVw = 0;
@@ -25,24 +25,36 @@ const ZenCafeLogo = ({ horizontalLogo = false, vw, vh }: props) => {
         if (typeof vh === "undefined") {
             localVw = vw;
             localVh = vw * aspectRatio;
+
+            zenCafeLogo =
+                <Box
+                    sx={{
+                        backgroundImage: `url("/svg/ZenCafeVerticalLogo.svg")`, // Load background image
+                        backgroundSize: 'contain', // Scale the background image to fit within the container while preserving its aspect ratio
+                        backgroundRepeat: 'no-repeat',
+                        width: `${localVw}vw`, // Set the width of the container
+                        height: `${localVh}vw`, // Automatically adjust the height based on the aspect ratio
+                        zIndex: 1
+                    }}
+                />
         }
 
         if (typeof vw === "undefined") {
             localVh = vh;
-            localVw = vh * (1/aspectRatio);
-        }
+            localVw = vh * (1 / aspectRatio);
 
-        zenCafeLogo =
-            <Box
-                sx={{
-                    backgroundImage: `url("/svg/ZenCafeVerticalLogo.svg")`, // Load background image
-                    backgroundSize: 'contain', // Scale the background image to fit within the container while preserving its aspect ratio
-                    backgroundRepeat: 'no-repeat',
-                    width: `${localVw}vw`, // Set the width of the container
-                    height: `${localVh}vh`, // Automatically adjust the height based on the aspect ratio
-                    zIndex: 1
-                }}
-            />
+            zenCafeLogo =
+                <Box
+                    sx={{
+                        backgroundImage: `url("/svg/ZenCafeVerticalLogo.svg")`, // Load background image
+                        backgroundSize: 'contain', // Scale the background image to fit within the container while preserving its aspect ratio
+                        backgroundRepeat: 'no-repeat',
+                        width: `${localVw}vh`, // Set the width of the container
+                        height: `${localVh}vh`, // Automatically adjust the height based on the aspect ratio
+                        zIndex: 1
+                    }}
+                />
+        }
     } else {
         const aspectRatio = 254 / 645;
 
@@ -52,24 +64,36 @@ const ZenCafeLogo = ({ horizontalLogo = false, vw, vh }: props) => {
         if (typeof vh === "undefined") {
             localVw = vw;
             localVh = vw * aspectRatio;
+
+            zenCafeLogo =
+                <Box
+                    sx={{
+                        backgroundImage: `url("/svg/ZenCafeHorizontalLogo.svg")`, // Load background image
+                        backgroundSize: 'contain', // Scale the background image to fit within the container while preserving its aspect ratio
+                        backgroundRepeat: 'no-repeat',
+                        width: `${localVw}vw`, // Set the width of the container
+                        height: `${localVh}vw`, // Automatically adjust the height based on the aspect ratio
+                        zIndex: 1
+                    }}
+                />
         }
 
         if (typeof vw === "undefined") {
             localVh = vh;
-            localVw = vh * (1/aspectRatio);
-        }
+            localVw = vh * (1 / aspectRatio);
 
-        zenCafeLogo =
+            zenCafeLogo =
             <Box
                 sx={{
                     backgroundImage: `url("/svg/ZenCafeHorizontalLogo.svg")`, // Load background image
                     backgroundSize: 'contain', // Scale the background image to fit within the container while preserving its aspect ratio
                     backgroundRepeat: 'no-repeat',
-                    width: `${localVw}vw`, // Set the width of the container
+                    width: `${localVw}vh`, // Set the width of the container
                     height: `${localVh}vh`, // Automatically adjust the height based on the aspect ratio
                     zIndex: 1
                 }}
             />
+        }
     }
 
     return (<>

@@ -17,15 +17,13 @@ const LoginSignupPage = () => {
 
     // Here we will pick which button to show based on if user is logged in or not, if they are lagged out in show login button, else show logout button
     var buttonToShow = !singletonUserContext.user ? // basically if (singltonUserContext.user)
-        <Button //https://stackoverflow.com/questions/32805670/what-does-before-and-after-do-in-css very useful for me when I made this button
-            onClick={signInWithGoogle}>Login With Google</Button> : // use this button
-        [<GlassButton text={"logintest"} onClick={logout}/>, <Button key={uuidv4()} onClick={() => { navigate("/ChatroomsPage") }}>Go to Chatroom List</Button>];   // else use this button
-
+        <GlassButton text={"Login With Google"} onClick={signInWithGoogle} /> :
+        [<GlassButton text={"logout"} onClick={logout} marginBottom="20px"/>, <GlassButton text={"Go to Chatroom List"} onClick={() => { navigate("/ChatroomsPage") }} />];   // else use this button
     console.log(getChatrooms());
 
     return (<>
         <Background useVignette={true} useBlur={true} gifPath="/gif/cyberPunkCity.gif">
-            <Stack>
+            <Stack alignItems={"center"} justifyContent={"center"} height={"80%"}>
                 <ZenCafeLogo vh={35} />
                 <Typography>Login/Signup</Typography>
                 {buttonToShow}

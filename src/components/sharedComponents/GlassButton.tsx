@@ -4,10 +4,29 @@ const { v4: uuidv4 } = require('uuid');
 interface props {
     text: string,
     fontSize?: number,
-    onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined
+    onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined,
+    width?: string,
+    minWidth?: string,
+    margin?: string,
+    marginTop?: string,
+    marginBottom?: string,
+    marginLeft?: string,
+    marginRight?: string,
 }
 
-const GlassButton = ({ text, fontSize = 14, onClick = () => { } }: props) => {
+//https://stackoverflow.com/questions/32805670/what-does-before-and-after-do-in-css very useful for me when I made this button
+const GlassButton = ({
+    text,
+    fontSize = 14,
+    onClick = () => { },
+    width = '50vw',
+    minWidth = "100px",
+    margin = "0px",
+    marginTop = "0px",
+    marginBottom = "0px",
+    marginRight = "0px",
+    marginLeft = "0px",
+}: props) => {
 
     const textContent = `"${text}"`;
 
@@ -18,7 +37,15 @@ const GlassButton = ({ text, fontSize = 14, onClick = () => { } }: props) => {
                 backgroundColor: 'transparent',
                 boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)",
                 overflow: 'hidden',
+                height: `${fontSize + 20}px`,
+                width: width,
+                minWidth: minWidth,
                 padding: '20px',
+                margin: margin,
+                marginTop: marginTop,
+                marginBottom: marginBottom,
+                marginLeft: marginLeft,
+                marginRight: marginRight,
                 '&::after': {
                     content: textContent,
                     color: 'white',
