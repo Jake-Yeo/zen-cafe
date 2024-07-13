@@ -31,7 +31,7 @@ const GlassButton = ({
     const textContent = `"${text}"`;
 
     return (<>
-        <Button key={uuidv4()}
+        <Button
             sx={{
                 borderRadius: '5em',
                 backgroundColor: 'transparent',
