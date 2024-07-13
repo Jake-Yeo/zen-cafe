@@ -37,15 +37,18 @@ const GlassButton = ({
                 backgroundColor: 'transparent',
                 boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)",
                 overflow: 'hidden',
-                height: `${fontSize + 20}px`,
+                //  height: `${fontSize + 20}px`,
+                height: 'auto',
                 width: width,
                 minWidth: minWidth,
-                padding: '20px',
+                padding: '10px',
+                paddingLeft: '10px',
                 margin: margin,
                 marginTop: marginTop,
                 marginBottom: marginBottom,
                 marginLeft: marginLeft,
                 marginRight: marginRight,
+                color: 'transparent',
                 '&::after': {
                     content: textContent,
                     color: 'white',
@@ -86,6 +89,8 @@ const GlassButton = ({
 
             }}
             onClick={onClick}>
+            {text}
+            {/** Here we put invisible text identical to the text in content, this is because text here will actually resize the button when the words wrap around, whereas for the text in the ::after context, it will not tell the button to expand vertically to allocate space to show its content*/} 
         </Button>
     </>)
 }

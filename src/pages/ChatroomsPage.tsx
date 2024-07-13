@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { TransitionProps } from "@mui/material/transitions";
 import { SingletonUserContext } from "../firebase/FirebaseApi";
+import Background from "../components/sharedComponents/Background";
 const { v4: uuidv4 } = require('uuid');
 
 const Transition = React.forwardRef(function Transition( // make sure this is not in the element itself or it will constantly be set again and again which ruins the sliding close animation!
@@ -59,21 +60,23 @@ const ChatroomsPage = () => {
     }
 
     return (<>
-        <Stack>
-            {typographyArray}
-            <Button onClick={() => { setIsDialogueOpen(true) }}>Create Chatroom</Button>
-            <Dialog
-                fullScreen
-                open={isDialogueOpen}
-                TransitionComponent={Transition}
-                onClose={() => { setIsDialogueOpen(false) }}>
-                <Button onClick={(e) => {
-                    setIsDialogueOpen(false);
-                }}>Close</Button>
-                <TextField onChange={(e) => { chatName = e.target.value }} id="outlined-basic" label="Outlined" variant="outlined" />
-                <Button onClick={() => {createChatroom(chatName, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId())}}>Create Chatroom</Button>
-            </Dialog>
-        </Stack>
+        <Background useBlur={true} useVignette={true}>
+            <Stack>
+                {typographyArray}
+                <Button onClick={() => { setIsDialogueOpen(true) }}>Create Chatroom</Button>
+                <Dialog
+                    fullScreen
+                    open={isDialogueOpen}
+                    TransitionComponent={Transition}
+                    onClose={() => { setIsDialogueOpen(false) }}>
+                    <Button onClick={(e) => {
+                        setIsDialogueOpen(false);
+                    }}>Close</Button>
+                    <TextField onChange={(e) => { chatName = e.target.value }} id="outlined-basic" label="Outlined" variant="outlined" />
+                    <Button onClick={() => { createChatroom(chatName, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId()) }}>Create Chatroom</Button>
+                </Dialog>
+            </Stack>
+        </Background>
     </>)
 }
 
