@@ -9,6 +9,7 @@ import React from "react";
 import { TransitionProps } from "@mui/material/transitions";
 import { SingletonUserContext } from "../firebase/FirebaseApi";
 import Background from "../components/sharedComponents/Background";
+import ChatroomDetailCard from "../components/chatroomsPageComponents/ChatroomDetailCard";
 const { v4: uuidv4 } = require('uuid');
 
 const Transition = React.forwardRef(function Transition( // make sure this is not in the element itself or it will constantly be set again and again which ruins the sliding close animation!
@@ -48,21 +49,17 @@ const ChatroomsPage = () => {
 
     }, []);
 
-    const typographyArray: ReactElement[] = [];
+    const chatroomDetailCardArray: ReactElement[] = [];
 
     for (const chatroom of chatrooms) {
-        typographyArray.push(
-            <Button
-                key={uuidv4()}
-                onClick={() => { navigate("/ChatroomPage/" + chatroom.getChatroomId()) }}>
-                {"Name: " + chatroom.getChatroomName() + " Id: " + chatroom.getChatroomId()}
-            </Button>);
+        chatroomDetailCardArray.push(
+            <ChatroomDetailCard chatroomMetadata={chatroom}/>);
     }
 
     return (<>
         <Background useBlur={true} useVignette={true}>
             <Stack>
-                {typographyArray}
+                {chatroomDetailCardArray}
                 <Button onClick={() => { setIsDialogueOpen(true) }}>Create Chatroom</Button>
                 <Dialog
                     fullScreen

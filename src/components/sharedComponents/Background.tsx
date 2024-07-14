@@ -86,6 +86,7 @@ const Background = ({ children, gifPath, useBlur = false, useVignette = false}: 
 
     const background =
         <Box sx={{
+            minWidth: "100px",
             backgroundImage: `url(${gifPath})`,
             width: '100vw',
             height: '100vh',

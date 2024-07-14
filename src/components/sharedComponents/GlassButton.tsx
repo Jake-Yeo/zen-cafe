@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 
 interface props {
     text: string,
-    fontSize?: number,
+    fontSize?: string,
     onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined,
     width?: string,
     minWidth?: string,
@@ -12,12 +12,17 @@ interface props {
     marginBottom?: string,
     marginLeft?: string,
     marginRight?: string,
+    borderTopRightRadius?: string,
+    borderTopLeftRadius?: string,
+    borderBottomRightRadius?: string,
+    borderBottomLeftRadius?: string,
+    padding?: string,
 }
 
 //https://stackoverflow.com/questions/32805670/what-does-before-and-after-do-in-css very useful for me when I made this button
 const GlassButton = ({
     text,
-    fontSize = 14,
+    fontSize = "14px",
     onClick = () => { },
     width = '50vw',
     minWidth = "100px",
@@ -26,6 +31,11 @@ const GlassButton = ({
     marginBottom = "0px",
     marginRight = "0px",
     marginLeft = "0px",
+    borderTopRightRadius = "5em",
+    borderTopLeftRadius = "5em",
+    borderBottomRightRadius = "5em",
+    borderBottomLeftRadius = "5em",
+    padding = "10px"
 }: props) => {
 
     const textContent = `"${text}"`;
@@ -33,16 +43,17 @@ const GlassButton = ({
     return (<>
         <Button
             sx={{
-                borderRadius: '5em',
+                borderTopRightRadius: borderTopRightRadius,
+                borderTopLeftRadius: borderTopLeftRadius,
+                borderBottomRightRadius: borderBottomRightRadius,
+                borderBottomLeftRadius: borderBottomLeftRadius,
                 backgroundColor: 'transparent',
                 boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)",
                 overflow: 'hidden',
-                //  height: `${fontSize + 20}px`,
                 height: 'auto',
                 width: width,
                 minWidth: minWidth,
-                padding: '10px',
-                paddingLeft: '10px',
+                padding: padding,
                 margin: margin,
                 marginTop: marginTop,
                 marginBottom: marginBottom,
