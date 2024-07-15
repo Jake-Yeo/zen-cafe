@@ -20,7 +20,7 @@ interface props {
 }
 
 //https://stackoverflow.com/questions/32805670/what-does-before-and-after-do-in-css very useful for me when I made this button
-const GlassButton = ({
+const FrostedButton = ({
     text,
     fontSize = "14px",
     onClick = () => { },
@@ -38,8 +38,6 @@ const GlassButton = ({
     padding = "10px"
 }: props) => {
 
-    const textContent = `"${text}"`;
-
     return (<>
         <Button
             sx={{
@@ -47,11 +45,13 @@ const GlassButton = ({
                 borderTopLeftRadius: borderTopLeftRadius,
                 borderBottomRightRadius: borderBottomRightRadius,
                 borderBottomLeftRadius: borderBottomLeftRadius,
-                backgroundColor: 'transparent',
+                backdropFilter: 'blur(10px) saturate(100%)', // Apply the blur effect
+                transition: 'backdrop-filter 0.3s ease', // Transition for background color
+                backgroundColor: 'rgba(144, 52, 135, 0.001)', // Semi-transparent background color
                 boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)",
                 overflow: 'hidden',
                 height: 'auto',
-                color: 'transparent',
+                color: 'white',
                 width: width,
                 minWidth: minWidth,
                 padding: padding,
@@ -60,50 +60,23 @@ const GlassButton = ({
                 marginBottom: marginBottom,
                 marginLeft: marginLeft,
                 marginRight: marginRight,
-                '&::after': {
-                    content: textContent,
-                    color: 'white',
-                    height: '100%',
-                    width: '100%',
-                    position: 'absolute',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: fontSize
-                },
-                '&::before': {
-                    content: '""',
-                    height: '100%',
-                    width: '100%',
-                    position: 'absolute',
-                    mixBlendMode: 'multiply',
-                    backdropFilter: 'blur(10px)',
-                    backgroundColor: '#903487',
-                    transition: 'background-color 0.3s ease', // Transition for background color
-                },
-                '&:hover::before': {
-                    content: "''",
-                    height: '100%',
-                    width: '100%',
-                    position: 'absolute',
-                    mixBlendMode: 'multiply',
-                    backdropFilter: 'blur(10px)',
-                    backgroundColor: '#ffffff',
-                    transition: 'background-color 0.3s ease', // Transition for background color
+                '&:hover': {
+                  //  backgroundColor: 'rgba(144, 52, 135, 0.5)', // Semi-transparent background color
+                    backdropFilter: 'blur(0px) saturate(400%)', // Apply the blur effect
+                    transition: 'backdrop-filter 0.3s ease', // Transition for background color
                 },
                 '&:hover .MuiTouchRipple-root': {
-                    color: 'Purple', // Change the ripple in color when clicked
+                    color: 'White', // Change the ripple in color when clicked
                 },
                 '& .MuiTouchRipple-root': {
-                    color: 'Purple', // Change fade-out ripple color
+                    color: 'White', // Change fade-out ripple color
                 },
-
             }}
             onClick={onClick}>
             {text}
-            {/** Here we put invisible text identical to the text in content, this is because text here will actually resize the button when the words wrap around, whereas for the text in the ::after context, it will not tell the button to expand vertically to allocate space to show its content*/} 
+            {/** Here we put invisible text identical to the text in content, this is because text here will actually resize the button when the words wrap around, whereas for the text in the ::after context, it will not tell the button to expand vertically to allocate space to show its content*/}
         </Button>
     </>)
 }
 
-export default GlassButton
+export default FrostedButton

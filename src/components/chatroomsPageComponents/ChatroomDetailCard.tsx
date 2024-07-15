@@ -2,6 +2,7 @@ import { Box, Stack, Typography } from "@mui/material"
 import ChatroomMetadata from "../../objects/ChatroomMetadata"
 import GlassButton from "../sharedComponents/GlassButton"
 import { useNavigate } from "react-router-dom"
+import FrostedButton from "../sharedComponents/FrostedButton"
 
 interface props {
     chatroomMetadata: ChatroomMetadata
@@ -48,7 +49,7 @@ const ChatroomDetailCard = ({ chatroomMetadata }: props) => {
                         Created By: {chatroomMetadata.getCreatorUsername()}
                     </Typography>
                 </Stack>
-                <GlassButton
+                <FrostedButton
                     text={"Join"}
                     borderTopLeftRadius="0em"
                     borderTopRightRadius="0em"

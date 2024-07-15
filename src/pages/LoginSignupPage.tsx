@@ -6,6 +6,7 @@ import { useNavigate, useRoutes } from "react-router-dom";
 import Background from "../components/sharedComponents/Background";
 import ZenCafeLogo from "../components/sharedComponents/ZenCafeLogo";
 import GlassButton from "../components/sharedComponents/GlassButton";
+import FrostedButton from "../components/sharedComponents/FrostedButton";
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -17,8 +18,8 @@ const LoginSignupPage = () => {
 
     // Here we will pick which button to show based on if user is logged in or not, if they are lagged out in show login button, else show logout button
     var buttonToShow = !singletonUserContext.user ? // basically if (singltonUserContext.user)
-        <GlassButton text={"Login With Google"} onClick={signInWithGoogle} /> :
-        [<GlassButton key={uuidv4()} text={"logout"} onClick={logout} marginBottom="20px" marginTop="20px"/>, <GlassButton key={uuidv4()} text={"Go to Chatroom List"} onClick={() => { navigate("/ChatroomsPage") }} />];   // else use this button
+        <FrostedButton text={"Login With Google"} onClick={signInWithGoogle} /> :
+        [<FrostedButton key={uuidv4()} text={"logout"} onClick={logout} marginBottom="20px" marginTop="20px"/>, <FrostedButton key={uuidv4()} text={"Go to Chatroom List"} onClick={() => { navigate("/ChatroomsPage") }} />];   // else use this button
     console.log(getChatrooms());
 
     return (<>

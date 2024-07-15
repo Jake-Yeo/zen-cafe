@@ -10,6 +10,7 @@ import { TransitionProps } from "@mui/material/transitions";
 import { SingletonUserContext } from "../firebase/FirebaseApi";
 import Background from "../components/sharedComponents/Background";
 import ChatroomDetailCard from "../components/chatroomsPageComponents/ChatroomDetailCard";
+import ChatroomList from "../components/chatroomsPageComponents/ChatroomList";
 const { v4: uuidv4 } = require('uuid');
 
 const Transition = React.forwardRef(function Transition( // make sure this is not in the element itself or it will constantly be set again and again which ruins the sliding close animation!
@@ -22,8 +23,6 @@ const Transition = React.forwardRef(function Transition( // make sure this is no
 });
 
 const ChatroomsPage = () => {
-
-    const navigate = useNavigate();
 
     const singletonUserContext = useContext(SingletonUserContext);
 
@@ -59,7 +58,7 @@ const ChatroomsPage = () => {
     return (<>
         <Background useBlur={true} useVignette={true}>
             <Stack>
-                {chatroomDetailCardArray}
+                <ChatroomList elementArr={chatroomDetailCardArray}></ChatroomList>
                 <Button onClick={() => { setIsDialogueOpen(true) }}>Create Chatroom</Button>
                 <Dialog
                     fullScreen
