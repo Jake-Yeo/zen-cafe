@@ -7,7 +7,9 @@ import { ListItemText } from "@mui/material";
 import React from "react";
 
 interface props {
-    elementArr: ReactElement[]
+    elementArr: ReactElement[],
+    width?: string,
+    widthOfItems?: string,
 }
 
 var listItemComponentSize: number[] = [];
@@ -17,19 +19,26 @@ var listItemComponentRefs: React.RefObject<HTMLDivElement>[] = [];
 interface ListItemComponentPropsExtended extends ListChildComponentProps {
     addSize: (height: number, index: number) => void
     elementArr: ReactElement[],
+    widthOfListItems?: string,
 }
 
 
 
 // !!! When using React-Window components don't forget to pass in the props.style!! https://stackoverflow.com/questions/56737563/react-window-and-infinite-loader-scrolling-issue
-const ListItemComponent = ({ index, style, addSize, elementArr }: ListItemComponentPropsExtended) => { // So how this works I think is that the FixSizeList will pass props into this automatically. The props contains an index, we can use this index to get the right stat.
+const ListItemComponent = ({ index, style, addSize, elementArr, widthOfListItems = "100%" }: ListItemComponentPropsExtended) => { // So how this works I think is that the FixSizeList will pass props into this automatically. The props contains an index, we can use this index to get the right stat.
     const licRef = useRef<HTMLDivElement>(null);
 
     const listItem = (
         // So because the div takes on the style of the prop, we don't know what its height is styled to, so we useRef on the ListItem instead to get the height
-        <div style={style}>
-            <ListItem ref={licRef} onClick={(e) => (console.log(licRef.current?.clientHeight))} key={index} component="div" disablePadding>
-                <ListItemText primary={elementArr[index]}/>
+        <div style={{
+            ...style,
+            width: "100%",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        }}>
+            <ListItem sx={{ width: widthOfListItems }} ref={licRef} onClick={(e) => (console.log(licRef.current?.clientHeight))} key={index} component="div" disablePadding>
+                <ListItemText primary={elementArr[index]} />
             </ListItem>
         </div>)
 
@@ -45,7 +54,7 @@ const ListItemComponent = ({ index, style, addSize, elementArr }: ListItemCompon
     return (listItem);
 };
 
-const ChatroomList = ({ elementArr }: props) => {
+const ChatroomList = ({ elementArr, width = "100%", widthOfItems = "100%" }: props) => {
 
     const listRef = useRef<VariableSizeList>(null);
 
@@ -80,7 +89,7 @@ const ChatroomList = ({ elementArr }: props) => {
         <VariableSizeList
             ref={listRef}
             height={height}
-            width={`${50}vw`}
+            width={width}
             itemSize={(index: number) => getSize(index)}
             itemCount={elementArr.length}
             overscanCount={5}
@@ -93,7 +102,7 @@ const ChatroomList = ({ elementArr }: props) => {
             }}
         >
             {({ index, style }) => (
-                <ListItemComponent index={index} style={{
+                <ListItemComponent index={index} widthOfListItems={widthOfItems} style={{
                     ...style,
                 }} data={undefined} addSize={addSize} elementArr={elementArr}></ListItemComponent>
             )}

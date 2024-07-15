@@ -17,6 +17,7 @@ interface props {
     borderBottomRightRadius?: string,
     borderBottomLeftRadius?: string,
     padding?: string,
+    boxShadow?: string,
 }
 
 //https://stackoverflow.com/questions/32805670/what-does-before-and-after-do-in-css very useful for me when I made this button
@@ -35,7 +36,8 @@ const FrostedButton = ({
     borderTopLeftRadius = "5em",
     borderBottomRightRadius = "5em",
     borderBottomLeftRadius = "5em",
-    padding = "10px"
+    padding = "10px",
+    boxShadow = "0px 5px 10px rgba(0, 0, 0, 0.7)"
 }: props) => {
 
     return (<>
@@ -45,10 +47,10 @@ const FrostedButton = ({
                 borderTopLeftRadius: borderTopLeftRadius,
                 borderBottomRightRadius: borderBottomRightRadius,
                 borderBottomLeftRadius: borderBottomLeftRadius,
-                backdropFilter: 'blur(10px) saturate(100%)', // Apply the blur effect
+                backdropFilter: 'blur(10px) saturate(150%)', // Apply the blur effect
                 transition: 'backdrop-filter 0.3s ease', // Transition for background color
                 backgroundColor: 'rgba(144, 52, 135, 0.001)', // Semi-transparent background color
-                boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)",
+                boxShadow: boxShadow,
                 overflow: 'hidden',
                 height: 'auto',
                 color: 'white',
@@ -61,7 +63,7 @@ const FrostedButton = ({
                 marginLeft: marginLeft,
                 marginRight: marginRight,
                 '&:hover': {
-                  //  backgroundColor: 'rgba(144, 52, 135, 0.5)', // Semi-transparent background color
+                    //  backgroundColor: 'rgba(144, 52, 135, 0.5)', // Semi-transparent background color
                     backdropFilter: 'blur(0px) saturate(400%)', // Apply the blur effect
                     transition: 'backdrop-filter 0.3s ease', // Transition for background color
                 },

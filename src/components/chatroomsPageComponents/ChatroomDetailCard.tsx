@@ -5,29 +5,26 @@ import { useNavigate } from "react-router-dom"
 import FrostedButton from "../sharedComponents/FrostedButton"
 
 interface props {
-    chatroomMetadata: ChatroomMetadata
+    chatroomMetadata: ChatroomMetadata,
 }
 
-const ChatroomDetailCard = ({ chatroomMetadata }: props) => {
+const ChatroomDetailCard = ({ chatroomMetadata}: props) => {
 
     const navigate = useNavigate();
 
     return (
         <Box sx={{
-            width: "50vw",
+            width: "100%",
             minWidth: "100px",
             paddingTop: "10px",
             paddingBottom: "10px",
-            //  borderRadius: '5em',
-            // boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)",
-            // mixBlendMode: 'multiply',
-            // backdropFilter: 'blur(10px)',
-            // backgroundColor: '#903487',
         }}>
             <Stack sx={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                borderRadius: "20px",
+                boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)"
             }}>
                 <Stack sx={{
                     zIndex: 1,
@@ -35,8 +32,7 @@ const ChatroomDetailCard = ({ chatroomMetadata }: props) => {
                     overflow: 'hidden',
                     borderTopLeftRadius: "20px",
                     borderTopRightRadius: "20px",
-                    backgroundColor: 'rgba(0, 0, 0, 0)',
-                    backdropFilter: 'blur(20px)',
+                    backdropFilter: 'blur(10px) saturate(150%)', // Apply the blur effect
                     width: "100%",
                     display: 'flex',
                     alignItems: 'center',
@@ -55,6 +51,8 @@ const ChatroomDetailCard = ({ chatroomMetadata }: props) => {
                     borderTopRightRadius="0em"
                     borderBottomLeftRadius="20px"
                     borderBottomRightRadius="20px"
+                    boxShadow="none"
+                    width="100%"
                     fontSize="12px"
                     padding="6px"
                     onClick={() => { navigate("/ChatroomPage/" + chatroomMetadata.getChatroomId()) }} />
