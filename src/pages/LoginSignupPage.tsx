@@ -18,7 +18,7 @@ const LoginSignupPage = () => {
 
     // Here we will pick which button to show based on if user is logged in or not, if they are lagged out in show login button, else show logout button
     var buttonToShow = !singletonUserContext.user ? // basically if (singltonUserContext.user)
-        <FrostedButton text={"Login With Google"} onClick={signInWithGoogle} /> :
+        <FrostedButton text={"Login With Google"} onClick={signInWithGoogle} marginBottom="20px" marginTop="20px" /> :
         [<FrostedButton key={uuidv4()} text={"logout"} onClick={logout} marginBottom="20px" marginTop="20px"/>, <FrostedButton key={uuidv4()} text={"Go to Chatroom List"} onClick={() => { navigate("/ChatroomsPage") }} />];   // else use this button
     console.log(getChatrooms());
 

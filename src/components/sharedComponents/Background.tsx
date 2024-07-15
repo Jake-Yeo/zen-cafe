@@ -41,6 +41,8 @@ function getRandomGifPath(): string {
     return randomGifPath;
 }
 
+var classGifPath = getRandomGifPath();
+
 // if gifPath is not provided, then a random gif will be selected for the background
 const Background = ({ children, gifPath, useBlur = false, useVignette = false}: props) => {
 
@@ -81,7 +83,7 @@ const Background = ({ children, gifPath, useBlur = false, useVignette = false}: 
         </Box>
 
             if (typeof gifPath === "undefined") {
-                gifPath = getRandomGifPath();
+                gifPath = classGifPath;
             }
 
     const background =
