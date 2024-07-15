@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useRef, useState } from "react";
 import ChatroomMetadata from "../../objects/ChatroomMetadata"
-import ChatroomDetailCard from "./ChatroomDetailCard";
+import ChatroomDetailCard from "../chatroomsPageComponents/ChatroomDetailCard";
 import { ListChildComponentProps, VariableSizeList } from 'react-window';
 import ListItem from "@mui/material/ListItem";
 import { ListItemText } from "@mui/material";
