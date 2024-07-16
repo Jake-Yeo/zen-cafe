@@ -7,7 +7,6 @@ import Message from "../objects/Message";
 import { SingletonUserContext } from "../firebase/FirebaseApi";
 import Background from "../components/sharedComponents/Background";
 import MessageDetailCard from "../components/chatroomPageComponents/MessageDetailCard";
-import InfiniteElementList from "../components/sharedComponents/InfiniteElementList";
 import { VariableSizeList } from "react-window";
 import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementList";
@@ -18,8 +17,6 @@ var statelessChatroom = new Chatroom("", "", "", [], ""); // We have this becaus
 // That was not working because useState is asynchronous or something, so we couldn't use the previous version of the chatroom to update, so we use this instead.
 
 const ChatroomPage = () => {
-
- const virtuosoRef = useRef<VirtuosoHandle>(null); // we pass a reference down to the virtuoso list instead of making it in the infinite list because we need to controll the scrolling of the list
 
     const { chatroomId = '' } = useParams();
 
@@ -48,7 +45,7 @@ const ChatroomPage = () => {
     }, [])
 
     useEffect(() => {
-        console.log(statelessChatroom.getMessages());
+        //console.log(statelessChatroom.getMessages());
     }, [chatroom]);
 
     useEffect(() => {
@@ -78,15 +75,7 @@ const ChatroomPage = () => {
         messageDetailCardArr.push(<MessageDetailCard key={uuidv4()} message={message} />);
     }
 
-    const scrollToBottom = () => {
-        if (virtuosoRef.current) {
-            virtuosoRef.current.scrollToIndex(chatroom.getMessages().length);
-        }
-    };
-    useEffect(() => {
-        scrollToBottom(); // scroll to the bottom on every re render, because that means that someone send a message probably.
-    }, [chatroom])
-    //
+
     return (
         <Background useBlur={true} useVignette={true}>
             <Stack
@@ -97,7 +86,7 @@ const ChatroomPage = () => {
                 }}
             >
                 {chatroom.getChatroomName()}
-                <VirtuosoElementList listRef={virtuosoRef} elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" />
+                <VirtuosoElementList elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" scrollToBottomAtStart={true} />
                 <TextField onChange={(e) => {
                     messageToSend = e.target.value;
                     console.log(messageToSend);

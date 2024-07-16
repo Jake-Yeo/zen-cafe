@@ -10,7 +10,6 @@ import { TransitionProps } from "@mui/material/transitions";
 import { SingletonUserContext } from "../firebase/FirebaseApi";
 import Background from "../components/sharedComponents/Background";
 import ChatroomDetailCard from "../components/chatroomsPageComponents/ChatroomDetailCard";
-import InfiniteElementList from "../components/sharedComponents/InfiniteElementList";
 import FrostedButton from "../components/sharedComponents/FrostedButton";
 import { VariableSizeList } from "react-window";
 import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementList";
@@ -59,8 +58,6 @@ const ChatroomsPage = () => {
             <ChatroomDetailCard chatroomMetadata={chatroom} />);
     }
 
-    const infiniteElementListRef = useRef<VirtuosoHandle>(null); // we pass a reference down to the infinite list instead of making it in the infinite list because in another class we need to be able to scroll to the bottom of the list
-
     return (<>
         <Background useBlur={true} useVignette={true}>
             <Stack sx={{
@@ -69,7 +66,7 @@ const ChatroomsPage = () => {
                 justifyContent: 'center',
                 width: "100%"
             }}>
-                <VirtuosoElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%" listRef={infiniteElementListRef}/>
+                <VirtuosoElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%"/>
                 <FrostedButton onClick={() => { setIsDialogueOpen(true); }} text={"Create Chatroom"} marginTop="20px" />
                 <Dialog
                     sx={{

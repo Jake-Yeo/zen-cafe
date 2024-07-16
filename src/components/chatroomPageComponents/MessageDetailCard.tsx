@@ -12,8 +12,8 @@ const MessageDetailCard = ({ message }: props) => {
     const singletonUserContext = useContext(SingletonUserContext);
 
     const sentByUser = message.getSenderUid() === singletonUserContext.user.getGoogleId();
-    console.log(message.getSenderUid(), singletonUserContext.user.getGoogleId());
-    console.log(sentByUser);
+    //console.log(message.getSenderUid(), singletonUserContext.user.getGoogleId());
+    //console.log(sentByUser);
 
     var boxStyling: React.CSSProperties = {};
 
