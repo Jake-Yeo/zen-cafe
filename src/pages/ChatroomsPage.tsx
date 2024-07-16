@@ -65,9 +65,11 @@ const ChatroomsPage = () => {
                 width: "100%"
             }}>
                 <InfiniteElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%"></InfiniteElementList>
-                <FrostedButton onClick={() => { setIsDialogueOpen(true); } } text={"Create Chatroom"}/>
+                <FrostedButton onClick={() => { setIsDialogueOpen(true); }} text={"Create Chatroom"} marginTop="20px" />
                 <Dialog
-                    fullScreen
+                    sx={{
+                        backgroundColor: "transparent"
+                    }}
                     open={isDialogueOpen}
                     TransitionComponent={Transition}
                     onClose={() => { setIsDialogueOpen(false) }}>

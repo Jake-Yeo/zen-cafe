@@ -97,7 +97,7 @@ const ChatroomList = ({ elementArr, width = "100%", widthOfItems = "100%" }: pro
                 overflowY: 'scroll',
                 overflowX: 'hidden',
                 scrollbarWidth: 'initial', // For Firefox
-                scrollbarColor: '#B6AAD7 transparent', // For Firefox
+                scrollbarColor: 'rgba(255, 255, 255, 0.5) transparent', // For Firefox
                 msScrollbarArrowColor: "transparent",
             }}
         >

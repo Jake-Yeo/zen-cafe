@@ -5,6 +5,7 @@ import { getChatroom, sendMessage } from "../functions/zenCafeChatroomsApi";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import Message from "../objects/Message";
 import { SingletonUserContext } from "../firebase/FirebaseApi";
+import Background from "../components/sharedComponents/Background";
 const { v4: uuidv4 } = require('uuid');
 
 var messageToSend = "";
@@ -21,7 +22,7 @@ const ChatroomPage = () => {
 
     // https://stackoverflow.com/questions/57982180/react-app-suddenly-stalling-in-dev-and-production always do the event source in the useEffect... or else there will be multiple open connections created which means you will not be able to send any requests (send messages) to the database!!!
     useEffect(() => {
-        
+
         const eventSource = new EventSource(`http://localhost:3000/chatrooms/changeStream/${chatroomId}`);
 
         eventSource.onmessage = function (event) {
@@ -35,8 +36,8 @@ const ChatroomPage = () => {
 
             statelessChatroom.pushMessage(newMessageObj);
 
-            setChatroom(new Chatroom(statelessChatroom.getChatroomName(),statelessChatroom.getCreatorUsername(), statelessChatroom.getCreatorUid(), statelessChatroom.getMessages(), statelessChatroom.getChatroomId()));
-              
+            setChatroom(new Chatroom(statelessChatroom.getChatroomName(), statelessChatroom.getCreatorUsername(), statelessChatroom.getCreatorUid(), statelessChatroom.getMessages(), statelessChatroom.getChatroomId()));
+
         };
     }, [])
 
@@ -68,24 +69,25 @@ const ChatroomPage = () => {
     const messages: ReactElement[] = [];
 
     for (const message of chatroom.getMessages()) {
-        messages.push(<Typography key={uuidv4()}>{message.getMessage()}</Typography>);
+        messages.push(<Typography zIndex={1} key={uuidv4()}>{message.getMessage()}</Typography>);
     }
 
-    return (<>
-        <Stack>
-            {chatroom.getChatroomName()}
-            {messages}
-            <TextField onChange={(e) => {
-                messageToSend = e.target.value;
-                console.log(messageToSend);
-            }}>Message to send</TextField>
-            <Button onClick={() => {
-                console.log(messageToSend);
-                console.log(chatroomId);
-                sendMessage(chatroomId, "test1", "another test...", messageToSend)
-            }}>Send Message</Button>
-        </Stack>
-    </>)
+    return (
+        <Background useBlur={true} useVignette={true}>
+            <Stack>
+                {chatroom.getChatroomName()}
+                {messages}
+                <TextField onChange={(e) => {
+                    messageToSend = e.target.value;
+                    console.log(messageToSend);
+                }}>Message to send</TextField>
+                <Button onClick={() => {
+                    console.log(messageToSend);
+                    console.log(chatroomId);
+                    sendMessage(chatroomId, "test1", "another test...", messageToSend)
+                }}>Send Message</Button>
+            </Stack>
+        </Background>)
 }
 
 export default ChatroomPage

@@ -29,6 +29,14 @@ function getRandomGifPath(): string {
     listOfGifs.push(new GifMetaData("/gif/Window.gif", "https://www.deviantart.com/danc3r10/art/DAY-7-WINDOW-894205187", "danc3r10", "Window"));
     listOfGifs.push(new GifMetaData("/gif/Convergence.gif", "https://www.deviantart.com/danc3r10/art/Convergence-886894361", "danc3r10", "Convergence"));
     listOfGifs.push(new GifMetaData("/gif/ViewoverJapaneseValleyinAutumn.gif", "https://www.reddit.com/r/PixelArt/comments/fovvoo/view_over_japanese_valley_in_autumn_animated/", "LennSan", "View over Japanese Valley in Autumn"));
+    listOfGifs.push(new GifMetaData("/gif/NightSunWaterfall.gif", "https://www.deviantart.com/taziii/art/Night-Sun-Waterfall-801845704", "Taziii", "Night Sun - Waterfall"));
+    listOfGifs.push(new GifMetaData("/gif/CorruptedTerraformingModuleM.gif", "https://www.deviantart.com/ivanboyko/art/Corrupted-Terraforming-Module-M-869429050", "IvanBoyko", "Corrupted_Terraforming_Module (M)"));
+    listOfGifs.push(new GifMetaData("/gif/cloudyday29.gif", "https://www.pond5.com/stock-footage/item/74112-cloudy-day-29-hd", "alunablue", "Cloudy Day 29"));
+    listOfGifs.push(new GifMetaData("/gif/OstanovkaTrolleybusstop.gif", "https://www.artstation.com/artwork/zO2E9w", "Deep Pixel Melancholy", "Ostanovka ❘ Trolleybus stop"));
+    listOfGifs.push(new GifMetaData("/gif/sinkingInBed.gif", "https://www.reddit.com/r/blender/comments/hww6qp/i_made_a_grease_pencil_animation/", "md_aw", "Sinking in Bed"));
+    listOfGifs.push(new GifMetaData("/gif/balcony.gif", "https://www.instagram.com/p/Cf6aKi1JeHm/", "deeppixelmelancholy", "BALCONY | БАЛКОН"));
+    listOfGifs.push(new GifMetaData("/gif/oknoWindow.gif", "https://www.instagram.com/p/CVVmaCNvtO4/", "deeppixelmelancholy", "OKNO ❘ WINDOW"));
+    //CorruptedTerraformingModuleM
 
     const randomIndex = Math.floor(Math.random() * listOfGifs.length);
 
@@ -37,6 +45,8 @@ function getRandomGifPath(): string {
     if (!randomGifPath) {
         return "";
     }
+
+
     
     return randomGifPath;
 }
