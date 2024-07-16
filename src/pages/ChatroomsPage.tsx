@@ -1,7 +1,7 @@
 import { Button, Dialog, Slide, Stack, TextField, Typography } from "@mui/material";
 import { createChatroom, getChatrooms } from "../functions/zenCafeChatroomsApi"
 import { JsxElement } from "typescript";
-import { ReactElement, useContext, useEffect, useState } from "react";
+import { ReactElement, useContext, useEffect, useRef, useState } from "react";
 import Chatroom from "../objects/Chatroom";
 import ChatroomMetadata from "../objects/ChatroomMetadata";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ import Background from "../components/sharedComponents/Background";
 import ChatroomDetailCard from "../components/chatroomsPageComponents/ChatroomDetailCard";
 import InfiniteElementList from "../components/sharedComponents/InfiniteElementList";
 import FrostedButton from "../components/sharedComponents/FrostedButton";
+import { VariableSizeList } from "react-window";
 const { v4: uuidv4 } = require('uuid');
 
 const Transition = React.forwardRef(function Transition( // make sure this is not in the element itself or it will constantly be set again and again which ruins the sliding close animation!
@@ -56,6 +57,8 @@ const ChatroomsPage = () => {
             <ChatroomDetailCard chatroomMetadata={chatroom} />);
     }
 
+    const infiniteElementListRef = useRef<VariableSizeList>(null); // we pass a reference down to the infinite list instead of making it in the infinite list because in another class we need to be able to scroll to the bottom of the list
+
     return (<>
         <Background useBlur={true} useVignette={true}>
             <Stack sx={{
@@ -64,7 +67,7 @@ const ChatroomsPage = () => {
                 justifyContent: 'center',
                 width: "100%"
             }}>
-                <InfiniteElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%"></InfiniteElementList>
+                <InfiniteElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%" listRef={infiniteElementListRef}></InfiniteElementList>
                 <FrostedButton onClick={() => { setIsDialogueOpen(true); }} text={"Create Chatroom"} marginTop="20px" />
                 <Dialog
                     sx={{

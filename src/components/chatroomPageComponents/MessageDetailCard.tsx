@@ -43,9 +43,9 @@ const MessageDetailCard = ({ message }: props) => {
                 boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)",
                 overflow: 'hidden',
                 height: 'auto',
-                width: '80%',
+                width: '90%',
                 backdropFilter: 'blur(10px) saturate(300%)',
-                marginBottom: "20px"
+              //  marginBottom: "20px"
             }}>
                 <Typography sx={{
                     zIndex: 1,

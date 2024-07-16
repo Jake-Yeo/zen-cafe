@@ -10,6 +10,7 @@ interface props {
     elementArr: ReactElement[],
     width?: string,
     widthOfItems?: string,
+    listRef: React.RefObject<VariableSizeList<any>>; 
 }
 
 var listItemComponentSize: number[] = [];
@@ -54,9 +55,7 @@ const ListItemComponent = ({ index, style, addSize, elementArr, widthOfListItems
     return (listItem);
 };
 
-const ChatroomList = ({ elementArr, width = "100%", widthOfItems = "100%" }: props) => {
-
-    const listRef = useRef<VariableSizeList>(null);
+const ChatroomList = ({ elementArr, width = "100%", widthOfItems = "100%", listRef}: props) => {
 
     const getSize = (index: number) => {
         return listItemComponentSize.at(index) || 0; // This is the getSize function

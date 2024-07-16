@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import Chatroom from "../objects/Chatroom";
-import { ReactElement, useContext, useEffect, useState } from "react";
+import { ReactElement, useContext, useEffect, useRef, useState } from "react";
 import { getChatroom, sendMessage } from "../functions/zenCafeChatroomsApi";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import Message from "../objects/Message";
@@ -8,6 +8,7 @@ import { SingletonUserContext } from "../firebase/FirebaseApi";
 import Background from "../components/sharedComponents/Background";
 import MessageDetailCard from "../components/chatroomPageComponents/MessageDetailCard";
 import InfiniteElementList from "../components/sharedComponents/InfiniteElementList";
+import { VariableSizeList } from "react-window";
 const { v4: uuidv4 } = require('uuid');
 
 var messageToSend = "";
@@ -15,6 +16,8 @@ var statelessChatroom = new Chatroom("", "", "", [], ""); // We have this becaus
 // That was not working because useState is asynchronous or something, so we couldn't use the previous version of the chatroom to update, so we use this instead.
 
 const ChatroomPage = () => {
+
+    const infiniteElementListRef = useRef<VariableSizeList>(null); // we pass a reference down to the infinite list instead of making it in the infinite list because we need to controll the scrolling of the list
 
     const { chatroomId = '' } = useParams();
 
@@ -39,7 +42,6 @@ const ChatroomPage = () => {
             statelessChatroom.pushMessage(newMessageObj);
 
             setChatroom(new Chatroom(statelessChatroom.getChatroomName(), statelessChatroom.getCreatorUsername(), statelessChatroom.getCreatorUid(), statelessChatroom.getMessages(), statelessChatroom.getChatroomId()));
-
         };
     }, [])
 
@@ -71,20 +73,31 @@ const ChatroomPage = () => {
     const messageDetailCardArr: ReactElement[] = [];
 
     for (const message of chatroom.getMessages()) {
-        messageDetailCardArr.push(<MessageDetailCard key={uuidv4()} message={message}/>);
+        messageDetailCardArr.push(<MessageDetailCard key={uuidv4()} message={message} />);
     }
+
+    const scrollToBottom = () => {
+        if (infiniteElementListRef.current) {
+            infiniteElementListRef.current.scrollToItem(messageDetailCardArr.length - 1, 'end');
+            infiniteElementListRef.current.resetAfterIndex(messageDetailCardArr.length - 1, true);
+        }
+    };
+
+    useEffect(() => {
+        scrollToBottom(); // scroll to the bottom on every re render, because that means that someone send a message probably.
+    }, [chatroom])
 
     return (
         <Background useBlur={true} useVignette={true}>
             <Stack
-            sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
             >
                 {chatroom.getChatroomName()}
-                <InfiniteElementList elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%"/>
+                <InfiniteElementList listRef={infiniteElementListRef} elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" />
                 <TextField onChange={(e) => {
                     messageToSend = e.target.value;
                     console.log(messageToSend);
