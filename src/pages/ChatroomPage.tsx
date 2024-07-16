@@ -9,6 +9,7 @@ import Background from "../components/sharedComponents/Background";
 import MessageDetailCard from "../components/chatroomPageComponents/MessageDetailCard";
 import InfiniteElementList from "../components/sharedComponents/InfiniteElementList";
 import { VariableSizeList } from "react-window";
+import { Virtuoso } from "react-virtuoso";
 const { v4: uuidv4 } = require('uuid');
 
 var messageToSend = "";
@@ -86,7 +87,7 @@ const ChatroomPage = () => {
     useEffect(() => {
         scrollToBottom(); // scroll to the bottom on every re render, because that means that someone send a message probably.
     }, [chatroom])
-
+    //
     return (
         <Background useBlur={true} useVignette={true}>
             <Stack
@@ -97,7 +98,14 @@ const ChatroomPage = () => {
                 }}
             >
                 {chatroom.getChatroomName()}
-                <InfiniteElementList listRef={infiniteElementListRef} elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" />
+                {/*}<InfiniteElementList listRef={infiniteElementListRef} elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" />*/}
+                <Virtuoso style={{ height: 400, width: "50vw" }} totalCount={messageDetailCardArr.length} itemContent={(index) => {
+                    return (
+                        <div style={{zIndex: 10}}>
+                            {messageDetailCardArr[index]}
+                        </div>
+                    );
+                }} />
                 <TextField onChange={(e) => {
                     messageToSend = e.target.value;
                     console.log(messageToSend);

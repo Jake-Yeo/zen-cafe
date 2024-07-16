@@ -7,8 +7,9 @@ npm install @mui/material @emotion/react @emotion/styled
 npm install -g firebase-tools
 npm install firebase
 npm install react-router-dom
-npm i react-window // its the infinite scrolling list, variable-list or smthn
-npm i --save-dev @types/react-window
+npm i react-window // its the infinite scrolling list, variable-list or smthn // might delete later
+npm i --save-dev @types/react-window // might delete later
+npm install react-virtuoso
 
 for backend:
 npm i uuid
