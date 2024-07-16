@@ -6,6 +6,8 @@ import { Button, Stack, TextField, Typography } from "@mui/material";
 import Message from "../objects/Message";
 import { SingletonUserContext } from "../firebase/FirebaseApi";
 import Background from "../components/sharedComponents/Background";
+import MessageDetailCard from "../components/chatroomPageComponents/MessageDetailCard";
+import InfiniteElementList from "../components/sharedComponents/InfiniteElementList";
 const { v4: uuidv4 } = require('uuid');
 
 var messageToSend = "";
@@ -66,17 +68,23 @@ const ChatroomPage = () => {
         fetchData();
     }, [])
 
-    const messages: ReactElement[] = [];
+    const messageDetailCardArr: ReactElement[] = [];
 
     for (const message of chatroom.getMessages()) {
-        messages.push(<Typography zIndex={1} key={uuidv4()}>{message.getMessage()}</Typography>);
+        messageDetailCardArr.push(<MessageDetailCard key={uuidv4()} message={message}/>);
     }
 
     return (
         <Background useBlur={true} useVignette={true}>
-            <Stack>
+            <Stack
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+            >
                 {chatroom.getChatroomName()}
-                {messages}
+                <InfiniteElementList elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%"/>
                 <TextField onChange={(e) => {
                     messageToSend = e.target.value;
                     console.log(messageToSend);
@@ -84,7 +92,7 @@ const ChatroomPage = () => {
                 <Button onClick={() => {
                     console.log(messageToSend);
                     console.log(chatroomId);
-                    sendMessage(chatroomId, "test1", "another test...", messageToSend)
+                    sendMessage(chatroomId, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId(), messageToSend)
                 }}>Send Message</Button>
             </Stack>
         </Background>)

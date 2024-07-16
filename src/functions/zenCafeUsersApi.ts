@@ -3,7 +3,7 @@ import User from "../objects/User";
 function dataToUserObj(data: any): User {
     const { _id, legalName, username } = data;
 
-    const userToReturn = new User(_id, legalName, username);
+    const userToReturn = new User(legalName, _id, username);
 
     return userToReturn;
 }

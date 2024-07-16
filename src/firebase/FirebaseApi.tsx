@@ -67,7 +67,6 @@ const FirebaseApi = ({ children }: Props) => { // We will wrap all components in
                     }
 
                     setUser(createdUserFromDB);
-
                 }
 
                 console.log("logged in");
