@@ -13,6 +13,8 @@ import ChatroomDetailCard from "../components/chatroomsPageComponents/ChatroomDe
 import InfiniteElementList from "../components/sharedComponents/InfiniteElementList";
 import FrostedButton from "../components/sharedComponents/FrostedButton";
 import { VariableSizeList } from "react-window";
+import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementList";
+import { VirtuosoHandle } from "react-virtuoso";
 const { v4: uuidv4 } = require('uuid');
 
 const Transition = React.forwardRef(function Transition( // make sure this is not in the element itself or it will constantly be set again and again which ruins the sliding close animation!
@@ -57,7 +59,7 @@ const ChatroomsPage = () => {
             <ChatroomDetailCard chatroomMetadata={chatroom} />);
     }
 
-    const infiniteElementListRef = useRef<VariableSizeList>(null); // we pass a reference down to the infinite list instead of making it in the infinite list because in another class we need to be able to scroll to the bottom of the list
+    const infiniteElementListRef = useRef<VirtuosoHandle>(null); // we pass a reference down to the infinite list instead of making it in the infinite list because in another class we need to be able to scroll to the bottom of the list
 
     return (<>
         <Background useBlur={true} useVignette={true}>
@@ -67,7 +69,7 @@ const ChatroomsPage = () => {
                 justifyContent: 'center',
                 width: "100%"
             }}>
-                <InfiniteElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%" listRef={infiniteElementListRef}></InfiniteElementList>
+                <VirtuosoElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%" listRef={infiniteElementListRef}/>
                 <FrostedButton onClick={() => { setIsDialogueOpen(true); }} text={"Create Chatroom"} marginTop="20px" />
                 <Dialog
                     sx={{

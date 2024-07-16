@@ -35,7 +35,10 @@ const MessageDetailCard = ({ message }: props) => {
 
     return (
         <Box
-            sx={boxStyling}
+            sx={{
+                ...boxStyling,
+                paddingBottom: "20px"
+            }}
         >
             <Stack sx={{
                 borderRadius: "20px",
@@ -45,7 +48,7 @@ const MessageDetailCard = ({ message }: props) => {
                 height: 'auto',
                 width: '90%',
                 backdropFilter: 'blur(10px) saturate(300%)',
-              //  marginBottom: "20px"
+                //  marginBottom: "20px"
             }}>
                 <Typography sx={{
                     zIndex: 1,

@@ -9,7 +9,8 @@ import Background from "../components/sharedComponents/Background";
 import MessageDetailCard from "../components/chatroomPageComponents/MessageDetailCard";
 import InfiniteElementList from "../components/sharedComponents/InfiniteElementList";
 import { VariableSizeList } from "react-window";
-import { Virtuoso } from "react-virtuoso";
+import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
+import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementList";
 const { v4: uuidv4 } = require('uuid');
 
 var messageToSend = "";
@@ -18,7 +19,7 @@ var statelessChatroom = new Chatroom("", "", "", [], ""); // We have this becaus
 
 const ChatroomPage = () => {
 
-    const infiniteElementListRef = useRef<VariableSizeList>(null); // we pass a reference down to the infinite list instead of making it in the infinite list because we need to controll the scrolling of the list
+ const virtuosoRef = useRef<VirtuosoHandle>(null); // we pass a reference down to the virtuoso list instead of making it in the infinite list because we need to controll the scrolling of the list
 
     const { chatroomId = '' } = useParams();
 
@@ -78,12 +79,10 @@ const ChatroomPage = () => {
     }
 
     const scrollToBottom = () => {
-        if (infiniteElementListRef.current) {
-            infiniteElementListRef.current.scrollToItem(messageDetailCardArr.length - 1, 'end');
-            infiniteElementListRef.current.resetAfterIndex(messageDetailCardArr.length - 1, true);
+        if (virtuosoRef.current) {
+            virtuosoRef.current.scrollToIndex(chatroom.getMessages().length);
         }
     };
-
     useEffect(() => {
         scrollToBottom(); // scroll to the bottom on every re render, because that means that someone send a message probably.
     }, [chatroom])
@@ -98,14 +97,7 @@ const ChatroomPage = () => {
                 }}
             >
                 {chatroom.getChatroomName()}
-                {/*}<InfiniteElementList listRef={infiniteElementListRef} elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" />*/}
-                <Virtuoso style={{ height: 400, width: "50vw" }} totalCount={messageDetailCardArr.length} itemContent={(index) => {
-                    return (
-                        <div style={{zIndex: 10}}>
-                            {messageDetailCardArr[index]}
-                        </div>
-                    );
-                }} />
+                <VirtuosoElementList listRef={virtuosoRef} elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" />
                 <TextField onChange={(e) => {
                     messageToSend = e.target.value;
                     console.log(messageToSend);
