@@ -22,7 +22,7 @@ const VirtuosoElementList = ({ elementArr, width = "100%", widthOfItems = "100%"
     return (
         <Virtuoso ref={virtuosoRef}
             followOutput="smooth" //https://github.com/petyosi/react-virtuoso/issues/199
-            initialTopMostItemIndex={indexToStartFrom}
+            initialTopMostItemIndex={indexToStartFrom} // https://virtuoso.dev/initial-index/
             style={{
                 height: 400,
                 width: width,
