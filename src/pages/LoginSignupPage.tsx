@@ -8,7 +8,8 @@ import ZenCafeLogo from "../components/sharedComponents/ZenCafeLogo";
 import GlassButton from "../components/sharedComponents/GlassButton";
 import FrostedButton from "../components/sharedComponents/FrostedButton";
 import Playlist from "../objects/Playlist";
-import { getPlaylists } from "../functions/ZCByteVaultApi";
+import { getRadio } from "../functions/ZCByteVaultApi";
+import Radio from "../objects/Radio";
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -18,14 +19,14 @@ const LoginSignupPage = () => {
     useEffect(() => {
         const playAudio = async () => {
 
-            const playlists: Playlist[] | null = await getPlaylists();
+            const radio: Radio | null = await getRadio();
 
-            if (!playlists) {
+            if (!radio) {
                 console.log("playlist is null");
                 return;
             }
 
-            const randomPlaylist = playlists[Math.floor(playlists.length * Math.random())];
+            const randomPlaylist = radio.getPlaylists()[Math.floor(radio.getPlaylists().length * Math.random())];
 
             const randomSong = randomPlaylist.getSongs()[Math.floor(randomPlaylist.getSongs().length * Math.random())];
 

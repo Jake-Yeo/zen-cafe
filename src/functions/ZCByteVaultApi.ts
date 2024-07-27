@@ -1,17 +1,18 @@
 import Playlist from "../objects/Playlist";
+import Radio from "../objects/Radio";
 import Song from "../objects/Song";
 
-async function getPlaylistJsonArr(): Promise<any[] | null> {
+async function getRadioJson(): Promise<any[] | null> {
   try {
 
     const options = { method: 'GET', headers: { 'User-Agent': 'ZCApi' } };
-    const response = await fetch('https://raw.githubusercontent.com/TheByteVault/ZCByteVault/main/Music/playlists/playlists_data.json', options);
+    const response = await fetch('https://raw.githubusercontent.com/TheByteVault/ZCByteVault/main/Music/playlists/radio.json', options);
     if (!response.ok) {
       throw new Error(`getPlaylistsJson Error: ${response.status}`);
     }
     const data = await response.json();
-    const playlistJsonArr = data;
-    return playlistJsonArr;
+    const radioJson = data;
+    return radioJson;
   } catch (error) {
     console.error('Error fetching JSON:', error);
     return null;
@@ -19,15 +20,15 @@ async function getPlaylistJsonArr(): Promise<any[] | null> {
 }
 
 function parsePlaylistJson(playlistJson: any): Playlist {
-  const { name, songs } = playlistJson; // songs is an array of songJsons so must convert
+  const { name, id, songs } = playlistJson; // songs is an array of songJsons so must convert
 
-  const playlist: Playlist = new Playlist(name, parseSongJsonArr(songs));
+  const playlist: Playlist = new Playlist(name, parseSongJsonArr(songs), id);
   return playlist;
 }
 
 function parseSongJson(songJson: any): Song {
-  const { author, source, title, streamLink } = songJson;
-  const song: Song = new Song(author, streamLink, title, source);
+  const { author, id, title, streamLink } = songJson;
+  const song: Song = new Song(author, streamLink, title, id);
   return song;
 }
 
@@ -40,22 +41,24 @@ function parseSongJsonArr(songJsonArr: any[]): Song[] {
   return songArr;
 }
 
-function parsePlaylistJsonArr(playlistJsonArr: any[]): Playlist[] {
+function parseRadioJson(radioJson: any): Radio {
+  const {playlists} = radioJson;
+
   const playlistArr: Playlist[] = [];
-  for (const playlistJson of playlistJsonArr) {
+  for (const playlistJson of playlists) {
     const playlist: Playlist = parsePlaylistJson(playlistJson);
     playlistArr.push(playlist);
   }
-  return playlistArr;
+  return new Radio(playlistArr);
 }
 
-export async function getPlaylists(): Promise<Playlist[] | null> {
-  const playlistJsonArr: any[] | null = await getPlaylistJsonArr(); // the array is represented as a string, so we need to convert it to an array of "strings" basically
-  console.log(playlistJsonArr);
+export async function getRadio(): Promise<Radio | null> {
+  const radioJson: any[] | null = await getRadioJson(); // the array is represented as a string, so we need to convert it to an array of "strings" basically
+  console.log(radioJson);
 
-  if (!playlistJsonArr) {
+  if (!radioJson) {
     return null;
   }
 
-  return parsePlaylistJsonArr(playlistJsonArr);
+  return parseRadioJson(radioJson);
 };

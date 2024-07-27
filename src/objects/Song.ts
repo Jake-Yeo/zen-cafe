@@ -2,13 +2,13 @@ class Song {
     private author: string;
     private streamLink: string;
     private title: string;
-    private source: string;
+    private id: string;
 
-    constructor(author: string, streamLink: string, title: string, source: string) {
+    constructor(author: string, streamLink: string, title: string, id: string) {
         this.author = author;
         this.streamLink = streamLink;
         this.title = title;
-        this.source = source;
+        this.id = id;
     }
 
     public getAuthor(): string {
@@ -23,8 +23,8 @@ class Song {
         return this.title;
     }
 
-    public getSource(): string {
-        return this.source;
+    public getId(): string {
+        return this.id;
     }
 }
 
