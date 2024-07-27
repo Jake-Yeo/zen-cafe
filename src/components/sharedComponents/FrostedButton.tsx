@@ -25,9 +25,9 @@ const FrostedButton = ({
     text,
     fontSize = "14px",
     onClick = () => { },
-    width = '50vw',
+    width = '50%',
     minWidth = "100px",
-    margin = "0px",
+    margin = "0px", // This does not work since margin Top, bottom, left, right all overide it!
     marginTop = "0px",
     marginBottom = "0px",
     marginRight = "0px",

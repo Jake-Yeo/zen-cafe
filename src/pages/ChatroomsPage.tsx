@@ -14,26 +14,12 @@ import FrostedButton from "../components/sharedComponents/FrostedButton";
 import { VariableSizeList } from "react-window";
 import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementList";
 import { VirtuosoHandle } from "react-virtuoso";
+import CreateChatroomButton from "../components/chatroomsPageComponents/CreateChatroomButton";
 const { v4: uuidv4 } = require('uuid');
-
-const Transition = React.forwardRef(function Transition( // make sure this is not in the element itself or it will constantly be set again and again which ruins the sliding close animation!
-    props: TransitionProps & {
-        children: React.ReactElement;
-    },
-    ref: React.Ref<unknown>,
-) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const ChatroomsPage = () => {
 
-    const singletonUserContext = useContext(SingletonUserContext);
-
-    const [isDialogueOpen, setIsDialogueOpen] = useState(false);
-
     const [chatrooms, setChatrooms] = useState<ChatroomMetadata[]>([]);
-
-    var chatName = "";
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,20 +53,7 @@ const ChatroomsPage = () => {
                 width: "100%"
             }}>
                 <VirtuosoElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%"/>
-                <FrostedButton onClick={() => { setIsDialogueOpen(true); }} text={"Create Chatroom"} marginTop="20px" />
-                <Dialog
-                    sx={{
-                        backgroundColor: "transparent"
-                    }}
-                    open={isDialogueOpen}
-                    TransitionComponent={Transition}
-                    onClose={() => { setIsDialogueOpen(false) }}>
-                    <Button onClick={(e) => {
-                        setIsDialogueOpen(false);
-                    }}>Close</Button>
-                    <TextField onChange={(e) => { chatName = e.target.value }} id="outlined-basic" label="Outlined" variant="outlined" />
-                    <Button onClick={() => { createChatroom(chatName, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId()) }}>Create Chatroom</Button>
-                </Dialog>
+                <CreateChatroomButton></CreateChatroomButton>
             </Stack>
         </Background>
     </>)
