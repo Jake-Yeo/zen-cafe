@@ -46,6 +46,12 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
             radioState.current.currentSong = randomSong;
 
             audioRef.current.src = radioState.current.currentSong.getStreamLink();
+            audioRef.current.addEventListener('ended', () => {
+                audioRef.current.src = randomPlaylist.getSongs()[Math.floor(randomPlaylist.getSongs().length * Math.random())].getStreamLink();
+                audioRef.current.play();
+                radioState.current.playingSong = true;
+            }) // for when the song ends
+
             document.body.appendChild(audioRef.current);
 
             if (radio) {
@@ -63,7 +69,7 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
     const playPause = () => {
         if (!radioState.current.playingSong) {
             audioRef.current.play();
-            radioState.current.playingSong = true
+            radioState.current.playingSong = true;
         } else {
             audioRef.current.pause();
             radioState.current.playingSong = false;
@@ -71,7 +77,11 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
     };
 
     const next = () => {
-        // Add logic to play the next song
+        const currentPlaylist: Playlist = radioState.current.currentPlaylist;
+        audioRef.current.pause();
+        audioRef.current.src = currentPlaylist.getSongs()[Math.floor(currentPlaylist.getSongs().length * Math.random())].getStreamLink();
+        audioRef.current.play();
+        radioState.current.playingSong = true;
     };
 
     const prev = () => {
@@ -83,7 +93,11 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
     };
 
     const changeRadio = () => {
-        // Add logic to change the radio station
+        const randomPlaylist = radio?.getPlaylists()[Math.floor(radio.getPlaylists().length * Math.random())];
+        if (randomPlaylist) {
+            radioState.current.currentPlaylist = randomPlaylist;
+        }
+        next();
     };
 
     return (
