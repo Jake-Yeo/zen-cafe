@@ -12,7 +12,7 @@ const RadioUi = () => {
 
     const radioContext = useContext(RadioContext);
     if (radioContext === undefined) {
-        throw new Error('useRadio must be used within a RadioProvider');
+        throw new Error('RadioUi must be used within a RadioProvider');
     }
 
     return (<>
