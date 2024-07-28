@@ -12,20 +12,23 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginSignupPage from './pages/LoginSignupPage';
 import ChatroomsPage from './pages/ChatroomsPage';
 import ChatroomPage from './pages/ChatroomPage';
+import RadioProvider from './components/sharedComponents/Radio/RadioProvider';
 
 function App() {
   return (
     <>
       <FirebaseApi>
-        <BrowserRouter>
-          <Routes>
-            <Route index element={<LoginSignupPage />} />
-            <Route path="/loginSignupPage" element={<LoginSignupPage />} />
-            <Route path="/TestPage" element={<TestPage />} />
-            <Route path="/ChatroomsPage" element={<ChatroomsPage />} />
-            <Route path="/ChatroomPage/:chatroomId" element={<ChatroomPage />} />
-          </Routes>
-        </BrowserRouter>
+        <RadioProvider> {/** global radio */}
+          <BrowserRouter>
+            <Routes>
+              <Route index element={<LoginSignupPage />} />
+              <Route path="/loginSignupPage" element={<LoginSignupPage />} />
+              <Route path="/TestPage" element={<TestPage />} />
+              <Route path="/ChatroomsPage" element={<ChatroomsPage />} />
+              <Route path="/ChatroomPage/:chatroomId" element={<ChatroomPage />} />
+            </Routes>
+          </BrowserRouter>
+        </RadioProvider>
       </FirebaseApi>
     </>
   );

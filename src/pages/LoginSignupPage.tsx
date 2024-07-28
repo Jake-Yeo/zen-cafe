@@ -10,38 +10,40 @@ import FrostedButton from "../components/sharedComponents/FrostedButton";
 import Playlist from "../objects/Playlist";
 import { getRadio } from "../functions/ZCByteVaultApi";
 import Radio from "../objects/Radio";
+import RadioPlayer from "../components/sharedComponents/Radio/RadioUi";
+import RadioUi from "../components/sharedComponents/Radio/RadioUi";
 const { v4: uuidv4 } = require('uuid');
 
 
 const LoginSignupPage = () => {
 
 
-    useEffect(() => {
-        const playAudio = async () => {
+    // useEffect(() => {
+    //     const playAudio = async () => {
 
-            const radio: Radio | null = await getRadio();
+    //         const radio: Radio | null = await getRadio();
 
-            if (!radio) {
-                console.log("playlist is null");
-                return;
-            }
+    //         if (!radio) {
+    //             console.log("playlist is null");
+    //             return;
+    //         }
 
-            const randomPlaylist = radio.getPlaylists()[Math.floor(radio.getPlaylists().length * Math.random())];
+    //         const randomPlaylist = radio.getPlaylists()[Math.floor(radio.getPlaylists().length * Math.random())];
 
-            const randomSong = randomPlaylist.getSongs()[Math.floor(randomPlaylist.getSongs().length * Math.random())];
+    //         const randomSong = randomPlaylist.getSongs()[Math.floor(randomPlaylist.getSongs().length * Math.random())];
 
-            console.log(randomSong.getStreamLink());
+    //         console.log(randomSong.getStreamLink());
 
-            let audio = await new Audio(randomSong.getStreamLink());
+    //         let audio = await new Audio(randomSong.getStreamLink());
 
-            document.body.appendChild(audio);
+    //         document.body.appendChild(audio);
 
-            document.body.addEventListener("click", function () {
-                audio.play()
-            })
-        }
-        playAudio();
-    }, [])
+    //         document.body.addEventListener("click", function () {
+    //             audio.play()
+    //         })
+    //     }
+    //     playAudio();
+    // }, [])
 
     const singletonUserContext = useContext(SingletonUserContext);
 
@@ -58,6 +60,7 @@ const LoginSignupPage = () => {
             <Stack alignItems={"center"} justifyContent={"center"} height={"80%"}>
                 <ZenCafeLogo vh={35} />
                 {buttonToShow}
+                <RadioUi></RadioUi>
             </Stack>
         </Background>
     </>);

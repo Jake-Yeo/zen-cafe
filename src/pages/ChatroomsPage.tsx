@@ -15,6 +15,7 @@ import { VariableSizeList } from "react-window";
 import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementList";
 import { VirtuosoHandle } from "react-virtuoso";
 import CreateChatroomButton from "../components/chatroomsPageComponents/CreateChatroomButton";
+import RadioUi from "../components/sharedComponents/Radio/RadioUi";
 const { v4: uuidv4 } = require('uuid');
 
 const ChatroomsPage = () => {
@@ -54,6 +55,7 @@ const ChatroomsPage = () => {
             }}>
                 <VirtuosoElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%"/>
                 <CreateChatroomButton></CreateChatroomButton>
+                <RadioUi></RadioUi>
             </Stack>
         </Background>
     </>)

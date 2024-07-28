@@ -36,9 +36,6 @@ const CreateChatroomButton = () => {
                     boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.7)', // Add a custom shadow
                 },
             }}
-            sx={{
-                backgroundColor: "transparent",
-            }}
             open={isDialogueOpen}
             TransitionComponent={Transition}
             onClose={() => { setIsDialogueOpen(false) }}>
