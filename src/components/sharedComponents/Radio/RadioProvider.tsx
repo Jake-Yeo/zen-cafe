@@ -12,7 +12,6 @@ interface RadioContextType {
     playPause: () => void;
     next: () => void;
     prev: () => void;
-    shuffle: () => void;
     changeRadio: () => void;
     isPlaying: () => boolean;
 }
@@ -139,11 +138,15 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
         play();
     };
 
-    const shuffle = () => {
-        // Add logic to shuffle the playlist
-    };
+    const resetSongHistory = () => {
+        radioState.current.currIndex = -1;
+        playlistSongHistory.splice(0, playlistSongHistory.length);
+    }
 
+
+    // Reset SongHistory everytime the playlist changes (because we want to play songs from the same radio)
     const changeRadio = () => {
+        resetSongHistory();
         audioRef.current.pause();
         const randomPlaylist = radio?.getPlaylists()[Math.floor(radio.getPlaylists().length * Math.random())];
         console.log(randomPlaylist);
@@ -158,7 +161,7 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
     };
 
     return (
-        <RadioContext.Provider value={{ playPause, next, prev, shuffle, changeRadio, isPlaying }}>
+        <RadioContext.Provider value={{ playPause, next, prev, changeRadio, isPlaying }}>
             {children}
         </RadioContext.Provider>
     );
