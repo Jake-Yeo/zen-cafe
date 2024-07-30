@@ -19,6 +19,8 @@ interface RadioContextType {
 
 export const RadioContext = createContext<RadioContextType | undefined>(undefined);
 
+const playlistSongHistory: { currentPlaylist: Playlist, currentSong: Song }[] = []
+
 const RadioProvider = ({ children }: props) => { // This provides global radio that can be used by all components and will alter the same radio.
 
     const [radio, setRadio] = useState<Radio>();
@@ -26,8 +28,31 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
     const radioState = useRef({
         currentPlaylist: null as unknown as Playlist,
         currentSong: null as unknown as Song,
-        playingSong: false
+        playingSong: false,
+        currIndex: -1
     });
+
+    const setUpSong = () => {
+
+        const addSongToHistory = () => {
+            playlistSongHistory.push({
+                currentPlaylist: radioState.current.currentPlaylist,
+                currentSong: radioState.current.currentSong,
+            });
+            radioState.current.currIndex++;
+        }
+
+        const currPlaylist: Playlist = radioState.current.currentPlaylist;
+        const nextSong = currPlaylist.getSongs()[Math.floor(currPlaylist.getSongs().length * Math.random())];
+
+        radioState.current.currentPlaylist = currPlaylist;
+        radioState.current.currentSong = nextSong;
+
+        audioRef.current.src = radioState.current.currentSong.getStreamLink();
+        console.log(audioRef.current.src);
+
+        addSongToHistory();
+    }
 
     useEffect(() => {
         const getAndSetRadio = async () => {
@@ -38,54 +63,80 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
                 return;
             }
 
-            const randomPlaylist = radio.getPlaylists()[Math.floor(radio.getPlaylists().length * Math.random())];
-
-            const randomSong = randomPlaylist.getSongs()[Math.floor(randomPlaylist.getSongs().length * Math.random())];
-
-            radioState.current.currentPlaylist = randomPlaylist;
-            radioState.current.currentSong = randomSong;
-
-            audioRef.current.src = radioState.current.currentSong.getStreamLink();
-            audioRef.current.addEventListener('ended', () => {
-                audioRef.current.src = randomPlaylist.getSongs()[Math.floor(randomPlaylist.getSongs().length * Math.random())].getStreamLink();
-                audioRef.current.play();
-                radioState.current.playingSong = true;
-            }) // for when the song ends
-
-            document.body.appendChild(audioRef.current);
-
             if (radio) {
                 setRadio(radio);
             }
+
+            audioRef.current.addEventListener('ended', () => {
+                next();
+            }) // for when the song ends
+
+            document.body.appendChild(audioRef.current);
         }
 
         getAndSetRadio();
+        console.log("setup");
     }, [])
+
+    useEffect(() => {
+        changeRadio(); // basically initalizes the radio when it actually gets the correct data for the playlists and songs
+    }, [radio])
 
     const isPlaying = () => {
         return radioState.current.playingSong
     }
 
-    const playPause = () => {
-        if (!radioState.current.playingSong) {
-            audioRef.current.play();
-            radioState.current.playingSong = true;
-        } else {
-            audioRef.current.pause();
-            radioState.current.playingSong = false;
-        }
-    };
-
-    const next = () => {
-        const currentPlaylist: Playlist = radioState.current.currentPlaylist;
-        audioRef.current.pause();
-        audioRef.current.src = currentPlaylist.getSongs()[Math.floor(currentPlaylist.getSongs().length * Math.random())].getStreamLink();
+    const play = () => {
         audioRef.current.play();
         radioState.current.playingSong = true;
+        console.log("HistoryLength: ", playlistSongHistory.length, "Pointer", radioState.current.currIndex)
+        console.log(playlistSongHistory.at(radioState.current.currIndex));
+    }
+
+    const pause = () => {
+        audioRef.current.pause();
+        radioState.current.playingSong = false;
+    }
+
+    const playPause = () => {
+        if (isPlaying()) {
+            pause();
+        } else {
+            play();
+        }
+    }
+
+    const setUpSongAtCurrIndex = () => {
+        const stateAtCurrIndex = playlistSongHistory.at(radioState.current.currIndex);
+
+        if (stateAtCurrIndex) {
+            radioState.current.currentPlaylist = stateAtCurrIndex?.currentPlaylist;
+            radioState.current.currentSong = stateAtCurrIndex?.currentSong;
+        }
+
+        audioRef.current.src = radioState.current.currentSong.getStreamLink();
+    }
+
+    const next = () => {
+        pause();
+
+        if (playlistSongHistory.length == radioState.current.currIndex + 1) {
+            setUpSong();
+        } else {
+            radioState.current.currIndex++;
+            setUpSongAtCurrIndex();
+        }
+
+        play();
     };
 
     const prev = () => {
-        // Add logic to play the previous song
+        pause();
+        if (radioState.current.currIndex != 0) {
+            radioState.current.currIndex--;
+            setUpSongAtCurrIndex();
+        }
+        play();
     };
 
     const shuffle = () => {
@@ -93,11 +144,17 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
     };
 
     const changeRadio = () => {
+        audioRef.current.pause();
         const randomPlaylist = radio?.getPlaylists()[Math.floor(radio.getPlaylists().length * Math.random())];
+        console.log(randomPlaylist);
         if (randomPlaylist) {
             radioState.current.currentPlaylist = randomPlaylist;
+            setUpSong();
         }
-        next();
+        if (isPlaying()) {
+            play();
+        }
+
     };
 
     return (

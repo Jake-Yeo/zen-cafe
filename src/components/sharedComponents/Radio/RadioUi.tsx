@@ -18,7 +18,7 @@ const RadioUi = () => {
     return (<>
         <Stack>
             <FrostedButton text="play/pause" onClick={radioContext.playPause} />
-            <FrostedButton text="prev" />
+            <FrostedButton text="prev" onClick={radioContext.prev}/>
             <FrostedButton text="next" onClick={radioContext.next} />
             <FrostedButton text="shuffle" />
             <FrostedButton text="change radio" onClick={radioContext.changeRadio}/>
