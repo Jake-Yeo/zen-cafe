@@ -78,14 +78,6 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
                 next();
             }) // for when the song ends
 
-            audioRef.current.onplaying = () => {
-                radioState.current.playingSong = true;
-            }
-
-            audioRef.current.onpause = () => {
-                radioState.current.playingSong = false;
-            }
-
             document.body.appendChild(audioRef.current);
         }
 
@@ -107,7 +99,8 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
     }
 
     const play = () => {
-        audioRef.current.play();
+        audioRef.current.play().catch(()=>{console.log("Play asynchronous error (doesen't rlly affect anything tbh)")});
+        radioState.current.playingSong = true;
         updateCurrPlaylistSong();
         console.log("HistoryLength: ", playlistSongHistory.length, "Pointer", radioState.current.currIndex)
         console.log(playlistSongHistory.at(radioState.current.currIndex));
@@ -115,6 +108,7 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
 
     const pause = () => {
         audioRef.current.pause();
+        radioState.current.playingSong = false;
     }
 
     const playPause = () => {
