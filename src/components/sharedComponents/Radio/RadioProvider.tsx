@@ -14,6 +14,8 @@ interface RadioContextType {
     prev: () => void;
     changeRadio: () => void;
     isPlaying: () => boolean;
+    currSong: Song | undefined;
+    currPlaylist: Playlist | undefined;
 }
 
 export const RadioContext = createContext<RadioContextType | undefined>(undefined);
@@ -24,6 +26,10 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
 
     const [radio, setRadio] = useState<Radio>();
     const audioRef = useRef(new Audio()); // The useRef hook will always return the same ref object when a functional component re-renders (we want the radio to stay the same across pages)
+    
+    const [currSong, setCurrSong] = useState<Song>();
+    const [currPlaylist, setCurrPlaylist] = useState<Playlist>();
+    
     const radioState = useRef({
         currentPlaylist: null as unknown as Playlist,
         currentSong: null as unknown as Song,
@@ -50,6 +56,8 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
         audioRef.current.src = radioState.current.currentSong.getStreamLink();
         console.log(audioRef.current.src);
 
+        updateCurrPlaylistSong();
+
         addSongToHistory();
     }
 
@@ -70,6 +78,14 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
                 next();
             }) // for when the song ends
 
+            audioRef.current.onplaying = () => {
+                radioState.current.playingSong = true;
+            }
+
+            audioRef.current.onpause = () => {
+                radioState.current.playingSong = false;
+            }
+
             document.body.appendChild(audioRef.current);
         }
 
@@ -85,16 +101,20 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
         return radioState.current.playingSong
     }
 
+    const updateCurrPlaylistSong = () => {
+        setCurrPlaylist(radioState.current.currentPlaylist);
+        setCurrSong(radioState.current.currentSong);
+    }
+
     const play = () => {
         audioRef.current.play();
-        radioState.current.playingSong = true;
+        updateCurrPlaylistSong();
         console.log("HistoryLength: ", playlistSongHistory.length, "Pointer", radioState.current.currIndex)
         console.log(playlistSongHistory.at(radioState.current.currIndex));
     }
 
     const pause = () => {
         audioRef.current.pause();
-        radioState.current.playingSong = false;
     }
 
     const playPause = () => {
@@ -161,7 +181,7 @@ const RadioProvider = ({ children }: props) => { // This provides global radio t
     };
 
     return (
-        <RadioContext.Provider value={{ playPause, next, prev, changeRadio, isPlaying }}>
+        <RadioContext.Provider value={{ playPause, next, prev, changeRadio, isPlaying, currPlaylist, currSong}}>
             {children}
         </RadioContext.Provider>
     );
