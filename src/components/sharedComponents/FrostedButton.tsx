@@ -3,6 +3,8 @@ const { v4: uuidv4 } = require('uuid');
 
 interface props {
     text: string,
+    content?: string,
+    height?: string,
     fontSize?: string,
     onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined,
     width?: string,
@@ -23,6 +25,7 @@ interface props {
 //https://stackoverflow.com/questions/32805670/what-does-before-and-after-do-in-css very useful for me when I made this button
 const FrostedButton = ({
     text,
+    content,
     fontSize = "14px",
     onClick = () => { },
     width = '50%',
@@ -37,12 +40,14 @@ const FrostedButton = ({
     borderBottomRightRadius = "5em",
     borderBottomLeftRadius = "5em",
     padding = "10px",
+    height = "auto",
     boxShadow = "0px 5px 10px rgba(0, 0, 0, 0.7)"
 }: props) => {
 
     return (<>
         <Button
             sx={{
+                content: content ? `${content}` : 'none',
                 borderTopRightRadius: borderTopRightRadius,
                 borderTopLeftRadius: borderTopLeftRadius,
                 borderBottomRightRadius: borderBottomRightRadius,
@@ -52,7 +57,7 @@ const FrostedButton = ({
                 backgroundColor: 'rgba(144, 52, 135, 0.001)', // Semi-transparent background color
                 boxShadow: boxShadow,
                 overflow: 'hidden',
-                height: 'auto',
+                height: height,
                 color: 'white',
                 width: width,
                 minWidth: minWidth,
