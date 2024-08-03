@@ -14,6 +14,17 @@ const RadioUi = () => {
     if (radioContext === undefined) {
         throw new Error('RadioUi must be used within a RadioProvider');
     }
+
+    const [playPauseSvg, setPlayPauseSvg] = useState(`url("/svgs/RadioSvgs/play.svg")`);
+    const onChangeForPlayPause = () => {
+        radioContext.playPause();
+        if (radioContext.isPlaying()) {
+            setPlayPauseSvg(`url("/svgs/RadioSvgs/pause.svg")`);
+        } else {
+            setPlayPauseSvg(`url("/svgs/RadioSvgs/play.svg")`);
+        }
+    }
+
     return (<>
         <Stack>
             <Stack
@@ -22,7 +33,7 @@ const RadioUi = () => {
                 style={{ alignItems: 'center' }} // Ensure buttons are centered
             >
                 {/** Must also set minwidth for each button!!! */}
-                <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/play.svg")`} onClick={radioContext.playPause} />
+                <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={playPauseSvg} onClick={onChangeForPlayPause} />
                 <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/radio.svg")`} onClick={radioContext.changeRadio} />
                 <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/prev.svg")`} onClick={radioContext.prev} />
                 <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/next.svg")`} onClick={radioContext.next} />
