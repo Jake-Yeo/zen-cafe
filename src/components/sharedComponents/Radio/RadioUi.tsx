@@ -26,7 +26,7 @@ const RadioUi = () => {
     }
 
     return (<>
-        <Stack>
+        <Stack spacing={0.1}>
             <Stack
                 direction="row"
                 spacing={1}
