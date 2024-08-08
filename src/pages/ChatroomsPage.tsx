@@ -1,4 +1,4 @@
-import { Button, Dialog, Slide, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, Slide, Stack, TextField, Typography } from "@mui/material";
 import { createChatroom, getChatrooms } from "../functions/zenCafeChatroomsApi"
 import { JsxElement } from "typescript";
 import { ReactElement, useContext, useEffect, useRef, useState } from "react";
@@ -47,15 +47,19 @@ const ChatroomsPage = () => {
 
     return (<>
         <Background useBlur={true} useVignette={true}>
-            <Stack sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: "100%"
-            }}>
-                <VirtuosoElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%"/>
+            <Stack
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: "100%",
+                    height: "100%"
+                }}>
+                <Typography padding={"10px"} zIndex={1} color={"white"}>Chatrooms</Typography>
+                <VirtuosoElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%" />
                 <CreateChatroomButton></CreateChatroomButton>
-                <RadioUi></RadioUi>
+                <Box sx={{ position: 'absolute', bottom: 0, left: 0, padding: "10px" }}>
+                    <RadioUi></RadioUi>
+                </Box>
             </Stack>
         </Background>
     </>)

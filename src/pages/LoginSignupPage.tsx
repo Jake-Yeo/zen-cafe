@@ -57,12 +57,15 @@ const LoginSignupPage = () => {
 
     return (<>
         <Background useVignette={true} useBlur={true}>
-            <Stack alignItems={"center"} justifyContent={"center"} height={"80%"}>
+            <Stack spacing={4} alignItems={"center"} height={"100%"}>
+                <Box height={"10px"}/>
                 <ZenCafeLogo vh={35} />
                 {buttonToShow}
-                <RadioUi></RadioUi>
+                <Box sx={{ position: 'absolute', bottom: 0, left: 0, padding: "10px"}}>
+                    <RadioUi></RadioUi>
+                </Box>
             </Stack>
-        </Background>
+        </Background >
     </>);
 }
 
