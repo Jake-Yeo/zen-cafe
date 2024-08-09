@@ -25,6 +25,15 @@ const RadioUi = () => {
         }
     }
 
+    // This use effect sets the proper icon for the RadioUi when the user switches pages
+    useEffect(() => {
+        if (radioContext.isPlaying()) {
+            setPlayPauseSvg(`url("/svgs/RadioSvgs/pause.svg")`);
+        } else {
+            setPlayPauseSvg(`url("/svgs/RadioSvgs/play.svg")`);
+        }
+    }, [])
+
     return (<>
         <Stack spacing={0.1}>
             <Stack
