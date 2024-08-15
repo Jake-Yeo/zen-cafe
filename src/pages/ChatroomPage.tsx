@@ -10,6 +10,7 @@ import MessageDetailCard from "../components/chatroomPageComponents/MessageDetai
 import { VariableSizeList } from "react-window";
 import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementList";
+import SendMessageButton from "../components/chatroomPageComponents/SendMessageButton";
 const { v4: uuidv4 } = require('uuid');
 
 var messageToSend = "";
@@ -75,6 +76,10 @@ const ChatroomPage = () => {
         messageDetailCardArr.push(<MessageDetailCard key={uuidv4()} message={message} />);
     }
 
+    const onTextFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+            messageToSend = e.target.value;
+            console.log(messageToSend);
+    }
 
     return (
         <Background useBlur={true} useVignette={true}>
@@ -87,10 +92,7 @@ const ChatroomPage = () => {
             >
                 {chatroom.getChatroomName()}
                 <VirtuosoElementList elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" scrollToBottomAtStart={true} />
-                <TextField onChange={(e) => {
-                    messageToSend = e.target.value;
-                    console.log(messageToSend);
-                }}>Message to send</TextField>
+                <SendMessageButton onChange={onTextFieldChange}></SendMessageButton>
                 <Button onClick={() => {
                     console.log(messageToSend);
                     console.log(chatroomId);
