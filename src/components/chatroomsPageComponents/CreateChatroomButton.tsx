@@ -4,6 +4,7 @@ import React, { useContext, useState } from "react";
 import FrostedButton from "../sharedComponents/FrostedButton";
 import { createChatroom } from "../../functions/zenCafeChatroomsApi";
 import { SingletonUserContext } from "../../firebase/FirebaseApi";
+import SendMessageButton from "../chatroomPageComponents/SendMessageButton";
 
 const Transition = React.forwardRef(function Transition( // make sure this is not in the element itself or it will constantly be set again and again which ruins the sliding close animation!
     props: TransitionProps & {

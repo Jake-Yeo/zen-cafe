@@ -7,7 +7,7 @@ interface props {
 
 const SendMessageButton = ({ onChange }: props) => {
     return (<>
-        <Stack direction={"row"} justifyContent={"end"} alignItems={"end"}>
+        <Stack direction={"row"} justifyContent={"end"} alignItems={"end"} height={"56px"}>
             <TextField
                 autoComplete="off"
                 InputLabelProps={{
@@ -24,7 +24,7 @@ const SendMessageButton = ({ onChange }: props) => {
                     },
                 }}
                 sx={{
-                    margin: "10px",
+                    margin: "0px",
                     '& .MuiOutlinedInput-root': {
                         '& fieldset': {
                             borderColor: 'white', // Default border color
@@ -42,7 +42,7 @@ const SendMessageButton = ({ onChange }: props) => {
                     },
                 }}
                 onChange={onChange} id="outlined-basic" label="Message" variant="outlined" />
-            <FrostedButton height={"56px"} text={""} content={`url("/svgs/ChatroomSvgs/send.svg")`}></FrostedButton>
+            <FrostedButton height={"100%"} text={""} content={`url("/svgs/ChatroomSvgs/send.svg")`}></FrostedButton>
         </Stack>
     </>)
 }

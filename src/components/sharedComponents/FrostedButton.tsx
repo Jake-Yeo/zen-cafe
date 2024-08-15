@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button"
 const { v4: uuidv4 } = require('uuid');
 
@@ -47,7 +48,6 @@ const FrostedButton = ({
     return (<>
         <Button
             sx={{
-                content: content ? `${content}` : 'none',
                 borderTopRightRadius: borderTopRightRadius,
                 borderTopLeftRadius: borderTopLeftRadius,
                 borderBottomRightRadius: borderBottomRightRadius,
@@ -80,7 +80,18 @@ const FrostedButton = ({
                 },
             }}
             onClick={onClick}>
-            {text}
+            {content ?
+            <Box sx={{
+                backgroundImage: content,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundSize: 'contain',
+                width: '100%', // Adjust to match your design
+                height: '100%', // Adjust to match your design
+            }}>
+
+            </Box>
+                : text}
             {/** Here we put invisible text identical to the text in content, this is because text here will actually resize the button when the words wrap around, whereas for the text in the ::after context, it will not tell the button to expand vertically to allocate space to show its content*/}
         </Button>
     </>)
