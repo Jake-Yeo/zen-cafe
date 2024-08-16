@@ -81,6 +81,12 @@ const ChatroomPage = () => {
             console.log(messageToSend);
     }
 
+    const onSendMessageClick = () => {
+        console.log(messageToSend);
+        console.log(chatroomId);
+        sendMessage(chatroomId, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId(), messageToSend)
+    }
+
     return (
         <Background useBlur={true} useVignette={true}>
             <Stack
@@ -92,12 +98,7 @@ const ChatroomPage = () => {
             >
                 {chatroom.getChatroomName()}
                 <VirtuosoElementList elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" scrollToBottomAtStart={true} />
-                <SendMessageButton onChange={onTextFieldChange}></SendMessageButton>
-                <Button onClick={() => {
-                    console.log(messageToSend);
-                    console.log(chatroomId);
-                    sendMessage(chatroomId, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId(), messageToSend)
-                }}>Send Message</Button>
+                <SendMessageButton onChange={onTextFieldChange} onClick={onSendMessageClick}></SendMessageButton>
             </Stack>
         </Background>)
 }

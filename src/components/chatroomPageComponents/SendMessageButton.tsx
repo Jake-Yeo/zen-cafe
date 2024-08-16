@@ -1,13 +1,15 @@
 import { Stack, TextField } from "@mui/material"
 import FrostedButton from "../sharedComponents/FrostedButton"
+import { MouseEventHandler } from "react"
 
 interface props {
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
+    onClick: MouseEventHandler<HTMLButtonElement>,
 }
 
-const SendMessageButton = ({ onChange }: props) => {
+const SendMessageButton = ({ onChange, onClick }: props) => {
     return (<>
-        <Stack direction={"row"} justifyContent={"end"} alignItems={"end"} height={"56px"}>
+        <Stack spacing={1} direction={"row"} justifyContent={"end"} alignItems={"end"} height={"56px"}>
             <TextField
                 autoComplete="off"
                 InputLabelProps={{
@@ -29,7 +31,7 @@ const SendMessageButton = ({ onChange }: props) => {
                         '& fieldset': {
                             borderColor: 'white', // Default border color
                             transition: 'border-color 0.3s ease', // Transition for border color
-                            borderRadius: '5em', // Set the border radius for the input
+                            borderRadius: '5em 5em 5em 5em', // Set the border radius for the input
                         },
                         '&:hover fieldset': {
                             borderColor: 'white',
@@ -42,7 +44,7 @@ const SendMessageButton = ({ onChange }: props) => {
                     },
                 }}
                 onChange={onChange} id="outlined-basic" label="Message" variant="outlined" />
-            <FrostedButton height={"100%"} text={""} content={`url("/svgs/ChatroomSvgs/send.svg")`}></FrostedButton>
+            <FrostedButton height={"100%"} onClick={onClick} minWidth={"0px"} width={"5em"} text={""} content={`url("/svgs/ChatroomSvgs/send.svg")`}></FrostedButton>
         </Stack>
     </>)
 }
