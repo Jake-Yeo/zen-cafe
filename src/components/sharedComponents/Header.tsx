@@ -1,13 +1,39 @@
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import ZenCafeLogo from "./ZenCafeLogo";
+import FrostedButton from "./FrostedButton";
+import { useNavigate } from "react-router-dom";
 
-const Header = () => {
+interface props {
+    hideLogo?: boolean,
+    hideBackButton?: boolean
+}
+
+const Header = ({ hideLogo = false, hideBackButton = false }: props) => {
+
+    const navigate = useNavigate();
+
+    const margin = "15px";
+
     return (<>
-        <Box zIndex={1} width={"100%"}>
-            <Box margin={"5px"}>
-                <ZenCafeLogo vh={10} logoType={2}></ZenCafeLogo>
-            </Box>
-        </Box>
+        <Stack direction={"row"} zIndex={1} width={"100%"} justifyContent={"space-between"}>
+            {
+                hideLogo ?
+                    <Box sx={{ opacity: 0 }} marginLeft={margin} marginRight={margin} marginTop={margin} >
+                        <ZenCafeLogo vh={10} logoType={2}></ZenCafeLogo>
+                    </Box> :
+                    <Box marginLeft={margin} marginRight={margin} marginTop={margin} >
+                        <ZenCafeLogo vh={10} logoType={2}></ZenCafeLogo>
+                    </Box>
+            }
+            {
+                hideBackButton ?
+                    <></>
+                    :
+                    <FrostedButton
+                        onClick={() => { navigate(-1) }}
+                        marginLeft={margin} marginRight={margin} marginTop={margin} content={`url("/svgs/back.svg")`} minWidth="0px" width={"60px"} height="60px" text={""}></FrostedButton>
+            }
+        </Stack>
     </>)
 }
 
