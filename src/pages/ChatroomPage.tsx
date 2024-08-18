@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import Chatroom from "../objects/Chatroom";
 import { ReactElement, useContext, useEffect, useRef, useState } from "react";
 import { getChatroom, sendMessage } from "../functions/zenCafeChatroomsApi";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import Message from "../objects/Message";
 import { SingletonUserContext } from "../firebase/FirebaseApi";
 import Background from "../components/sharedComponents/Background";
@@ -12,6 +12,7 @@ import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementList";
 import SendMessageButton from "../components/chatroomPageComponents/SendMessageButton";
 import Header from "../components/sharedComponents/Header";
+import RadioUi from "../components/sharedComponents/Radio/RadioUi";
 const { v4: uuidv4 } = require('uuid');
 
 var messageToSend = "";
@@ -78,8 +79,8 @@ const ChatroomPage = () => {
     }
 
     const onTextFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-            messageToSend = e.target.value;
-            console.log(messageToSend);
+        messageToSend = e.target.value;
+        console.log(messageToSend);
     }
 
     const onSendMessageClick = () => {
@@ -97,10 +98,13 @@ const ChatroomPage = () => {
                     justifyContent: 'center',
                 }}
             >
-                <Header/>
+                <Header />
                 {chatroom.getChatroomName()}
                 <VirtuosoElementList elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" scrollToBottomAtStart={true} />
                 <SendMessageButton onChange={onTextFieldChange} onClick={onSendMessageClick}></SendMessageButton>
+                <Box sx={{ position: 'absolute', bottom: 0, left: 0, padding: "10px" }}>
+                    <RadioUi></RadioUi>
+                </Box>
             </Stack>
         </Background>)
 }

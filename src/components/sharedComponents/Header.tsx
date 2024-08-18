@@ -19,10 +19,10 @@ const Header = ({ hideLogo = false, hideBackButton = false }: props) => {
             {
                 hideLogo ?
                     <Box sx={{ opacity: 0 }} marginLeft={margin} marginRight={margin} marginTop={margin} >
-                        <ZenCafeLogo vh={10} logoType={2}></ZenCafeLogo>
+                        <ZenCafeLogo vh={10} logoType={1}></ZenCafeLogo>
                     </Box> :
                     <Box marginLeft={margin} marginRight={margin} marginTop={margin} >
-                        <ZenCafeLogo vh={10} logoType={2}></ZenCafeLogo>
+                        <ZenCafeLogo vh={10} logoType={1}></ZenCafeLogo>
                     </Box>
             }
             {
