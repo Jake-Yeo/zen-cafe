@@ -11,6 +11,7 @@ import { VariableSizeList } from "react-window";
 import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementList";
 import SendMessageButton from "../components/chatroomPageComponents/SendMessageButton";
+import Header from "../components/sharedComponents/Header";
 const { v4: uuidv4 } = require('uuid');
 
 var messageToSend = "";
@@ -96,6 +97,7 @@ const ChatroomPage = () => {
                     justifyContent: 'center',
                 }}
             >
+                <Header/>
                 {chatroom.getChatroomName()}
                 <VirtuosoElementList elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" scrollToBottomAtStart={true} />
                 <SendMessageButton onChange={onTextFieldChange} onClick={onSendMessageClick}></SendMessageButton>

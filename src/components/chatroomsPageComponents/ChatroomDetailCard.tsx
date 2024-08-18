@@ -1,6 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material"
 import ChatroomMetadata from "../../objects/ChatroomMetadata"
-import GlassButton from "../sharedComponents/GlassButton"
 import { useNavigate } from "react-router-dom"
 import FrostedButton from "../sharedComponents/FrostedButton"
 

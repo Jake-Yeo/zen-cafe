@@ -5,13 +5,13 @@ import { getChatrooms } from "../functions/zenCafeChatroomsApi";
 import { useNavigate, useRoutes } from "react-router-dom";
 import Background from "../components/sharedComponents/Background";
 import ZenCafeLogo from "../components/sharedComponents/ZenCafeLogo";
-import GlassButton from "../components/sharedComponents/GlassButton";
 import FrostedButton from "../components/sharedComponents/FrostedButton";
 import Playlist from "../objects/Playlist";
 import { getRadio } from "../functions/ZCByteVaultApi";
 import Radio from "../objects/Radio";
 import RadioPlayer from "../components/sharedComponents/Radio/RadioUi";
 import RadioUi from "../components/sharedComponents/Radio/RadioUi";
+import Header from "../components/sharedComponents/Header";
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -58,6 +58,7 @@ const LoginSignupPage = () => {
     return (<>
         <Background useVignette={true} useBlur={true}>
             <Stack spacing={4} alignItems={"center"} height={"100%"}>
+                <Header/>
                 <Box height={"10px"}/>
                 <ZenCafeLogo vh={35} />
                 {buttonToShow}

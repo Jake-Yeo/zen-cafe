@@ -16,6 +16,7 @@ import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementL
 import { VirtuosoHandle } from "react-virtuoso";
 import CreateChatroomButton from "../components/chatroomsPageComponents/CreateChatroomButton";
 import RadioUi from "../components/sharedComponents/Radio/RadioUi";
+import Header from "../components/sharedComponents/Header";
 const { v4: uuidv4 } = require('uuid');
 
 const ChatroomsPage = () => {
@@ -54,6 +55,7 @@ const ChatroomsPage = () => {
                     width: "100%",
                     height: "100%"
                 }}>
+                <Header />
                 <Typography padding={"10px"} zIndex={1} color={"white"}>Chatrooms</Typography>
                 <VirtuosoElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%" />
                 <CreateChatroomButton></CreateChatroomButton>
