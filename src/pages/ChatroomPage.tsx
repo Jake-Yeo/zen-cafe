@@ -13,6 +13,7 @@ import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementL
 import SendMessageButton from "../components/chatroomPageComponents/SendMessageButton";
 import Header from "../components/sharedComponents/Header";
 import RadioUi from "../components/sharedComponents/Radio/RadioUi";
+import apiUrl from "../functions/apiUrl";
 const { v4: uuidv4 } = require('uuid');
 
 var messageToSend = "";
@@ -30,7 +31,7 @@ const ChatroomPage = () => {
     // https://stackoverflow.com/questions/57982180/react-app-suddenly-stalling-in-dev-and-production always do the event source in the useEffect... or else there will be multiple open connections created which means you will not be able to send any requests (send messages) to the database!!!
     useEffect(() => {
 
-        const eventSource = new EventSource(`http://localhost:3000/chatrooms/changeStream/${chatroomId}`);
+        const eventSource = new EventSource(`${apiUrl}/chatrooms/changeStream/${chatroomId}`);
 
         eventSource.onmessage = function (event) {
             console.log("event received");
@@ -99,7 +100,7 @@ const ChatroomPage = () => {
                 }}
             >
                 <Header />
-                {chatroom.getChatroomName()}
+                <Typography zIndex={1}>{chatroom.getChatroomName()}</Typography>
                 <VirtuosoElementList elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" scrollToBottomAtStart={true} />
                 <SendMessageButton onChange={onTextFieldChange} onClick={onSendMessageClick}></SendMessageButton>
                 <Box sx={{ position: 'absolute', bottom: 0, left: 0, padding: "10px" }}>

@@ -11,5 +11,8 @@ npm i react-window // its the infinite scrolling list, variable-list or smthn //
 npm i --save-dev @types/react-window // might delete later
 npm install react-virtuoso
 
+
 for backend:
 npm i uuid
+npm install express
+npm install dotenv

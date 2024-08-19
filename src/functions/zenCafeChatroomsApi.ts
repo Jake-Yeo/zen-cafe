@@ -1,6 +1,7 @@
 import Chatroom from "../objects/Chatroom";
 import ChatroomMetadata from "../objects/ChatroomMetadata";
 import Message from "../objects/Message";
+import apiUrl from "./apiUrl";
 
 function dataToChatroomMetadataObj(data: any): ChatroomMetadata {
     const { _id, chatroomName, creatorUsername, creatorUid } = data;
@@ -46,7 +47,7 @@ function dataToChatroomObj(data: any): Chatroom {
 export async function sendMessage(chatroom_id: string, senderUsername: string, senderUid: string, message: string): Promise<void> {
     try {
         console.log("before fetch");
-        const response = await fetch("http://localhost:3000/chatrooms/sendMessage", {
+        const response = await fetch(`${apiUrl}/chatrooms/sendMessage`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -71,7 +72,7 @@ export async function sendMessage(chatroom_id: string, senderUsername: string, s
 
 export async function createChatroom(chatroomName: string, creatorUsername: string, creatorUid: string): Promise<ChatroomMetadata | null> {
     try {
-        const response = await fetch(`http://localhost:3000/chatrooms/createChatroom`, {
+        const response = await fetch(`${apiUrl}/chatrooms/createChatroom`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -102,7 +103,7 @@ export async function createChatroom(chatroomName: string, creatorUsername: stri
 
 export async function getChatroom(chatroom_id: string): Promise<Chatroom | null> {
     try {
-        const response = await fetch(`http://localhost:3000/chatrooms/getChatroom/${chatroom_id}`, {
+        const response = await fetch(`${apiUrl}/chatrooms/getChatroom/${chatroom_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -128,7 +129,7 @@ export async function getChatroom(chatroom_id: string): Promise<Chatroom | null>
 
 export async function getChatrooms(): Promise<ChatroomMetadata[] | null> {
     try {
-        const response = await fetch(`http://localhost:3000/chatrooms/getChatrooms`, {
+        const response = await fetch(`${apiUrl}/chatrooms/getChatrooms`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
