@@ -43,6 +43,7 @@ function getRandomGifPath(): string {
     const randomGifPath = listOfGifs.at(randomIndex)?.getGifPath();
 
     if (!randomGifPath) {
+        console.error("Problem loading background from index ", randomIndex);
         return "";
     }
 
