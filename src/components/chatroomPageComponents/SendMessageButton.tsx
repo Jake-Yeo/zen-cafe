@@ -4,9 +4,8 @@ import { MouseEventHandler, useRef, useState } from "react"
 
 interface props {
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
-    onClick: MouseEventHandler<HTMLButtonElement>,
+    onClick: () => void,
 }
-
 const SendMessageButton = ({ onChange, onClick }: props) => {
 
     const textFieldRef = useRef(null);
@@ -52,10 +51,19 @@ const SendMessageButton = ({ onChange, onClick }: props) => {
                 onChange={(e) => {
                     onChange(e)
                     setTextContent(e.target.value);
-                    }} id="outlined-basic" label="Message" variant="outlined" />
+                }} id="outlined-basic" label="Message" variant="outlined"
+                onKeyUp={
+                    (e) => {
+                        if (e.key === 'Enter') {
+                            onClick();
+                            setTextContent("");
+                        }
+                    }
+                }
+            />
             <FrostedButton height={"100%"} onClick={
-                (e) => {
-                    onClick(e);
+                () => {
+                    onClick();
                     setTextContent("");
                 }
             } minWidth={"0px"} width={"5em"} text={""} content={`url("/svgs/ChatroomSvgs/send.svg")`}></FrostedButton>
