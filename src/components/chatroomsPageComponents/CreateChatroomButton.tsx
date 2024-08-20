@@ -5,6 +5,8 @@ import FrostedButton from "../sharedComponents/FrostedButton";
 import { createChatroom } from "../../functions/zenCafeChatroomsApi";
 import { SingletonUserContext } from "../../firebase/FirebaseApi";
 import SendMessageButton from "../chatroomPageComponents/SendMessageButton";
+import ChatroomMetadata from "../../objects/ChatroomMetadata";
+import { useNavigate } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition( // make sure this is not in the element itself or it will constantly be set again and again which ruins the sliding close animation!
     props: TransitionProps & {
@@ -18,11 +20,25 @@ const Transition = React.forwardRef(function Transition( // make sure this is no
 
 const CreateChatroomButton = () => {
 
+    const navigate = useNavigate();
+
     var chatroomName = "";
 
     const singletonUserContext = useContext(SingletonUserContext);
 
     const [isDialogueOpen, setIsDialogueOpen] = useState(false);
+
+    const onClick = () => {
+        const helper = async () => {
+            const chatroomMetadata: ChatroomMetadata | null = await createChatroom(chatroomName, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId());
+
+            // Have error if statements here
+
+            navigate(`/ChatroomPage/${chatroomMetadata?.getChatroomId()}`); // go to chatroom after you create it
+
+        }
+        helper();
+    }
 
     return (<>
         <FrostedButton onClick={() => { setIsDialogueOpen(true); }} text={"Create Chatroom"} marginTop="20px" />
@@ -81,7 +97,7 @@ const CreateChatroomButton = () => {
                     marginLeft="10px"
                     marginRight="10px"
                     marginBottom="10px"
-                    onClick={() => { createChatroom(chatroomName, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId()) }}
+                    onClick={onClick}
                     text={"Create Chatroom"} />
                 <FrostedButton
                     width="90%"
