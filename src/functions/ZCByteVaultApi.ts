@@ -6,7 +6,7 @@ async function getRadioJson(): Promise<any[] | null> {
   try {
 
     const options = { method: 'GET', headers: { 'User-Agent': 'ZCApi' } };
-    const response = await fetch('https://raw.githubusercontent.com/TheByteVault/ZCByteVault/main/Music/playlists/radio.json', options);
+    const response = await fetch('https://zen-cafe-production.up.railway.app/zcByteVault/fetchRadioJson', options);
     if (!response.ok) {
       throw new Error(`getPlaylistsJson Error: ${response.status}`);
     }
