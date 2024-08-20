@@ -21,6 +21,7 @@ interface props {
     borderBottomLeftRadius?: string,
     padding?: string,
     boxShadow?: string,
+    rotate?: string,
 }
 
 //https://stackoverflow.com/questions/32805670/what-does-before-and-after-do-in-css very useful for me when I made this button
@@ -42,7 +43,8 @@ const FrostedButton = ({
     borderBottomLeftRadius = "5em",
     padding = "10px",
     height = "auto",
-    boxShadow = "0px 5px 10px rgba(0, 0, 0, 0.7)"
+    boxShadow = "0px 5px 10px rgba(0, 0, 0, 0.7)",
+    rotate = 'rotate(0deg)'
 }: props) => {
 
     return (<>
@@ -82,6 +84,7 @@ const FrostedButton = ({
             onClick={onClick}>
             {content ?
             <Box sx={{
+                rotate: rotate,
                 backgroundImage: content,
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',

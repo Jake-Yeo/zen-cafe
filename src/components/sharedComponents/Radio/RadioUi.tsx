@@ -44,7 +44,7 @@ const RadioUi = () => {
                 {/** Must also set minwidth for each button!!! */}
                 <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={playPauseSvg} onClick={onChangeForPlayPause} />
                 <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/radio.svg")`} onClick={radioContext.changeRadio} />
-                <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/prev.svg")`} onClick={radioContext.prev} />
+                <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/prev.svg")`} onClick={radioContext.prev} rotate={'rotate(180deg)'}/>
                 <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/next.svg")`} onClick={radioContext.next} />
             </Stack>
             <Stack direction="row"></Stack>
