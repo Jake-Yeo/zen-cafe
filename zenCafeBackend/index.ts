@@ -28,6 +28,8 @@ app.use('/chatrooms', chatroomRouter);
 import userRouter from './routes/userRoute';
 app.use('/users', userRouter);
 
+import zcByteVaultRouter from './routes/zcByteVaultRoute';
+app.use('/zcByteVault', zcByteVaultRouter);
 
 // cannot push this file because this has api key!
 mongoose.connect(mongoUri)
