@@ -6,8 +6,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
-const api_key = process.env.REACT_APP_API_KEY;
-console.log("API Key:", process.env.REACT_APP_API_KEY);
+const api_key = process.env.REACT_APP_API_KEY;x
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries

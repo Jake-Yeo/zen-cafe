@@ -5,11 +5,21 @@ import Song from "../objects/Song";
 async function getRadioJson(): Promise<any[] | null> {
   try {
 
-    const options = { method: 'GET', headers: { 'User-Agent': 'ZCApi' } };
-    const response = await fetch('https://zen-cafe-production.up.railway.app/zcByteVault/fetchRadioJson', options);
+    // const options = { method: 'GET', headers: { 'User-Agent': 'ZCApi' } };
+
+    //const response = await fetch('https://zen-cafe-production.up.railway.app/zcByteVault/fetchRadioJson', options);
+
+    const response = await fetch('https://zen-cafe-production.up.railway.app/zcByteVault/fetchRadioJson', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+
     if (!response.ok) {
       throw new Error(`getPlaylistsJson Error: ${response.status}`);
     }
+
     const data = await response.json();
     const radioJson = data;
     return radioJson;
@@ -42,7 +52,7 @@ function parseSongJsonArr(songJsonArr: any[]): Song[] {
 }
 
 function parseRadioJson(radioJson: any): Radio {
-  const {playlists} = radioJson;
+  const { playlists } = radioJson;
 
   const playlistArr: Playlist[] = [];
   for (const playlistJson of playlists) {
