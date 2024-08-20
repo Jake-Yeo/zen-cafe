@@ -1,6 +1,6 @@
 import { Stack, TextField } from "@mui/material"
 import FrostedButton from "../sharedComponents/FrostedButton"
-import { MouseEventHandler } from "react"
+import { MouseEventHandler, useRef, useState } from "react"
 
 interface props {
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
@@ -8,9 +8,15 @@ interface props {
 }
 
 const SendMessageButton = ({ onChange, onClick }: props) => {
+
+    const textFieldRef = useRef(null);
+    const [textContent, setTextContent] = useState("");
+
     return (<>
         <Stack spacing={1} direction={"row"} justifyContent={"end"} alignItems={"end"} height={"56px"}>
             <TextField
+                value={textContent}
+                ref={textFieldRef}
                 autoComplete="off"
                 InputLabelProps={{
                     sx: {
@@ -43,8 +49,16 @@ const SendMessageButton = ({ onChange, onClick }: props) => {
                         },
                     },
                 }}
-                onChange={onChange} id="outlined-basic" label="Message" variant="outlined" />
-            <FrostedButton height={"100%"} onClick={onClick} minWidth={"0px"} width={"5em"} text={""} content={`url("/svgs/ChatroomSvgs/send.svg")`}></FrostedButton>
+                onChange={(e) => {
+                    onChange(e)
+                    setTextContent(e.target.value);
+                    }} id="outlined-basic" label="Message" variant="outlined" />
+            <FrostedButton height={"100%"} onClick={
+                (e) => {
+                    onClick(e);
+                    setTextContent("");
+                }
+            } minWidth={"0px"} width={"5em"} text={""} content={`url("/svgs/ChatroomSvgs/send.svg")`}></FrostedButton>
         </Stack>
     </>)
 }
