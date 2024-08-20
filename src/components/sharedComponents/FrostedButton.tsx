@@ -84,7 +84,7 @@ const FrostedButton = ({
             onClick={onClick}>
             {content ?
             <Box sx={{
-                rotate: rotate,
+                transform: rotate,
                 backgroundImage: content,
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
