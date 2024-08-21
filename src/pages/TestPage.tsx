@@ -23,7 +23,7 @@ const TestPage = () => {
     };
   
     const onSendMessageClick = () => {
-      sendMessage(chatroom_id, username, uid, message);
+      sendMessage(chatroom_id, username, uid, message, false);
     }
   
     return (

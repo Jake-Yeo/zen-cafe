@@ -38,9 +38,15 @@ const ChatroomPage = () => {
 
             const { newMessage } = JSON.parse(event.data)
 
-            const { senderUsername, senderUid, message, _id } = newMessage;
+            const { senderUsername, senderUid, message, _id, chatroomId } = newMessage;
 
-            const newMessageObj = new Message(message, senderUsername, senderUid, _id);
+            var {deleted} = newMessage;
+
+            if (!deleted) {
+                deleted = false
+            }
+
+            const newMessageObj = new Message(message, senderUsername, senderUid, _id, deleted, chatroomId);
 
             statelessChatroom.pushMessage(newMessageObj);
 
@@ -87,7 +93,7 @@ const ChatroomPage = () => {
     const onSendMessageClick = () => {
         console.log(messageToSend);
         console.log(chatroomId);
-        sendMessage(chatroomId, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId(), messageToSend)
+        sendMessage(chatroomId, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId(), messageToSend, false);
     }
 
     return (

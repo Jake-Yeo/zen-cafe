@@ -2,6 +2,8 @@ import { Box, Stack, Typography } from "@mui/material"
 import Message from "../../objects/Message"
 import { useContext } from "react";
 import { SingletonUserContext } from "../../firebase/FirebaseApi";
+import FrostedButton from "../sharedComponents/FrostedButton";
+import { sendMessage } from "../../functions/zenCafeChatroomsApi";
 
 interface props {
     message: Message
@@ -14,6 +16,10 @@ const MessageDetailCard = ({ message }: props) => {
     const sentByUser = message.getSenderUid() === singletonUserContext.user.getGoogleId();
     //console.log(message.getSenderUid(), singletonUserContext.user.getGoogleId());
     //console.log(sentByUser);
+
+    const onDeleteButtonClick = () => {
+        sendMessage(message.getChatroomId(), message.getSenderUsername(), message.getSenderUid(), message.getMessageId(), true);
+    }
 
     var boxStyling: React.CSSProperties = {};
 
@@ -48,13 +54,18 @@ const MessageDetailCard = ({ message }: props) => {
                 height: 'auto',
                 width: '90%',
                 backdropFilter: 'blur(10px) saturate(300%)',
-                //  marginBottom: "20px"
+                padding: "10px",
             }}>
-                <Typography sx={{
-                    zIndex: 1,
-                    margin: "4px",
-                    color: "white"
-                }} >{message.getSenderUsername()}</Typography>
+                <Stack direction={"row"} justifyContent={"space-between"}>
+                    <Typography sx={{
+                        zIndex: 1,
+                        margin: "4px",
+                        color: "white"
+                    }} >{message.getSenderUsername()}</Typography>
+                    {sentByUser ?
+                        <FrostedButton onClick={onDeleteButtonClick} text={""} content={`url("/svgs/ChatroomSvgs/trashbin.svg")`} minWidth="0px" width="35px" height="35px" /> :
+                        <></>}
+                </Stack>
                 <Typography sx={{
                     zIndex: 1,
                     margin: "4px",

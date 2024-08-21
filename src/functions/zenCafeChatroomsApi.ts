@@ -15,9 +15,15 @@ function dataToChatroomMetadataObj(data: any): ChatroomMetadata {
 function dataToChatroomObj(data: any): Chatroom {
 
     function dataToMessageObj(data: any): Message {
-        const { _id, senderUsername, senderUid, message } = data;
+        const { _id, senderUsername, senderUid, message, chatroomId} = data;
 
-        const messageToReturn = new Message(message, senderUsername, senderUid, _id);
+        var {deleted} = data;
+
+        if (!deleted) {
+            deleted = false;
+        }
+
+        const messageToReturn = new Message(message, senderUsername, senderUid, _id, deleted, chatroomId);
 
         return messageToReturn;
     }
@@ -44,7 +50,7 @@ function dataToChatroomObj(data: any): Chatroom {
 // Make sure to look at the network debugging tool to see that requests are actually being send to ensure its not a backend or frontend problem...
 // Also for some reason edge is not letting me send my requests??? Maybe it might be because of the keep alive line? Idk...
 // https://stackoverflow.com/questions/25847083/chrome-just-doesnt-finish-loading-js-files
-export async function sendMessage(chatroom_id: string, senderUsername: string, senderUid: string, message: string): Promise<void> {
+export async function sendMessage(chatroom_id: string, senderUsername: string, senderUid: string, message: string, deleted: boolean): Promise<void> {
     try {
         console.log("before fetch");
         const response = await fetch(`${apiUrl}/chatrooms/sendMessage`, {
@@ -57,9 +63,9 @@ export async function sendMessage(chatroom_id: string, senderUsername: string, s
                 senderUsername: senderUsername,
                 senderUid: senderUid,
                 message: message,
+                deleted: deleted,
             })
         });
-        console.log("awefawefaw");
 
         if (!response.ok) {
             console.error('createChatroom Error:', 'Failed to fetch');

@@ -4,12 +4,16 @@ class Message {
     private message: string;
     private senderUsername: string;
     private senderUid: string;
+    private deleted: boolean;
+    private chatroomId: string;
 
-    constructor(message: string, senderUsername: string, senderUid: string, messageId: string) {
+    constructor(message: string, senderUsername: string, senderUid: string, messageId: string, deleted: boolean, chatroomId: string) {
         this.message = message;
         this.senderUid = senderUid;
         this.senderUsername = senderUsername;
         this.messageId = messageId;
+        this.deleted = deleted;
+        this.chatroomId = chatroomId;
     }
 
     public getMessageId(): string {
@@ -26,6 +30,14 @@ class Message {
 
     public getSenderUid(): string {
         return this.senderUid;
+    }
+
+    public isDeleted(): boolean {
+        return this.deleted;
+    }
+
+    public getChatroomId(): string {
+        return this.chatroomId;
     }
 }
 

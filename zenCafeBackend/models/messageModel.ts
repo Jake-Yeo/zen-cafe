@@ -16,10 +16,19 @@ const messageSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please provide a uid"],
     },
+    chatroomId: {
+        type: String,
+        required: [true, "Please provide a chatroom id"],
+    },
     message: { // the message they sent
         type: String,
         required: [true, "Please provide a message"],
-    }
+    },
+    deleted: { // Every message with this id should be removed if true
+        type: Boolean,
+        required: true,
+        default: false
+    } 
 },
     {
         timestamps: true // this time stamp if so we can track when the user creates a message, and when the user updates a message

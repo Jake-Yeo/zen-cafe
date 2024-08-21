@@ -4,6 +4,7 @@ class Chatroom {
     private creatorUsername: string;
     private creatorUid: string;
     private messages: Message[];
+    private deletedMessageIds: string[];
     private chatroomName: string;
     private chatroomId: string;
 
@@ -11,8 +12,19 @@ class Chatroom {
         this.chatroomName = chatroomName;
         this.creatorUsername = creatorUsername;
         this.creatorUid = creatorUid;
-        this.messages = messages;
         this.chatroomId = chatroomId;
+        this.messages = [];
+        this.deletedMessageIds = [];
+
+        for (const msg of messages) {
+            if (msg.isDeleted()) {
+                this.deletedMessageIds.push(msg.getMessage());
+                this.deleteMessages();
+            } else {
+                this.messages.push(msg);
+            }
+        }
+        console.log(this.deletedMessageIds);
     }
 
     public getChatroomId(): string {
@@ -35,8 +47,22 @@ class Chatroom {
         return this.chatroomName;
     }
 
+    private deleteMessages(): void {
+        for (const msg of this.messages) {
+            if (this.deletedMessageIds.includes(msg.getMessageId())) {
+                const indexOfMsgToDelete = this.messages.indexOf(msg);
+                this.messages.splice(indexOfMsgToDelete, 1);
+            }
+        }
+    }
+
     public pushMessage(message: Message): void {
-        this.messages.push(message);
+        if (message.isDeleted()) {
+            this.deletedMessageIds.push(message.getMessage());
+            this.deleteMessages();
+        } else {
+            this.messages.push(message);
+        }
     }
 }
 

@@ -64,17 +64,21 @@ module.exports = {
     sendMessage: async (req, res) => {
         try {
             console.log("message received");
-            const { chatroom_id, senderUsername, senderUid, message } = req.body;
+            const { chatroom_id, senderUsername, senderUid, message, deleted } = req.body;
 
-            if (!chatroom_id || !senderUsername || !senderUid || !message) {
-                return res.status(400).json({ message: 'Either forgot chatroom_id, senderUsername, message, or senderUid' });
+            console.log("point 1");
+            console.log("senderusername: ", senderUid);
+            if (!chatroom_id || !senderUsername || !senderUid || !message || deleted === undefined || deleted === null) { // we cannot do !deleted like the rest since it's a boolean value
+                return res.status(400).json({ message: 'Either forgot chatroom_id, senderUsername, message, deleted, or senderUid' });
             }
-
+            console.log("point 2");
             const messageData =
             {
+                chatroomId: chatroom_id,
                 senderUsername: senderUsername,
                 senderUid: senderUid,
-                message: message
+                message: message,
+                deleted: deleted,
             }
 
             const chatroom = await Chatroom.findByIdAndUpdate(
