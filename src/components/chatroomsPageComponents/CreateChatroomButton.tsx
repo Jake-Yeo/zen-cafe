@@ -2,11 +2,12 @@ import { Button, Dialog, Slide, Stack, TextField } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import React, { useContext, useState } from "react";
 import FrostedButton from "../sharedComponents/FrostedButton";
-import { createChatroom } from "../../functions/zenCafeChatroomsApi";
+import { createChatroom, isChatroomNameUnique } from "../../functions/zenCafeChatroomsApi";
 import { SingletonUserContext } from "../../firebase/FirebaseApi";
 import SendMessageButton from "../chatroomPageComponents/SendMessageButton";
 import ChatroomMetadata from "../../objects/ChatroomMetadata";
 import { useNavigate } from "react-router-dom";
+import CustomSnackbar from "../sharedComponents/CustomSnackbar";
 
 const Transition = React.forwardRef(function Transition( // make sure this is not in the element itself or it will constantly be set again and again which ruins the sliding close animation!
     props: TransitionProps & {
@@ -28,8 +29,26 @@ const CreateChatroomButton = () => {
 
     const [isDialogueOpen, setIsDialogueOpen] = useState(false);
 
+    const [openEmptyChatroomNameSnack, setOpenEmptyChatroomNameSnack] = useState(false);
+
+    const [openNotUniqueSnack, setOpenNotUniqueSnack] = useState(false);
+
+
     const onClick = () => {
         const helper = async () => {
+
+            if (chatroomName.length == 0) { // we must check this if statement first because isChatroomNameUnique cannot handle empty strings!
+                setOpenEmptyChatroomNameSnack(true);
+                return;
+            }
+
+            const isCNU = await isChatroomNameUnique(chatroomName);
+
+            if (isCNU == false || isCNU == null) {
+                setOpenNotUniqueSnack(true);
+                return;
+            }
+
             const chatroomMetadata: ChatroomMetadata | null = await createChatroom(chatroomName, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId());
 
             // Have error if statements here
@@ -42,6 +61,8 @@ const CreateChatroomButton = () => {
 
     return (<>
         <FrostedButton onClick={() => { setIsDialogueOpen(true); }} text={"Create Chatroom"} marginTop="20px" />
+        <CustomSnackbar open={openEmptyChatroomNameSnack} setOpen={setOpenEmptyChatroomNameSnack} message={"Please give the Chatroom a name!"}></CustomSnackbar>
+        <CustomSnackbar open={openNotUniqueSnack} setOpen={setOpenNotUniqueSnack} message={"Chatroom name not available!"}></CustomSnackbar>
         <Dialog
             components={{
                 Backdrop: () => null // Remove the backdrop completely

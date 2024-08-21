@@ -43,7 +43,6 @@ module.exports = {
             {
                 isChatroomNameUnique: true,
             }
-
             if (chatroomWithProvidedName) {
                 isChatroomNameUnique =
                 {

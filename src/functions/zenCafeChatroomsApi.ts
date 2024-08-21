@@ -70,6 +70,34 @@ export async function sendMessage(chatroom_id: string, senderUsername: string, s
     }
 }
 
+export async function isChatroomNameUnique(chatroomName: string): Promise<boolean | null> {
+    try {
+        const response = await fetch(`${apiUrl}/chatrooms/isChatroomNameUnique`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chatroomName: chatroomName,
+            })
+        });
+
+        if (!response.ok) {
+            console.error('isChatroomNameUnique endpoint error:', 'Failed to fetch');
+            return null;
+        }
+
+        const data = await response.json();
+
+        const { isChatroomNameUnique } = data;
+
+        return isChatroomNameUnique;
+
+    } catch (error) {
+        return null;
+    }
+}
+
 export async function createChatroom(chatroomName: string, creatorUsername: string, creatorUid: string): Promise<ChatroomMetadata | null> {
     try {
         const response = await fetch(`${apiUrl}/chatrooms/createChatroom`, {
