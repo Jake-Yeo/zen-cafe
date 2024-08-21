@@ -1,6 +1,8 @@
-import { Stack, TextField } from "@mui/material"
+import { Alert, Button, IconButton, Snackbar, SnackbarCloseReason, Stack, TextField } from "@mui/material"
 import FrostedButton from "../sharedComponents/FrostedButton"
 import { MouseEventHandler, useRef, useState } from "react"
+import React from "react";
+import CustomSnackbar from "../sharedComponents/CustomSnackbar";
 
 interface props {
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
@@ -10,6 +12,16 @@ const SendMessageButton = ({ onChange, onClick }: props) => {
 
     const textFieldRef = useRef(null);
     const [textContent, setTextContent] = useState("");
+    const [messageSnackOpen, setMessageSnackOpen] = useState(false);
+
+    const onSend = () => {
+        if (textContent.length != 0) {
+            onClick();
+            setTextContent("");
+        } else {
+            setMessageSnackOpen(true);
+        }
+    }
 
     return (<>
         <Stack spacing={1} direction={"row"} justifyContent={"end"} alignItems={"end"} height={"56px"}>
@@ -55,18 +67,17 @@ const SendMessageButton = ({ onChange, onClick }: props) => {
                 onKeyUp={
                     (e) => {
                         if (e.key === 'Enter') {
-                            onClick();
-                            setTextContent("");
+                            onSend();
                         }
                     }
                 }
             />
             <FrostedButton height={"100%"} onClick={
                 () => {
-                    onClick();
-                    setTextContent("");
+                    onSend();
                 }
             } minWidth={"0px"} width={"5em"} text={""} content={`url("/svgs/ChatroomSvgs/send.svg")`}></FrostedButton>
+            <CustomSnackbar open={messageSnackOpen} setOpen={setMessageSnackOpen} message={"Type a message first!"}></CustomSnackbar>
         </Stack>
     </>)
 }
