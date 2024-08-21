@@ -28,6 +28,35 @@ module.exports = {
         }
     },
 
+    isChatroomNameUnique: async (req, res) => {
+        try {
+
+            const { chatroomName } = req.body;
+
+            if (!chatroomName) {
+                return res.status(400).json({ message: 'Forgot to provide chatroomName' });
+            }
+
+            const chatroomsWithProvidedName = await Chatroom.find({ chatroomName: chatroomName }, { chatroomName: 1 });
+
+            var isChatroomNameUnique =
+            {
+                isChatroomNameUnique: true,
+            }
+
+            if (chatroomsWithProvidedName.length > 0) {
+                isChatroomNameUnique =
+                {
+                    isChatroomNameUnique: false,
+                }
+            }
+
+            res.status(200).json(isChatroomNameUnique);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
     // idea, send the sse event here anytime someone sends a message, then on frontend, check to make sure that event isn't one created by the user themselves, then we no longer need to check the database for updates
 
     // Requires: chatroomUid, username, userUid, message, as JSON in req.body

@@ -19,4 +19,7 @@ chatroomRouter.get('/getChatrooms', controller.getChatrooms);
 // Get one chatroom via chatroom_id
 chatroomRouter.get('/getChatroom/:chatroom_id', controller.getChatroom);
 
+// Check if chatroom name is unique
+chatroomRouter.get('/isChatroomNameUnique', controller.isChatroomNameUnique);
+
 export default chatroomRouter;
