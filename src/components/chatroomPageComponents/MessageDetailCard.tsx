@@ -25,6 +25,7 @@ const MessageDetailCard = ({ message }: props) => {
 
     if (sentByUser) {
         boxStyling = {
+            paddingLeft: "30px",
             width: "100%",
             display: 'flex',
             alignItems: 'center',
@@ -32,6 +33,7 @@ const MessageDetailCard = ({ message }: props) => {
         }
     } else {
         boxStyling = {
+            paddingRight: "30px",
             width: "100%",
             display: 'flex',
             alignItems: 'center',
@@ -52,7 +54,7 @@ const MessageDetailCard = ({ message }: props) => {
                 boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)",
                 overflow: 'hidden',
                 height: 'auto',
-                width: '90%',
+                width: '100%',
                 backdropFilter: 'blur(10px) saturate(300%)',
                 padding: "10px",
             }}>
