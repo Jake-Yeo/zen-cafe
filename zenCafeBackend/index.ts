@@ -19,9 +19,6 @@ app.get('/', (req, res) => { // get method
     res.send("Hello from node api");
 });
 
-const productRoute = require('./routes/productRoute');
-app.use('/api/products', productRoute);
-
 import chatroomRouter from './routes/chatroomRoute';
 app.use('/chatrooms', chatroomRouter);
 
