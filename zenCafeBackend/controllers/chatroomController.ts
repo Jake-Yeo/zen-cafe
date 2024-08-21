@@ -37,14 +37,14 @@ module.exports = {
                 return res.status(400).json({ message: 'Forgot to provide chatroomName' });
             }
 
-            const chatroomsWithProvidedName = await Chatroom.find({ chatroomName: chatroomName }, { chatroomName: 1 });
+            const chatroomWithProvidedName = await Chatroom.findOne({ chatroomName: chatroomName });;
 
             var isChatroomNameUnique =
             {
                 isChatroomNameUnique: true,
             }
 
-            if (chatroomsWithProvidedName.length > 0) {
+            if (chatroomWithProvidedName) {
                 isChatroomNameUnique =
                 {
                     isChatroomNameUnique: false,
