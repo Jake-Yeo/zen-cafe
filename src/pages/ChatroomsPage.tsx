@@ -23,20 +23,19 @@ const ChatroomsPage = () => {
 
     const [chatrooms, setChatrooms] = useState<ChatroomMetadata[]>([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const chatrooms = await getChatrooms();
+    const fetchChatrooms = async () => {
+        const chatrooms = await getChatrooms();
 
-            if (!chatrooms) {
-                console.error('ChatroomsPage Error:', 'Failed to get Chatrooms with getChatrooms()');
-                return;
-            }
-
-            setChatrooms(chatrooms);
+        if (!chatrooms) {
+            console.error('ChatroomsPage Error:', 'Failed to get Chatrooms with getChatrooms()');
+            return;
         }
 
-        fetchData();
+        setChatrooms(chatrooms);
+    }
 
+    useEffect(() => {
+        fetchChatrooms();
     }, []);
 
     const chatroomDetailCardArray: ReactElement[] = [];
@@ -58,7 +57,10 @@ const ChatroomsPage = () => {
                 <Header />
                 <Typography padding={"10px"} zIndex={1} color={"white"}>Chatrooms</Typography>
                 <VirtuosoElementList elementArr={chatroomDetailCardArray} width="75%" widthOfItems="66.67%" />
-                <CreateChatroomButton></CreateChatroomButton>
+                <Stack direction={"row"} width={"50%"}>
+                    <CreateChatroomButton></CreateChatroomButton>
+                    <FrostedButton text={"Refresh"} marginTop="20px" borderTopLeftRadius="0" borderBottomLeftRadius="0" onClick={fetchChatrooms}></FrostedButton>
+                </Stack>
                 <Box sx={{ position: 'absolute', bottom: 0, left: 0, padding: "10px" }}>
                     <RadioUi></RadioUi>
                 </Box>

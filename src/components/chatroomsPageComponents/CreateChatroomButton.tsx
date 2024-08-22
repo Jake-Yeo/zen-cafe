@@ -59,7 +59,7 @@ const CreateChatroomButton = () => {
     }
 
     return (<>
-        <FrostedButton onClick={() => { setIsDialogueOpen(true); }} text={"Create Chatroom"} marginTop="20px" />
+        <FrostedButton onClick={() => { setIsDialogueOpen(true); }} text={"Create Chatroom"} marginTop="20px" borderBottomRightRadius="0" borderTopRightRadius="0"/>
         <CustomSnackbar open={openEmptyChatroomNameSnack} setOpen={setOpenEmptyChatroomNameSnack} message={"Please give the Chatroom a name!"}></CustomSnackbar>
         <CustomSnackbar open={openNotUniqueSnack} setOpen={setOpenNotUniqueSnack} message={"Chatroom name not available!"}></CustomSnackbar>
         <Dialog
