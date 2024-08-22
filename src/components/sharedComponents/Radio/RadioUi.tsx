@@ -46,11 +46,11 @@ const RadioUi = () => {
                 <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/radio.svg")`} onClick={radioContext.changeRadio} />
                 <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/prev.svg")`} onClick={() => {
                     radioContext.prev();
-                    setPlayPauseSvg(`url("/svgs/RadioSvgs/play.svg")`);
+                    setPlayPauseSvg(`url("/svgs/RadioSvgs/pause.svg")`);
                 }} rotate={'rotate(180deg)'} />
                 <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/next.svg")`} onClick={() => {
                     radioContext.next();
-                    setPlayPauseSvg(`url("/svgs/RadioSvgs/play.svg")`);
+                    setPlayPauseSvg(`url("/svgs/RadioSvgs/pause.svg")`);
                 }} />
             </Stack>
             <Stack direction="row"></Stack>
