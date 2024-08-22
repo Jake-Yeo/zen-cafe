@@ -2,7 +2,7 @@ import { Button, Dialog, Slide, Stack, TextField } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import React, { useContext, useState } from "react";
 import FrostedButton from "../sharedComponents/FrostedButton";
-import { createChatroom, isChatroomNameUnique } from "../../functions/zenCafeChatroomsApi";
+import { createChatroom, isChatroomNameUnique, sendMessage } from "../../functions/zenCafeChatroomsApi";
 import { SingletonUserContext } from "../../firebase/FirebaseApi";
 import SendMessageButton from "../chatroomPageComponents/SendMessageButton";
 import ChatroomMetadata from "../../objects/ChatroomMetadata";
@@ -34,29 +34,28 @@ const CreateChatroomButton = () => {
     const [openNotUniqueSnack, setOpenNotUniqueSnack] = useState(false);
 
 
-    const onClick = () => {
-        const helper = async () => {
+    const onClick = async () => {
 
-            if (chatroomName.length == 0) { // we must check this if statement first because isChatroomNameUnique cannot handle empty strings!
-                setOpenEmptyChatroomNameSnack(true);
-                return;
-            }
 
-            const isCNU = await isChatroomNameUnique(chatroomName);
-
-            if (isCNU == false || isCNU == null) {
-                setOpenNotUniqueSnack(true);
-                return;
-            }
-
-            const chatroomMetadata: ChatroomMetadata | null = await createChatroom(chatroomName, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId());
-
-            // Have error if statements here
-
-            navigate(`/ChatroomPage/${chatroomMetadata?.getChatroomId()}`); // go to chatroom after you create it
-
+        if (chatroomName.length == 0) { // we must check this if statement first because isChatroomNameUnique cannot handle empty strings!
+            setOpenEmptyChatroomNameSnack(true);
+            return;
         }
-        helper();
+
+        const isCNU = await isChatroomNameUnique(chatroomName);
+
+        if (isCNU == false || isCNU == null) {
+            setOpenNotUniqueSnack(true);
+            return;
+        }
+
+        const chatroomMetadata: ChatroomMetadata | null = await createChatroom(chatroomName, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId());
+
+        // Have error if statements here
+        if (chatroomMetadata) {
+            await sendMessage(chatroomMetadata.getChatroomId(), chatroomMetadata.getCreatorUsername(), chatroomMetadata.getCreatorUid(), "initial message (to stop dupicate key error)", true);
+            navigate(`/ChatroomPage/${chatroomMetadata.getChatroomId()}`); // go to chatroom after you create it
+        }
     }
 
     return (<>

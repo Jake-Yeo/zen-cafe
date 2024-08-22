@@ -2,16 +2,18 @@ import { Box, Stack, Typography } from "@mui/material"
 import ChatroomMetadata from "../../objects/ChatroomMetadata"
 import { useNavigate } from "react-router-dom"
 import FrostedButton from "../sharedComponents/FrostedButton"
-import { deleteChatroom, doesChatroomExist } from "../../functions/zenCafeChatroomsApi"
+import { deleteChatroom, doesChatroomExist, getChatrooms } from "../../functions/zenCafeChatroomsApi"
 import { SetStateAction, useContext, useState } from "react"
 import CustomSnackbar from "../sharedComponents/CustomSnackbar"
 import { SingletonUserContext } from "../../firebase/FirebaseApi"
 
 interface props {
     chatroomMetadata: ChatroomMetadata,
+    chatrooms: ChatroomMetadata[],
+    setChatrooms: React.Dispatch<React.SetStateAction<ChatroomMetadata[]>>,
 }
 
-const ChatroomDetailCard = ({ chatroomMetadata }: props) => {
+const ChatroomDetailCard = ({ chatroomMetadata, chatrooms, setChatrooms }: props) => {
 
     const navigate = useNavigate();
 
@@ -31,7 +33,11 @@ const ChatroomDetailCard = ({ chatroomMetadata }: props) => {
 
     const onClickDeleteChatroom = async () => {
         if (await doesChatroomExist(chatroomMetadata.getChatroomId())) {
-            deleteChatroom(chatroomMetadata.getChatroomId());
+            await deleteChatroom(chatroomMetadata.getChatroomId()); // must have await or the below line of code will return the chatrooms list before the chatroom is deleted
+            const chatroomsToSet = await getChatrooms();
+            if (chatroomsToSet) {
+                setChatrooms(chatroomsToSet);
+            }
         } else {
             setOpenEmptyChatroomNameSnack(true);
         }

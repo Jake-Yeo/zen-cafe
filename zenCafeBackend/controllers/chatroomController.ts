@@ -24,6 +24,7 @@ module.exports = {
             const chatroom = await Chatroom.create(newChatData);
             res.status(200).json(chatroom);
         } catch (error) {
+            console.log(error.message );
             res.status(500).json({ message: error.message });
         }
     },

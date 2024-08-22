@@ -43,7 +43,7 @@ const ChatroomsPage = () => {
 
     for (const chatroom of chatrooms) {
         chatroomDetailCardArray.push(
-            <ChatroomDetailCard chatroomMetadata={chatroom} />);
+            <ChatroomDetailCard chatroomMetadata={chatroom} chatrooms={chatrooms} setChatrooms={setChatrooms} />);
     }
 
     return (<>

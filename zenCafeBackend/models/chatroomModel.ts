@@ -24,7 +24,7 @@ const chatroomSchema = new mongoose.Schema({
     messages: {
         type: [messageSchema],
         required: [true, 'provide an array of messages'],
-        default: [] // Default value is an empty array
+        default: [], // Default value is an empty array
     }
 });
 
