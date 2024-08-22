@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Chatroom from "../objects/Chatroom";
 import { ReactElement, useContext, useEffect, useRef, useState } from "react";
 import { doesChatroomExist, getChatroom, sendMessage } from "../functions/zenCafeChatroomsApi";
@@ -26,6 +26,12 @@ const ChatroomPage = () => {
     const { chatroomId = '' } = useParams();
 
     const singletonUserContext = useContext(SingletonUserContext);
+
+    const navigate = useNavigate();
+
+    if (!singletonUserContext.user) { // Check if person accessing this page is logged in first, if not then redirect them to the login page
+        navigate("/loginSignupPage");
+    }
 
     const [chatroom, setChatroom] = useState(new Chatroom("", "", "", [], ""));
 

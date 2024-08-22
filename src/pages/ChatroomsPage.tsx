@@ -21,6 +21,14 @@ const { v4: uuidv4 } = require('uuid');
 
 const ChatroomsPage = () => {
 
+    const navigate = useNavigate();
+
+    const singletonUserContext = useContext(SingletonUserContext);
+
+    if (!singletonUserContext.user) { // Check if person accessing this page is logged in first, if not then redirect them to the login page
+        navigate("/loginSignupPage");
+    }
+
     const [chatrooms, setChatrooms] = useState<ChatroomMetadata[]>([]);
 
     const fetchChatrooms = async () => {
