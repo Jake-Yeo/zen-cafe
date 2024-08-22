@@ -15,9 +15,9 @@ function dataToChatroomMetadataObj(data: any): ChatroomMetadata {
 function dataToChatroomObj(data: any): Chatroom {
 
     function dataToMessageObj(data: any): Message {
-        const { _id, senderUsername, senderUid, message, chatroomId} = data;
+        const { _id, senderUsername, senderUid, message, chatroomId } = data;
 
-        var {deleted} = data;
+        var { deleted } = data;
 
         if (!deleted) {
             deleted = false;
@@ -131,6 +131,52 @@ export async function createChatroom(chatroomName: string, creatorUsername: stri
 
     } catch (error) {
         console.error('getChatrooms Error:', 'Failed to fetch');
+        return null;
+    }
+}
+
+export async function deleteChatroom(chatroom_id: string): Promise<boolean> {
+    try {
+        const response = await fetch(`${apiUrl}/chatrooms/deleteChatroom/${chatroom_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        if (!response.ok) {
+            console.error('deleteChatroom Error:', 'Failed to delete');
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('deleteChatroom Error:', 'Failed to delete');
+        return false;
+    }
+}
+
+export async function doesChatroomExist(chatroom_id: string): Promise<boolean | null> {
+    try {
+        const response = await fetch(`${apiUrl}/chatrooms/doesChatroomExist/${chatroom_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        if (!response.ok) {
+            console.error('doesChatroomExist Error:', 'Failed to get');
+            return null;
+        }
+
+        const data = await response.json();
+
+        const { doesChatroomExist } = data;
+
+        return doesChatroomExist;
+    } catch (error) {
+        console.error('doesChatroomExist Error:', 'Failed to get');
         return null;
     }
 }

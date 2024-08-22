@@ -1,9 +1,10 @@
 import { Box, Stack, Typography } from "@mui/material"
 import Message from "../../objects/Message"
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SingletonUserContext } from "../../firebase/FirebaseApi";
 import FrostedButton from "../sharedComponents/FrostedButton";
-import { sendMessage } from "../../functions/zenCafeChatroomsApi";
+import { doesChatroomExist, sendMessage } from "../../functions/zenCafeChatroomsApi";
+import CustomSnackbar from "../sharedComponents/CustomSnackbar";
 
 interface props {
     message: Message
@@ -17,8 +18,14 @@ const MessageDetailCard = ({ message }: props) => {
     //console.log(message.getSenderUid(), singletonUserContext.user.getGoogleId());
     //console.log(sentByUser);
 
-    const onDeleteButtonClick = () => {
-        sendMessage(message.getChatroomId(), message.getSenderUsername(), message.getSenderUid(), message.getMessageId(), true);
+    const [openChatroomNoLongerExistsSnack, setOpenChatroomNoLongerExistsSnack] = useState(false);
+
+    const onDeleteButtonClick = async () => {
+        if (await doesChatroomExist(message.getChatroomId())) {
+            sendMessage(message.getChatroomId(), message.getSenderUsername(), message.getSenderUid(), message.getMessageId(), true);
+        } else {
+            setOpenChatroomNoLongerExistsSnack(true);
+        }
     }
 
     var boxStyling: React.CSSProperties = {};
@@ -42,39 +49,43 @@ const MessageDetailCard = ({ message }: props) => {
     }
 
     return (
-        <Box
-            sx={{
-                ...boxStyling,
-                paddingBottom: "20px"
-            }}
-        >
-            <Stack sx={{
-                borderRadius: "20px",
-                backgroundColor: 'transparent',
-                boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)",
-                overflow: 'hidden',
-                height: 'auto',
-                width: '100%',
-                backdropFilter: 'blur(10px) saturate(300%)',
-                padding: "10px",
-            }}>
-                <Stack direction={"row"} justifyContent={"space-between"}>
+        <>
+            <Box
+                sx={{
+                    ...boxStyling,
+                    paddingBottom: "20px"
+                }}
+            >
+                <Stack sx={{
+                    borderRadius: "20px",
+                    backgroundColor: 'transparent',
+                    boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.7)",
+                    overflow: 'hidden',
+                    height: 'auto',
+                    width: '100%',
+                    backdropFilter: 'blur(10px) saturate(300%)',
+                    padding: "10px",
+                }}>
+                    <Stack direction={"row"} justifyContent={"space-between"}>
+                        <Typography sx={{
+                            zIndex: 1,
+                            margin: "4px",
+                            color: "white"
+                        }} >{message.getSenderUsername()}</Typography>
+                        {sentByUser ?
+                            <FrostedButton onClick={onDeleteButtonClick} text={""} content={`url("/svgs/ChatroomSvgs/trashbin.svg")`} minWidth="0px" width="35px" height="35px" /> :
+                            <></>}
+                    </Stack>
                     <Typography sx={{
                         zIndex: 1,
                         margin: "4px",
                         color: "white"
-                    }} >{message.getSenderUsername()}</Typography>
-                    {sentByUser ?
-                        <FrostedButton onClick={onDeleteButtonClick} text={""} content={`url("/svgs/ChatroomSvgs/trashbin.svg")`} minWidth="0px" width="35px" height="35px" /> :
-                        <></>}
+                    }} >{message.getMessage()}</Typography>
                 </Stack>
-                <Typography sx={{
-                    zIndex: 1,
-                    margin: "4px",
-                    color: "white"
-                }} >{message.getMessage()}</Typography>
-            </Stack>
-        </Box>)
+            </Box>
+            <CustomSnackbar open={openChatroomNoLongerExistsSnack} setOpen={setOpenChatroomNoLongerExistsSnack} message={`This chatroom was deleted! Please go back to the chatrooms page!`}></CustomSnackbar>
+        </>
+    )
 
 }
 

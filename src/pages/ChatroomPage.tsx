@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import Chatroom from "../objects/Chatroom";
 import { ReactElement, useContext, useEffect, useRef, useState } from "react";
-import { getChatroom, sendMessage } from "../functions/zenCafeChatroomsApi";
+import { doesChatroomExist, getChatroom, sendMessage } from "../functions/zenCafeChatroomsApi";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import Message from "../objects/Message";
 import { SingletonUserContext } from "../firebase/FirebaseApi";
@@ -14,6 +14,7 @@ import SendMessageButton from "../components/chatroomPageComponents/SendMessageB
 import Header from "../components/sharedComponents/Header";
 import RadioUi from "../components/sharedComponents/Radio/RadioUi";
 import apiUrl from "../functions/apiUrl";
+import CustomSnackbar from "../components/sharedComponents/CustomSnackbar";
 const { v4: uuidv4 } = require('uuid');
 
 var messageToSend = "";
@@ -28,6 +29,8 @@ const ChatroomPage = () => {
 
     const [chatroom, setChatroom] = useState(new Chatroom("", "", "", [], ""));
 
+    const [openChatroomNoLongerExistsSnack, setOpenChatroomNoLongerExistsSnack] = useState(false);
+
     // https://stackoverflow.com/questions/57982180/react-app-suddenly-stalling-in-dev-and-production always do the event source in the useEffect... or else there will be multiple open connections created which means you will not be able to send any requests (send messages) to the database!!!
     useEffect(() => {
 
@@ -40,7 +43,7 @@ const ChatroomPage = () => {
 
             const { senderUsername, senderUid, message, _id, chatroomId } = newMessage;
 
-            var {deleted} = newMessage;
+            var { deleted } = newMessage;
 
             if (!deleted) {
                 deleted = false
@@ -90,10 +93,12 @@ const ChatroomPage = () => {
         console.log(messageToSend);
     }
 
-    const onSendMessageClick = () => {
-        console.log(messageToSend);
-        console.log(chatroomId);
-        sendMessage(chatroomId, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId(), messageToSend, false);
+    const onSendMessageClick = async () => {
+        if (await doesChatroomExist(chatroomId)) {
+            sendMessage(chatroomId, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId(), messageToSend, false);
+        } else {
+            setOpenChatroomNoLongerExistsSnack(true);
+        }
     }
 
     return (
@@ -113,6 +118,7 @@ const ChatroomPage = () => {
                     <RadioUi></RadioUi>
                 </Box>
             </Stack>
+            <CustomSnackbar open={openChatroomNoLongerExistsSnack} setOpen={setOpenChatroomNoLongerExistsSnack} message={`This chatroom was deleted! Please go back to the chatrooms page!`}></CustomSnackbar>
         </Background>)
 }
 
