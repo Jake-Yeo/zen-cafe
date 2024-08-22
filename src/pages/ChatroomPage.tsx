@@ -111,7 +111,7 @@ const ChatroomPage = () => {
                 }}
             >
                 <Header />
-                <Typography zIndex={1}>{chatroom.getChatroomName()}</Typography>
+                <Typography padding={"10px"} zIndex={1} color={"white"}>{"Chatroom: " + chatroom.getChatroomName()}</Typography>
                 <VirtuosoElementList elementArr={messageDetailCardArr} width="50%" widthOfItems="66.67%" scrollToBottomAtStart={true} />
                 <SendMessageButton onChange={onTextFieldChange} onClick={onSendMessageClick}></SendMessageButton>
                 <Box sx={{ position: 'absolute', bottom: 0, left: 0, padding: "10px" }}>

@@ -44,8 +44,14 @@ const RadioUi = () => {
                 {/** Must also set minwidth for each button!!! */}
                 <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={playPauseSvg} onClick={onChangeForPlayPause} />
                 <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/radio.svg")`} onClick={radioContext.changeRadio} />
-                <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/prev.svg")`} onClick={radioContext.prev} rotate={'rotate(180deg)'}/>
-                <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/next.svg")`} onClick={radioContext.next} />
+                <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/prev.svg")`} onClick={() => {
+                    radioContext.prev();
+                    setPlayPauseSvg(`url("/svgs/RadioSvgs/play.svg")`);
+                }} rotate={'rotate(180deg)'} />
+                <FrostedButton height={"35px"} width={"auto"} minWidth={"35px"} text="" content={`url("/svgs/RadioSvgs/next.svg")`} onClick={() => {
+                    radioContext.next();
+                    setPlayPauseSvg(`url("/svgs/RadioSvgs/play.svg")`);
+                }} />
             </Stack>
             <Stack direction="row"></Stack>
             <Typography color="white" zIndex={1}>Radio: {radioContext.currPlaylist?.getName()}</Typography>
