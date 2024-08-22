@@ -1,7 +1,8 @@
 import Chatroom from "../objects/Chatroom";
 import ChatroomMetadata from "../objects/ChatroomMetadata";
 import Message from "../objects/Message";
-import apiUrl from "./apiUrl";
+
+const apiUrl = process.env.API_URL;
 
 function dataToChatroomMetadataObj(data: any): ChatroomMetadata {
     const { _id, chatroomName, creatorUsername, creatorUid } = data;

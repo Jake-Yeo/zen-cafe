@@ -13,8 +13,9 @@ import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementL
 import SendMessageButton from "../components/chatroomPageComponents/SendMessageButton";
 import Header from "../components/sharedComponents/Header";
 import RadioUi from "../components/sharedComponents/Radio/RadioUi";
-import apiUrl from "../functions/apiUrl";
 const { v4: uuidv4 } = require('uuid');
+
+const apiUrl = process.env.API_URL;
 
 var messageToSend = "";
 var statelessChatroom = new Chatroom("", "", "", [], ""); // We have this because originally I was setting updating the chatroom variable that had state, then I would clone the chatroom and set it as the new chatroom to re-render
