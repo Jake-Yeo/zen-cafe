@@ -3,8 +3,9 @@ import ChatroomMetadata from "../../objects/ChatroomMetadata"
 import { useNavigate } from "react-router-dom"
 import FrostedButton from "../sharedComponents/FrostedButton"
 import { deleteChatroom, doesChatroomExist } from "../../functions/zenCafeChatroomsApi"
-import { SetStateAction, useState } from "react"
+import { SetStateAction, useContext, useState } from "react"
 import CustomSnackbar from "../sharedComponents/CustomSnackbar"
+import { SingletonUserContext } from "../../firebase/FirebaseApi"
 
 interface props {
     chatroomMetadata: ChatroomMetadata,
@@ -15,6 +16,10 @@ const ChatroomDetailCard = ({ chatroomMetadata }: props) => {
     const navigate = useNavigate();
 
     const [openChatroomDeletedSnack, setOpenEmptyChatroomNameSnack] = useState(false);
+
+    const singletonUserContext = useContext(SingletonUserContext);
+
+    const isCreatedByUser = chatroomMetadata.getCreatorUid() === singletonUserContext.user.getGoogleId();
 
     const onClickJoin = async () => {
         if (await doesChatroomExist(chatroomMetadata.getChatroomId())) {
@@ -67,28 +72,45 @@ const ChatroomDetailCard = ({ chatroomMetadata }: props) => {
                         </Typography>
                     </Stack>
                     <Stack direction="row" width="100%">
-                        <FrostedButton
-                            text={"Join"}
-                            borderTopLeftRadius="0em"
-                            borderTopRightRadius="0em"
-                            borderBottomLeftRadius="20px"
-                            borderBottomRightRadius="0"
-                            boxShadow="none"
-                            width="100%"
-                            fontSize="12px"
-                            padding="6px"
-                            onClick={onClickJoin} />
-                        <FrostedButton
-                            text={"Delete"}
-                            borderTopLeftRadius="0em"
-                            borderTopRightRadius="0em"
-                            borderBottomLeftRadius="0"
-                            borderBottomRightRadius="20px"
-                            boxShadow="none"
-                            width="25%"
-                            fontSize="12px"
-                            padding="6px"
-                            onClick={onClickDeleteChatroom} />
+                        {
+                            isCreatedByUser ?
+                                <>
+                                    < FrostedButton
+                                        text={"Join"}
+                                        borderTopLeftRadius="0em"
+                                        borderTopRightRadius="0em"
+                                        borderBottomLeftRadius="20px"
+                                        borderBottomRightRadius="0"
+                                        boxShadow="none"
+                                        width="100%"
+                                        fontSize="12px"
+                                        padding="6px"
+                                        onClick={onClickJoin} />
+                                    <FrostedButton
+                                        text={"Delete"}
+                                        borderTopLeftRadius="0em"
+                                        borderTopRightRadius="0em"
+                                        borderBottomLeftRadius="0"
+                                        borderBottomRightRadius="20px"
+                                        boxShadow="none"
+                                        width="25%"
+                                        fontSize="12px"
+                                        padding="6px"
+                                        onClick={onClickDeleteChatroom} />
+                                </>
+                                :
+                                < FrostedButton
+                                    text={"Join"}
+                                    borderTopLeftRadius="0em"
+                                    borderTopRightRadius="0em"
+                                    borderBottomLeftRadius="20px"
+                                    borderBottomRightRadius="20px"
+                                    boxShadow="none"
+                                    width="100%"
+                                    fontSize="12px"
+                                    padding="6px"
+                                    onClick={onClickJoin} />
+                        }
                     </Stack>
                 </Stack>
             </Box>
