@@ -1,4 +1,5 @@
 import Chatroom from "../models/chatroomModel";
+import { authorize } from "./authorization";
 
 module.exports = {
 
@@ -7,6 +8,10 @@ module.exports = {
     // Requires: chatroomName, creatorUsername, creatorUid, as JSON in req.body
     createChatroom: async (req, res) => {
         try {
+
+            if (!authorize(req)) {
+                return res.status(400).json({ message: 'Api key is incorrect!' });
+            }
 
             const { chatroomName, creatorUsername, creatorUid } = req.body;
 
@@ -24,13 +29,17 @@ module.exports = {
             const chatroom = await Chatroom.create(newChatData);
             res.status(200).json(chatroom);
         } catch (error) {
-            console.log(error.message );
+            console.log(error.message);
             res.status(500).json({ message: error.message });
         }
     },
 
     isChatroomNameUnique: async (req, res) => {
         try {
+
+            if (!authorize(req)) {
+                return res.status(400).json({ message: 'Api key is incorrect!' });
+            }
 
             const { chatroomName } = req.body;
 
@@ -64,6 +73,11 @@ module.exports = {
     // userUid: uid of the person sending the message
     sendMessage: async (req, res) => {
         try {
+
+            if (!authorize(req)) {
+                return res.status(400).json({ message: 'Api key is incorrect!' });
+            }
+
             console.log("message received");
             const { chatroom_id, senderUsername, senderUid, message, deleted } = req.body;
 
@@ -96,6 +110,11 @@ module.exports = {
 
     getChatrooms: async (req, res) => {
         try {
+
+            if (!authorize(req)) {
+                return res.status(400).json({ message: 'Api key is incorrect!' });
+            }
+
             const chatrooms = await Chatroom.find({}, { chatroomName: 1, creatorUsername: 1, creatorUid: 1 });
             res.status(200).json(chatrooms);
         } catch (error) {
@@ -106,6 +125,11 @@ module.exports = {
 
     getChatroom: async (req, res) => {
         try {
+
+            if (!authorize(req)) {
+                return res.status(400).json({ message: 'Api key is incorrect!' });
+            }
+
             const { chatroom_id } = req.params;
 
             if (!chatroom_id) {
@@ -128,6 +152,11 @@ module.exports = {
 
     doesChatroomExist: async (req, res) => {
         try {
+
+            if (!authorize(req)) {
+                return res.status(400).json({ message: 'Api key is incorrect!' });
+            }
+
             const { chatroom_id } = req.params;
 
             const chatroom = await Chatroom.findById(chatroom_id);
@@ -152,6 +181,11 @@ module.exports = {
 
     deleteChatroom: async (req, res) => {
         try {
+
+            if (!authorize(req)) {
+                return res.status(400).json({ message: 'Api key is incorrect!' });
+            }
+
             const { chatroom_id } = req.params;
 
             const chatroom = await Chatroom.findByIdAndDelete(chatroom_id);
@@ -168,7 +202,7 @@ module.exports = {
         }
     },
 
-    chatroomChangeStream: async (req, res) => {
+    chatroomChangeStream: async (req, res) => { // do not check if api key here is correct since we cannot pass headers via EventStream
         console.log("connection established");
         try {
             const { chatroom_id } = req.params;

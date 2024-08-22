@@ -1,7 +1,7 @@
 import Chatroom from "../objects/Chatroom";
 import ChatroomMetadata from "../objects/ChatroomMetadata";
 import Message from "../objects/Message";
-import apiUrl from "./apiUrl";
+import { encryptedZenCafeApiKey, zenCafeApiUrl } from "./envVars";
 
 function dataToChatroomMetadataObj(data: any): ChatroomMetadata {
     const { _id, chatroomName, creatorUsername, creatorUid } = data;
@@ -10,7 +10,6 @@ function dataToChatroomMetadataObj(data: any): ChatroomMetadata {
 
     return chatroomMetadataToReturn;
 }
-
 
 function dataToChatroomObj(data: any): Chatroom {
 
@@ -53,10 +52,11 @@ function dataToChatroomObj(data: any): Chatroom {
 export async function sendMessage(chatroom_id: string, senderUsername: string, senderUid: string, message: string, deleted: boolean): Promise<void> {
     try {
         console.log("before fetch");
-        const response = await fetch(`${apiUrl}/chatrooms/sendMessage`, {
+        const response = await fetch(`${zenCafeApiUrl}/chatrooms/sendMessage`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `${encryptedZenCafeApiKey}`
             },
             body: JSON.stringify({
                 chatroom_id: chatroom_id,
@@ -78,10 +78,11 @@ export async function sendMessage(chatroom_id: string, senderUsername: string, s
 
 export async function isChatroomNameUnique(chatroomName: string): Promise<boolean | null> {
     try {
-        const response = await fetch(`${apiUrl}/chatrooms/isChatroomNameUnique`, {
+        const response = await fetch(`${zenCafeApiUrl}/chatrooms/isChatroomNameUnique`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `${encryptedZenCafeApiKey}`
             },
             body: JSON.stringify({
                 chatroomName: chatroomName,
@@ -106,10 +107,11 @@ export async function isChatroomNameUnique(chatroomName: string): Promise<boolea
 
 export async function createChatroom(chatroomName: string, creatorUsername: string, creatorUid: string): Promise<ChatroomMetadata | null> {
     try {
-        const response = await fetch(`${apiUrl}/chatrooms/createChatroom`, {
+        const response = await fetch(`${zenCafeApiUrl}/chatrooms/createChatroom`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `${encryptedZenCafeApiKey}`
             },
             body: JSON.stringify({
                 chatroomName: chatroomName,
@@ -137,10 +139,11 @@ export async function createChatroom(chatroomName: string, creatorUsername: stri
 
 export async function deleteChatroom(chatroom_id: string): Promise<boolean> {
     try {
-        const response = await fetch(`${apiUrl}/chatrooms/deleteChatroom/${chatroom_id}`, {
+        const response = await fetch(`${zenCafeApiUrl}/chatrooms/deleteChatroom/${chatroom_id}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `${encryptedZenCafeApiKey}`
             },
         });
 
@@ -158,10 +161,11 @@ export async function deleteChatroom(chatroom_id: string): Promise<boolean> {
 
 export async function doesChatroomExist(chatroom_id: string): Promise<boolean | null> {
     try {
-        const response = await fetch(`${apiUrl}/chatrooms/doesChatroomExist/${chatroom_id}`, {
+        const response = await fetch(`${zenCafeApiUrl}/chatrooms/doesChatroomExist/${chatroom_id}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `${encryptedZenCafeApiKey}`
             },
         });
 
@@ -183,10 +187,11 @@ export async function doesChatroomExist(chatroom_id: string): Promise<boolean | 
 
 export async function getChatroom(chatroom_id: string): Promise<Chatroom | null> {
     try {
-        const response = await fetch(`${apiUrl}/chatrooms/getChatroom/${chatroom_id}`, {
+        const response = await fetch(`${zenCafeApiUrl}/chatrooms/getChatroom/${chatroom_id}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `${encryptedZenCafeApiKey}`
             },
         });
 
@@ -209,10 +214,11 @@ export async function getChatroom(chatroom_id: string): Promise<Chatroom | null>
 
 export async function getChatrooms(): Promise<ChatroomMetadata[] | null> {
     try {
-        const response = await fetch(`${apiUrl}/chatrooms/getChatrooms`, {
+        const response = await fetch(`${zenCafeApiUrl}/chatrooms/getChatrooms`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `${encryptedZenCafeApiKey}`
             },
         });
 
@@ -232,7 +238,7 @@ export async function getChatrooms(): Promise<ChatroomMetadata[] | null> {
         return chatrooms
 
     } catch (error) {
-        console.error('getChatrooms Error:', 'Failed to fetch at ', `${apiUrl}/chatrooms/getChatrooms`);
+        console.error('getChatrooms Error:', 'Failed to fetch at ', `${zenCafeApiUrl}/chatrooms/getChatrooms`);
         return null;
     }
 }

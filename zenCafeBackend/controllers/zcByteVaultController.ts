@@ -1,7 +1,14 @@
+import { authorize } from "./authorization";
+
 module.exports = {
     // Requires: Use the backend as a proxy server to avoid CORS policy
     fetchRadioJson: async (req, res) => {
         try {
+
+            if (!authorize(req)) {
+                return res.status(400).json({ message: 'Api key is incorrect!' });
+            }
+
             const options = { method: 'GET', headers: { 'User-Agent': 'ZCApi' } };
             const response = await fetch('https://raw.githubusercontent.com/TheByteVault/ZCByteVault/main/Music/playlists/radio.json', options);
             if (!response.ok) {

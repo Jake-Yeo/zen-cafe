@@ -11,7 +11,8 @@ npm i react-window // its the infinite scrolling list, variable-list or smthn //
 npm i --save-dev @types/react-window // might delete later
 npm install react-virtuoso
 npm install --save-dev @babel/plugin-transform-private-property-in-object
-
+npm i crypto-js
+ npm install @types/crypto-js --save-dev
 
 for backend:
 npm i uuid

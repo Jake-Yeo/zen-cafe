@@ -1,5 +1,6 @@
 import User from "../objects/User";
-import apiUrl from "./apiUrl";
+import { encryptedZenCafeApiKey, zenCafeApiUrl } from "./envVars";
+
 
 function dataToUserObj(data: any): User {
     const { _id, legalName, username } = data;
@@ -14,10 +15,11 @@ export async function createUser(google_id: string, username: string, legalName:
         console.log(google_id);
         console.log(username);
         console.log(legalName); // cannot be an empty string for some reason
-        const response = await fetch(`${apiUrl}/users/createUser`, {
+        const response = await fetch(`${zenCafeApiUrl}/users/createUser`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `${encryptedZenCafeApiKey}`
             },
             body: JSON.stringify({
                 legalName: legalName,
@@ -45,10 +47,11 @@ export async function createUser(google_id: string, username: string, legalName:
 
 export async function doesUserExist(google_id: string): Promise<boolean | null> {
     try {
-        const response = await fetch(`${apiUrl}/users/doesUserExist/${google_id}`, {
+        const response = await fetch(`${zenCafeApiUrl}/users/doesUserExist/${google_id}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `${encryptedZenCafeApiKey}`
             },
         });
 
@@ -72,10 +75,11 @@ export async function doesUserExist(google_id: string): Promise<boolean | null> 
 // Expected: google_id user must already exist
 export async function getUser(google_id: string): Promise<User | null> {
     try {
-        const response = await fetch(`${apiUrl}/users/getUser/${google_id}`, {
+        const response = await fetch(`${zenCafeApiUrl}/users/getUser/${google_id}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `${encryptedZenCafeApiKey}`
             },
         });
 

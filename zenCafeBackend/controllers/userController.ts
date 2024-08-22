@@ -1,10 +1,16 @@
 import User from "../models/userModel";
+import { authorize } from "./authorization";
 
 module.exports = {
     // Requires: legalName, username, google_id, as JSON in req.body
     createUser: async (req, res) => {
 
         try {
+
+            if (!authorize(req)) {
+                return res.status(400).json({ message: 'Api key is incorrect!' });
+            }
+
             const { legalName, username, google_id } = req.body;
 
             if (!legalName || !username || !google_id) {
@@ -30,6 +36,11 @@ module.exports = {
     // requires: googleId
     doesUserExist: async (req, res) => {
         try {
+
+            if (!authorize(req)) {
+                return res.status(400).json({ message: 'Api key is incorrect!' });
+            }
+
             const { google_id } = req.params;
 
             if (!google_id) {
@@ -52,6 +63,11 @@ module.exports = {
     // requires: googleId
     getUser: async (req, res) => {
         try {
+
+            if (!authorize(req)) {
+                return res.status(400).json({ message: 'Api key is incorrect!' });
+            }
+
             const { google_id } = req.params;
 
             if (!google_id) {

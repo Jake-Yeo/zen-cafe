@@ -1,6 +1,7 @@
 import Playlist from "../objects/Playlist";
 import Radio from "../objects/Radio";
 import Song from "../objects/Song";
+import { encryptedZenCafeApiKey, zenCafeApiUrl } from "./envVars";
 
 async function getRadioJson(): Promise<any[] | null> {
   try {
@@ -9,10 +10,11 @@ async function getRadioJson(): Promise<any[] | null> {
 
     //const response = await fetch('https://zen-cafe-production.up.railway.app/zcByteVault/fetchRadioJson', options);
 
-    const response = await fetch('https://zen-cafe-production.up.railway.app/zcByteVault/fetchRadioJson', {
+    const response = await fetch(`${zenCafeApiUrl}/zcByteVault/fetchRadioJson`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `${encryptedZenCafeApiKey}`
       },
     });
 

@@ -13,8 +13,8 @@ import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementL
 import SendMessageButton from "../components/chatroomPageComponents/SendMessageButton";
 import Header from "../components/sharedComponents/Header";
 import RadioUi from "../components/sharedComponents/Radio/RadioUi";
-import apiUrl from "../functions/apiUrl";
 import CustomSnackbar from "../components/sharedComponents/CustomSnackbar";
+import { zenCafeApiUrl } from "../functions/envVars";
 const { v4: uuidv4 } = require('uuid');
 
 var messageToSend = "";
@@ -39,8 +39,10 @@ const ChatroomPage = () => {
 
     // https://stackoverflow.com/questions/57982180/react-app-suddenly-stalling-in-dev-and-production always do the event source in the useEffect... or else there will be multiple open connections created which means you will not be able to send any requests (send messages) to the database!!!
     useEffect(() => {
+        
+        // do a doesChatroomExist() call here for security reasons (cannot pass headers in eventSource)
 
-        const eventSource = new EventSource(`${apiUrl}/chatrooms/changeStream/${chatroomId}`);
+        const eventSource = new EventSource(`${zenCafeApiUrl}/chatrooms/changeStream/${chatroomId}`);
 
         eventSource.onmessage = function (event) {
             console.log("event received");
