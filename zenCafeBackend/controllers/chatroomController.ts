@@ -125,6 +125,48 @@ module.exports = {
         }
     },
 
+    doesChatroomExist: async (req, res) => {
+        try {
+            const { chatroom_id } = req.params;
+
+            const chatroom = await Chatroom.findById(chatroom_id);
+
+            var doesChatroomExist = {
+                doesChatroomExist: false
+            }
+
+            if (chatroom) {
+                doesChatroomExist = {
+                    doesChatroomExist: true
+                }
+            }
+
+            res.status(200).json(doesChatroomExist);
+
+        } catch (error) {
+            console.error('Error in deleteChatroom:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
+    deleteChatroom: async (req, res) => {
+        try {
+            const { chatroom_id } = req.params;
+
+            const chatroom = await Chatroom.findByIdAndDelete(chatroom_id);
+
+            if (!chatroom) {
+                return res.status(400).json({ message: 'No chatroom exists with that id!' });
+            }
+
+            res.status(200).json({ message: 'Deleted Successfully' });
+
+        } catch (error) {
+            console.error('Error in deleteChatroom:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
     chatroomChangeStream: async (req, res) => {
         console.log("connection established");
         try {

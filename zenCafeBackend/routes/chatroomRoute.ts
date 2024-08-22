@@ -22,4 +22,10 @@ chatroomRouter.get('/getChatroom/:chatroom_id', controller.getChatroom);
 // Check if chatroom name is unique
 chatroomRouter.post('/isChatroomNameUnique', controller.isChatroomNameUnique);
 
+// Delete chatroom
+chatroomRouter.get('/deleteChatroom/:chatroom_id', controller.deleteChatroom);
+
+// Check if a chatroom with the specified chatroom id exists
+chatroomRouter.get('/doesChatroomExist/:chatroom_id', controller.doesChatroomExist);
+
 export default chatroomRouter;
