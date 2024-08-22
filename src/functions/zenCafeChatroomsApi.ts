@@ -1,8 +1,7 @@
 import Chatroom from "../objects/Chatroom";
 import ChatroomMetadata from "../objects/ChatroomMetadata";
 import Message from "../objects/Message";
-
-const apiUrl = process.env.API_URL;
+import apiUrl from "./apiUrl";
 
 function dataToChatroomMetadataObj(data: any): ChatroomMetadata {
     const { _id, chatroomName, creatorUsername, creatorUid } = data;
@@ -187,7 +186,7 @@ export async function getChatrooms(): Promise<ChatroomMetadata[] | null> {
         return chatrooms
 
     } catch (error) {
-        console.error('getChatrooms Error:', 'Failed to fetch');
+        console.error('getChatrooms Error:', 'Failed to fetch at ', `${apiUrl}/chatrooms/getChatrooms`);
         return null;
     }
 }

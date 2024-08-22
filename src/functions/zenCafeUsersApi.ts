@@ -1,6 +1,5 @@
 import User from "../objects/User";
-
-const apiUrl = process.env.API_URL;
+import apiUrl from "./apiUrl";
 
 function dataToUserObj(data: any): User {
     const { _id, legalName, username } = data;
