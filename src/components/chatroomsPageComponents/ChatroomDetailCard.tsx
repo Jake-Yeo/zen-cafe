@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from "@mui/material"
 import ChatroomMetadata from "../../objects/ChatroomMetadata"
 import { useNavigate } from "react-router-dom"
 import FrostedButton from "../sharedComponents/FrostedButton"
-import { doesChatroomExist } from "../../functions/zenCafeChatroomsApi"
+import { deleteChatroom, doesChatroomExist } from "../../functions/zenCafeChatroomsApi"
 import { SetStateAction, useState } from "react"
 import CustomSnackbar from "../sharedComponents/CustomSnackbar"
 
@@ -19,6 +19,14 @@ const ChatroomDetailCard = ({ chatroomMetadata }: props) => {
     const onClickJoin = async () => {
         if (await doesChatroomExist(chatroomMetadata.getChatroomId())) {
             navigate("/ChatroomPage/" + chatroomMetadata.getChatroomId())
+        } else {
+            setOpenEmptyChatroomNameSnack(true);
+        }
+    }
+
+    const onClickDeleteChatroom = async () => {
+        if (await doesChatroomExist(chatroomMetadata.getChatroomId())) {
+            deleteChatroom(chatroomMetadata.getChatroomId());
         } else {
             setOpenEmptyChatroomNameSnack(true);
         }
@@ -58,17 +66,30 @@ const ChatroomDetailCard = ({ chatroomMetadata }: props) => {
                             Created By: {chatroomMetadata.getCreatorUsername()}
                         </Typography>
                     </Stack>
-                    <FrostedButton
-                        text={"Join"}
-                        borderTopLeftRadius="0em"
-                        borderTopRightRadius="0em"
-                        borderBottomLeftRadius="20px"
-                        borderBottomRightRadius="20px"
-                        boxShadow="none"
-                        width="100%"
-                        fontSize="12px"
-                        padding="6px"
-                        onClick={onClickJoin} />
+                    <Stack direction="row" width="100%">
+                        <FrostedButton
+                            text={"Join"}
+                            borderTopLeftRadius="0em"
+                            borderTopRightRadius="0em"
+                            borderBottomLeftRadius="20px"
+                            borderBottomRightRadius="0"
+                            boxShadow="none"
+                            width="100%"
+                            fontSize="12px"
+                            padding="6px"
+                            onClick={onClickJoin} />
+                        <FrostedButton
+                            text={"Delete"}
+                            borderTopLeftRadius="0em"
+                            borderTopRightRadius="0em"
+                            borderBottomLeftRadius="0"
+                            borderBottomRightRadius="20px"
+                            boxShadow="none"
+                            width="25%"
+                            fontSize="12px"
+                            padding="6px"
+                            onClick={onClickDeleteChatroom} />
+                    </Stack>
                 </Stack>
             </Box>
             <CustomSnackbar open={openChatroomDeletedSnack} setOpen={setOpenEmptyChatroomNameSnack} message={`Chatroom "${chatroomMetadata.getChatroomName()}" no longer exists! Please refresh the page!`}></CustomSnackbar>
