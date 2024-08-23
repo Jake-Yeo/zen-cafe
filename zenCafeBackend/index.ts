@@ -6,9 +6,10 @@ require('dotenv').config();
 
 const port = process.env.PORT;
 const mongoUri = process.env.MONGO_URI;
+const origin = process.env.ORIGIN;
 
 app.options('*', (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', `${origin}`);
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.sendStatus(200);
