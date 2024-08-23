@@ -76,7 +76,8 @@ const MessageDetailCard = ({ message }: props) => {
                             <FrostedButton onClick={onDeleteButtonClick} text={""} content={`url("/svgs/ChatroomSvgs/trashbin.svg")`} minWidth="0px" width="35px" height="35px" /> :
                             <></>}
                     </Stack>
-                    <Typography sx={{
+                    <Typography whiteSpace={"pre-wrap"} sx={{
+                        wordBreak: "break-all",
                         zIndex: 1,
                         margin: "4px",
                         color: "white"
