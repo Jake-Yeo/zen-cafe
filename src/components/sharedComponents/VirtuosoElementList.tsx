@@ -5,11 +5,12 @@ import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 interface props {
     elementArr: ReactElement[],
     width?: string,
+    height?: string,
     widthOfItems?: string,
     scrollToBottomAtStart?: boolean
 }
 
-const VirtuosoElementList = ({ elementArr, width = "100%", widthOfItems = "100%", scrollToBottomAtStart = false }: props) => {
+const VirtuosoElementList = ({ elementArr, width = "100%", widthOfItems = "100%", height = "60%", scrollToBottomAtStart = false }: props) => {
 
     const virtuosoRef = useRef<VirtuosoHandle>(null);
 
@@ -20,37 +21,37 @@ const VirtuosoElementList = ({ elementArr, width = "100%", widthOfItems = "100%"
     }
 
     return (
-        <Virtuoso ref={virtuosoRef}
-            followOutput="smooth" //https://github.com/petyosi/react-virtuoso/issues/199
-            initialTopMostItemIndex={indexToStartFrom} // https://virtuoso.dev/initial-index/
-            style={{
-                height: 400,
-                width: width,
-                overflowY: 'scroll',
-                overflowX: 'hidden',
-                scrollbarWidth: 'initial', // For Firefox
-                scrollbarColor: 'rgba(255, 255, 255, 0.5) transparent', // For Firefox
-                msScrollbarArrowColor: "transparent",
-            }} totalCount={elementArr.length} itemContent={(index) => {
-                return (
-                    <Box // This box will center the elements in the list
-                        sx={{
-                            width: "100%",
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <Box // This sets the width of the elements
+            <Virtuoso ref={virtuosoRef}
+                followOutput="smooth" //https://github.com/petyosi/react-virtuoso/issues/199
+                initialTopMostItemIndex={indexToStartFrom} // https://virtuoso.dev/initial-index/
+                style={{
+                    width: width,
+                    height: height,
+                    overflowY: 'scroll',
+                    overflowX: 'hidden',
+                    scrollbarWidth: 'initial', // For Firefox
+                    scrollbarColor: 'rgba(255, 255, 255, 0.5) transparent', // For Firefox
+                    msScrollbarArrowColor: "transparent",
+                }} totalCount={elementArr.length} itemContent={(index) => {
+                    return (
+                        <Box // This box will center the elements in the list
                             sx={{
-                                width: widthOfItems,
+                                width: "100%",
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
                             }}
                         >
-                            {elementArr[index]}
+                            <Box // This sets the width of the elements
+                                sx={{
+                                    width: widthOfItems,
+                                }}
+                            >
+                                {elementArr[index]}
+                            </Box>
                         </Box>
-                    </Box>
-                );
-            }} />)
+                    );
+                }} />)
 }
 
 export default VirtuosoElementList

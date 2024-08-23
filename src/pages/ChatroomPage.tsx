@@ -125,7 +125,8 @@ const ChatroomPage = () => {
                 sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
+                    justifyContent: 'start',
+                    height: '100%'
                 }}
             >
                 <Header />
