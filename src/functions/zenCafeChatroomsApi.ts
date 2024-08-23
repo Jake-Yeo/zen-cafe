@@ -1,7 +1,8 @@
+
 import Chatroom from "../objects/Chatroom";
 import ChatroomMetadata from "../objects/ChatroomMetadata";
 import Message from "../objects/Message";
-import { encryptedZenCafeApiKey, zenCafeApiUrl } from "./envVars";
+import { zenCafeApiUrl } from "./envVars";
 
 function dataToChatroomMetadataObj(data: any): ChatroomMetadata {
     const { _id, chatroomName, creatorUsername, creatorUid } = data;
@@ -56,7 +57,7 @@ export async function sendMessage(chatroom_id: string, senderUsername: string, s
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${encryptedZenCafeApiKey}`
+                'Authorization': `Bearer ${localStorage.getItem('currentZenUserJwtToken')}`
             },
             body: JSON.stringify({
                 chatroom_id: chatroom_id,
@@ -67,12 +68,20 @@ export async function sendMessage(chatroom_id: string, senderUsername: string, s
             })
         });
 
+        const { expired } = await response.json();
+
+        if (expired) {
+            throw Error("Token Expired");
+        }
+
         if (!response.ok) {
             console.error('createChatroom Error:', 'Failed to fetch');
+            throw Error("Fetch createChatroom Failed");
         }
 
     } catch (error) {
         console.error('sendMessage Error:', 'Failed to fetch');
+        throw error;
     }
 }
 
@@ -82,36 +91,42 @@ export async function isChatroomNameUnique(chatroomName: string): Promise<boolea
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${encryptedZenCafeApiKey}`
+                'Authorization': `Bearer ${localStorage.getItem('currentZenUserJwtToken')}`
             },
             body: JSON.stringify({
                 chatroomName: chatroomName,
             })
         });
 
-        if (!response.ok) {
-            console.error('isChatroomNameUnique endpoint error:', 'Failed to fetch');
-            return null;
+        const data = await response.json();
+
+        const { expired } = data;
+
+        if (expired) {
+            throw Error("Token Expired");
         }
 
-        const data = await response.json();
+        if (!response.ok) {
+            console.error('isChatroomNameUnique endpoint error:', 'Failed to fetch');
+            throw Error("Fetch isChatroomNameUnique Failed");
+        }
 
         const { isChatroomNameUnique } = data;
 
         return isChatroomNameUnique;
 
     } catch (error) {
-        return null;
+        throw error;
     }
 }
 
-export async function createChatroom(chatroomName: string, creatorUsername: string, creatorUid: string): Promise<ChatroomMetadata | null> {
+export async function createChatroom(chatroomName: string, creatorUsername: string, creatorUid: string): Promise<ChatroomMetadata> {
     try {
         const response = await fetch(`${zenCafeApiUrl}/chatrooms/createChatroom`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${encryptedZenCafeApiKey}`
+                'Authorization': `Bearer ${localStorage.getItem('currentZenUserJwtToken')}`
             },
             body: JSON.stringify({
                 chatroomName: chatroomName,
@@ -120,12 +135,18 @@ export async function createChatroom(chatroomName: string, creatorUsername: stri
             })
         });
 
-        if (!response.ok) {
-            console.error('createChatroom Error:', 'Failed to fetch');
-            return null;
+        const data = await response.json();
+
+        const { expired } = data;
+
+        if (expired) {
+            throw Error("Token Expired");
         }
 
-        const data = await response.json();
+        if (!response.ok) {
+            console.error('createChatroom Error:', 'Failed to fetch');
+            throw Error("Fetch createChatroom Failed");
+        }
 
         const newChatroomMetadata = dataToChatroomMetadataObj(data);
 
@@ -133,7 +154,7 @@ export async function createChatroom(chatroomName: string, creatorUsername: stri
 
     } catch (error) {
         console.error('getChatrooms Error:', 'Failed to fetch');
-        return null;
+        throw error;
     }
 }
 
@@ -143,64 +164,83 @@ export async function deleteChatroom(chatroom_id: string): Promise<boolean> {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${encryptedZenCafeApiKey}`
+                'Authorization': `Bearer ${localStorage.getItem('currentZenUserJwtToken')}`
             },
         });
 
+        const { expired } = await response.json();
+
+        if (expired) {
+            throw Error("Token Expired");
+        }
+
         if (!response.ok) {
             console.error('deleteChatroom Error:', 'Failed to delete');
-            return false;
+            throw Error("Fetch deleteChatroom Failed")
         }
 
         return true;
     } catch (error) {
         console.error('deleteChatroom Error:', 'Failed to delete');
-        return false;
+        throw error;
     }
 }
 
-export async function doesChatroomExist(chatroom_id: string): Promise<boolean | null> {
+export async function doesChatroomExist(chatroom_id: string): Promise<boolean> {
     try {
         const response = await fetch(`${zenCafeApiUrl}/chatrooms/doesChatroomExist/${chatroom_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${encryptedZenCafeApiKey}`
+                'Authorization': `Bearer ${localStorage.getItem('currentZenUserJwtToken')}`
             },
         });
 
-        if (!response.ok) {
-            console.error('doesChatroomExist Error:', 'Failed to get');
-            return null;
+        const data = await response.json();
+
+        const { expired } = data;
+
+        if (expired) {
+            console.log("in if statement");
+            throw Error("Token Expired");
         }
 
-        const data = await response.json();
+        if (!response.ok) {
+            console.error('doesChatroomExist Error:', 'Failed to get');
+            throw Error("Fetch doesChatroomExist Failed");
+        }
 
         const { doesChatroomExist } = data;
 
         return doesChatroomExist;
     } catch (error) {
         console.error('doesChatroomExist Error:', 'Failed to get');
-        return null;
+        throw error;
     }
 }
 
-export async function getChatroom(chatroom_id: string): Promise<Chatroom | null> {
+export async function getChatroom(chatroom_id: string): Promise<Chatroom> {
     try {
         const response = await fetch(`${zenCafeApiUrl}/chatrooms/getChatroom/${chatroom_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${encryptedZenCafeApiKey}`
+                'Authorization': `Bearer ${localStorage.getItem('currentZenUserJwtToken')}`
             },
         });
 
-        if (!response.ok) {
-            console.error('getChatroom Error:', 'Failed to fetch');
-            return null;
+        const data = await response.json();
+
+        const { expired } = data;
+
+        if (expired) {
+            throw Error("Token Expired");
         }
 
-        const data = await response.json();
+        if (!response.ok) {
+            console.error('getChatroom Error:', 'Failed to fetch');
+            throw Error("Fetch getChatroom Failed");
+        }
 
         const newChatroom = dataToChatroomObj(data);
 
@@ -208,26 +248,32 @@ export async function getChatroom(chatroom_id: string): Promise<Chatroom | null>
 
     } catch (error) {
         console.error('getChatroom Error:', 'Failed to fetch');
-        return null;
+        throw error;
     }
 }
 
-export async function getChatrooms(): Promise<ChatroomMetadata[] | null> {
+export async function getChatrooms(): Promise<ChatroomMetadata[]> {
     try {
         const response = await fetch(`${zenCafeApiUrl}/chatrooms/getChatrooms`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${encryptedZenCafeApiKey}`
+                'Authorization': `Bearer ${localStorage.getItem('currentZenUserJwtToken')}`
             },
         });
 
-        if (!response.ok) {
-            console.error('getChatrooms Error:', 'Failed to fetch');
-            return null;
+        const data = await response.json();
+
+        const { expired } = data;
+
+        if (expired) {
+            throw Error("Token Expired");
         }
 
-        const data = await response.json();
+        if (!response.ok) {
+            console.error('getChatrooms Error:', 'Failed to fetch');
+            throw Error("Fetch getChatrooms Failed");
+        }
 
         var chatrooms: ChatroomMetadata[] = [];
 
@@ -239,6 +285,6 @@ export async function getChatrooms(): Promise<ChatroomMetadata[] | null> {
 
     } catch (error) {
         console.error('getChatrooms Error:', 'Failed to fetch at ', `${zenCafeApiUrl}/chatrooms/getChatrooms`);
-        return null;
+        throw error;
     }
 }

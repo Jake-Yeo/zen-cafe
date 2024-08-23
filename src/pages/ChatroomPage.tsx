@@ -1,14 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import Chatroom from "../objects/Chatroom";
-import { ReactElement, useContext, useEffect, useRef, useState } from "react";
+import { ReactElement, useContext, useEffect, useState } from "react";
 import { doesChatroomExist, getChatroom, sendMessage } from "../functions/zenCafeChatroomsApi";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import Message from "../objects/Message";
 import { SingletonUserContext } from "../firebase/FirebaseApi";
 import Background from "../components/sharedComponents/Background";
 import MessageDetailCard from "../components/chatroomPageComponents/MessageDetailCard";
-import { VariableSizeList } from "react-window";
-import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 import VirtuosoElementList from "../components/sharedComponents/VirtuosoElementList";
 import SendMessageButton from "../components/chatroomPageComponents/SendMessageButton";
 import Header from "../components/sharedComponents/Header";
@@ -39,7 +37,7 @@ const ChatroomPage = () => {
 
     // https://stackoverflow.com/questions/57982180/react-app-suddenly-stalling-in-dev-and-production always do the event source in the useEffect... or else there will be multiple open connections created which means you will not be able to send any requests (send messages) to the database!!!
     useEffect(() => {
-        
+
         // do a doesChatroomExist() call here for security reasons (cannot pass headers in eventSource)
 
         const eventSource = new EventSource(`${zenCafeApiUrl}/chatrooms/changeStream/${chatroomId}`);
@@ -77,14 +75,20 @@ const ChatroomPage = () => {
                 return;
             }
 
-            const chatroom = await getChatroom(chatroomId);
+            try {
+                const chatroom = await getChatroom(chatroomId);
 
-            if (!chatroom) {
-                console.error('ChatroomPage Error:', 'Failed to get chatroom.');
-                return;
+                if (!chatroom) {
+                    console.error('ChatroomPage Error:', 'Failed to get chatroom.');
+                    return;
+                }
+                statelessChatroom = chatroom;
+                setChatroom(chatroom);
+            } catch (error) {
+                if (error instanceof Error && error.message === 'Token Expired') {
+                    navigate("/loginSignupPage");
+                }
             }
-            statelessChatroom = chatroom;
-            setChatroom(chatroom);
         }
 
         fetchData();
@@ -102,10 +106,16 @@ const ChatroomPage = () => {
     }
 
     const onSendMessageClick = async () => {
-        if (await doesChatroomExist(chatroomId)) {
-            sendMessage(chatroomId, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId(), messageToSend, false);
-        } else {
-            setOpenChatroomNoLongerExistsSnack(true);
+        try {
+            if (await doesChatroomExist(chatroomId)) {
+                sendMessage(chatroomId, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId(), messageToSend, false);
+            } else {
+                setOpenChatroomNoLongerExistsSnack(true);
+            }
+        } catch (error) {
+            if (error instanceof Error && error.message === 'Token Expired') {
+                navigate("/loginSignupPage/expired");
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 import User from "../objects/User";
-import { encryptedZenCafeApiKey, zenCafeApiUrl } from "./envVars";
+import { zenCafeApiUrl } from "./envVars";
 
 
 function dataToUserObj(data: any): User {
@@ -10,7 +10,7 @@ function dataToUserObj(data: any): User {
     return userToReturn;
 }
 
-export async function createUser(google_id: string, username: string, legalName: string): Promise<User | null> {
+export async function createUser(google_id: string, username: string, legalName: string): Promise<User> { // no jwt because no user thus no jwt. Also chatgpt said use rate limiting or captcha to stop people from making tons of accounts
     try {
         console.log(google_id);
         console.log(username);
@@ -19,7 +19,6 @@ export async function createUser(google_id: string, username: string, legalName:
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${encryptedZenCafeApiKey}`
             },
             body: JSON.stringify({
                 legalName: legalName,
@@ -30,34 +29,37 @@ export async function createUser(google_id: string, username: string, legalName:
 
         if (!response.ok) {
             console.error('createUser Error:', 'Failed to fetch');
-            return null;
+            throw Error("Fetch createUser Failed");
         }
 
         const data = await response.json(); // data type any for json
 
-        const userToReturn = dataToUserObj(data);
+        const { user, token } = data;
+
+        localStorage.setItem('currentZenUserJwtToken', token);
+
+        const userToReturn = dataToUserObj(user);
 
         return userToReturn;
 
     } catch (error) {
         console.error('createUser Error:', 'Failed to fetch');
-        return null;
+        throw error;
     }
 }
 
-export async function doesUserExist(google_id: string): Promise<boolean | null> {
+export async function doesUserExist(google_id: string): Promise<boolean> { // no jwt not really 
     try {
         const response = await fetch(`${zenCafeApiUrl}/users/doesUserExist/${google_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${encryptedZenCafeApiKey}`
             },
         });
 
         if (!response.ok) {
             console.error('doesUserExist Error:', 'Failed to fetch');
-            return null;
+            throw Error("Fetch doesUserExist Failed");
         }
 
         const data = await response.json();
@@ -68,34 +70,68 @@ export async function doesUserExist(google_id: string): Promise<boolean | null> 
 
     } catch (error) {
         console.error('doesUserExist Error:', error);
-        return null;
+        throw error;
+    }
+}
+
+export async function isTokenValid(): Promise<boolean> { // no jwt not really 
+    try {
+        const response = await fetch(`${zenCafeApiUrl}/users/isTokenValid`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('currentZenUserJwtToken')}`
+            },
+        });
+
+        const data = await response.json();
+
+        const { expired } = data;
+
+        if (expired) {
+            throw Error("Token Expired");
+        }
+
+        if (!response.ok) {
+            console.error('doesUserExist Error:', 'Failed to fetch');
+            throw Error("failed to fetch");
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error('doesUserExist Error:', error);
+        throw error;
     }
 }
 
 // Expected: google_id user must already exist
-export async function getUser(google_id: string): Promise<User | null> {
+export async function getUser(google_id: string): Promise<User> {
     try {
         const response = await fetch(`${zenCafeApiUrl}/users/getUser/${google_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${encryptedZenCafeApiKey}`
             },
         });
 
         if (!response.ok) {
             console.error('getUser Error:', 'Failed to fetch');
-            return null;
+            throw Error("Failed fetch get user");
         }
 
         const data = await response.json(); // data type any for json
 
-        const userToReturn = dataToUserObj(data);
+        const { user, token } = data;
+
+        localStorage.setItem('currentZenUserJwtToken', token);
+
+        const userToReturn = dataToUserObj(user);
 
         return userToReturn;
 
     } catch (error) {
         console.error('getUser Error:', error);
-        return null;
+        throw error
     }
 }

@@ -1,20 +1,19 @@
 import Playlist from "../objects/Playlist";
 import Radio from "../objects/Radio";
 import Song from "../objects/Song";
-import { encryptedZenCafeApiKey, zenCafeApiUrl } from "./envVars";
+import { zenCafeApiUrl } from "./envVars";
 
-async function getRadioJson(): Promise<any[] | null> {
+async function getRadioJson(): Promise<any[]> {
   try {
 
     // const options = { method: 'GET', headers: { 'User-Agent': 'ZCApi' } };
 
     //const response = await fetch('https://zen-cafe-production.up.railway.app/zcByteVault/fetchRadioJson', options);
 
-    const response = await fetch(`${zenCafeApiUrl}/zcByteVault/fetchRadioJson`, {
+    const response = await fetch(`${zenCafeApiUrl}/zcByteVault/fetchRadioJson`, { // no point securing this endpoint with jwt, also we need it anyway for people who aren't logged in
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `${encryptedZenCafeApiKey}`
       },
     });
 
@@ -27,7 +26,7 @@ async function getRadioJson(): Promise<any[] | null> {
     return radioJson;
   } catch (error) {
     console.error('Error fetching JSON:', error);
-    return null;
+    throw error
   }
 }
 
@@ -64,12 +63,12 @@ function parseRadioJson(radioJson: any): Radio {
   return new Radio(playlistArr);
 }
 
-export async function getRadio(): Promise<Radio | null> {
+export async function getRadio(): Promise<Radio> {
   const radioJson: any[] | null = await getRadioJson(); // the array is represented as a string, so we need to convert it to an array of "strings" basically
   console.log(radioJson);
 
   if (!radioJson) {
-    return null;
+    throw Error("Server Down (Check your wifi)");
   }
 
   return parseRadioJson(radioJson);

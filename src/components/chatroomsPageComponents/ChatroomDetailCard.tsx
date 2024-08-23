@@ -24,22 +24,34 @@ const ChatroomDetailCard = ({ chatroomMetadata, chatrooms, setChatrooms }: props
     const isCreatedByUser = chatroomMetadata.getCreatorUid() === singletonUserContext.user.getGoogleId();
 
     const onClickJoin = async () => {
-        if (await doesChatroomExist(chatroomMetadata.getChatroomId())) {
-            navigate("/ChatroomPage/" + chatroomMetadata.getChatroomId())
-        } else {
-            setOpenEmptyChatroomNameSnack(true);
+        try {
+            if (await doesChatroomExist(chatroomMetadata.getChatroomId())) {
+                navigate("/ChatroomPage/" + chatroomMetadata.getChatroomId())
+            } else {
+                setOpenEmptyChatroomNameSnack(true);
+            }
+        } catch (error) {
+            if (error instanceof Error && error.message === 'Token Expired') {
+                navigate("/loginSignupPage");
+            }
         }
     }
 
     const onClickDeleteChatroom = async () => {
-        if (await doesChatroomExist(chatroomMetadata.getChatroomId())) {
-            await deleteChatroom(chatroomMetadata.getChatroomId()); // must have await or the below line of code will return the chatrooms list before the chatroom is deleted
-            const chatroomsToSet = await getChatrooms();
-            if (chatroomsToSet) {
-                setChatrooms(chatroomsToSet);
+        try {
+            if (await doesChatroomExist(chatroomMetadata.getChatroomId())) {
+                await deleteChatroom(chatroomMetadata.getChatroomId()); // must have await or the below line of code will return the chatrooms list before the chatroom is deleted
+                const chatroomsToSet = await getChatrooms();
+                if (chatroomsToSet) {
+                    setChatrooms(chatroomsToSet);
+                }
+            } else {
+                setOpenEmptyChatroomNameSnack(true);
             }
-        } else {
-            setOpenEmptyChatroomNameSnack(true);
+        } catch (error) {
+            if (error instanceof Error && error.message === 'Token Expired') {
+                navigate("/loginSignupPage");
+            }
         }
     }
 

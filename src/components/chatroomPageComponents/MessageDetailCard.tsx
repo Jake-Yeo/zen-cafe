@@ -5,6 +5,7 @@ import { SingletonUserContext } from "../../firebase/FirebaseApi";
 import FrostedButton from "../sharedComponents/FrostedButton";
 import { doesChatroomExist, sendMessage } from "../../functions/zenCafeChatroomsApi";
 import CustomSnackbar from "../sharedComponents/CustomSnackbar";
+import { useNavigate } from "react-router-dom";
 
 interface props {
     message: Message
@@ -14,6 +15,8 @@ const MessageDetailCard = ({ message }: props) => {
 
     const singletonUserContext = useContext(SingletonUserContext);
 
+    const navigate = useNavigate();
+
     const sentByUser = message.getSenderUid() === singletonUserContext.user.getGoogleId();
     //console.log(message.getSenderUid(), singletonUserContext.user.getGoogleId());
     //console.log(sentByUser);
@@ -21,10 +24,16 @@ const MessageDetailCard = ({ message }: props) => {
     const [openChatroomNoLongerExistsSnack, setOpenChatroomNoLongerExistsSnack] = useState(false);
 
     const onDeleteButtonClick = async () => {
-        if (await doesChatroomExist(message.getChatroomId())) {
-            sendMessage(message.getChatroomId(), message.getSenderUsername(), message.getSenderUid(), message.getMessageId(), true);
-        } else {
-            setOpenChatroomNoLongerExistsSnack(true);
+        try {
+            if (await doesChatroomExist(message.getChatroomId())) {
+                sendMessage(message.getChatroomId(), message.getSenderUsername(), message.getSenderUid(), message.getMessageId(), true);
+            } else {
+                setOpenChatroomNoLongerExistsSnack(true);
+            }
+        } catch (error) {
+            if (error instanceof Error && error.message === 'Token Expired') {
+                navigate("/loginSignupPage");
+            }
         }
     }
 

@@ -42,24 +42,33 @@ const CreateChatroomButton = () => {
             return;
         }
 
-        const isCNU = await isChatroomNameUnique(chatroomName);
+        try {
+            const isCNU = await isChatroomNameUnique(chatroomName);
 
-        if (isCNU == false || isCNU == null) {
-            setOpenNotUniqueSnack(true);
-            return;
+            if (isCNU == false || isCNU == null) {
+                setOpenNotUniqueSnack(true);
+                return;
+            }
+        } catch (error) {
+            if (error instanceof Error && error.message === 'Token Expired') {
+                navigate("/loginSignupPage");
+            }
         }
 
-        const chatroomMetadata: ChatroomMetadata | null = await createChatroom(chatroomName, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId());
+        try {
+            const chatroomMetadata: ChatroomMetadata = await createChatroom(chatroomName, singletonUserContext.user.getUsername(), singletonUserContext.user.getGoogleId());
 
-        // Have error if statements here
-        if (chatroomMetadata) {
             await sendMessage(chatroomMetadata.getChatroomId(), chatroomMetadata.getCreatorUsername(), chatroomMetadata.getCreatorUid(), "initial message (to stop dupicate key error)", true);
             navigate(`/ChatroomPage/${chatroomMetadata.getChatroomId()}`); // go to chatroom after you create it
+        } catch (error) {
+            if (error instanceof Error && error.message === 'Token Expired') {
+                navigate("/loginSignupPage");
+            }
         }
     }
 
     return (<>
-        <FrostedButton onClick={() => { setIsDialogueOpen(true); }} text={"Create Chatroom"} marginTop="20px" borderBottomRightRadius="0" borderTopRightRadius="0"/>
+        <FrostedButton onClick={() => { setIsDialogueOpen(true); }} text={"Create Chatroom"} marginTop="20px" borderBottomRightRadius="0" borderTopRightRadius="0" />
         <CustomSnackbar open={openEmptyChatroomNameSnack} setOpen={setOpenEmptyChatroomNameSnack} message={"Please give the Chatroom a name!"}></CustomSnackbar>
         <CustomSnackbar open={openNotUniqueSnack} setOpen={setOpenNotUniqueSnack} message={"Chatroom name not available!"}></CustomSnackbar>
         <Dialog

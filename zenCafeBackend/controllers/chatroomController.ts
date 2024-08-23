@@ -1,5 +1,44 @@
 import Chatroom from "../models/chatroomModel";
-import { authorize } from "./authorization";
+
+var jwt = require('jsonwebtoken');
+
+require('dotenv').config();
+
+const jwtKey = process.env.JWT_KEY;
+
+function authenticateToken(req, res): any | undefined {
+
+    const { authorization } = req.headers
+
+    var encodedToken;
+
+    if (authorization) {
+        encodedToken = authorization.split(" ")[1];
+    } else {
+        res.status(400).json({ message: "No token provided" })
+        return;
+    }
+
+    try {
+        const decodedToken = jwt.verify(encodedToken, jwtKey);
+
+        const { exp } = decodedToken; // expiration date of token
+
+        if (Date.now() > exp) {
+            res.status(400).json({
+                message: "Token expired, please login again.",
+                expired: true
+            })
+            return;
+        }
+
+        return decodedToken;
+    } catch (error) {
+        console.error('Error verifying token:', error);
+        res.status(400).json({ message: "Unauthorized access" })
+        return;
+    }
+}
 
 module.exports = {
 
@@ -9,8 +48,8 @@ module.exports = {
     createChatroom: async (req, res) => {
         try {
 
-            if (!authorize(req)) {
-                return res.status(400).json({ message: 'Api key is incorrect!' });
+            if (!authenticateToken(req, res)) {
+                return;
             }
 
             const { chatroomName, creatorUsername, creatorUid } = req.body;
@@ -37,8 +76,8 @@ module.exports = {
     isChatroomNameUnique: async (req, res) => {
         try {
 
-            if (!authorize(req)) {
-                return res.status(400).json({ message: 'Api key is incorrect!' });
+            if (!authenticateToken(req, res)) {
+                return;
             }
 
             const { chatroomName } = req.body;
@@ -74,8 +113,10 @@ module.exports = {
     sendMessage: async (req, res) => {
         try {
 
-            if (!authorize(req)) {
-                return res.status(400).json({ message: 'Api key is incorrect!' });
+            const token = authenticateToken(req, res);
+
+            if (!token) {
+                return;
             }
 
             console.log("message received");
@@ -87,6 +128,7 @@ module.exports = {
                 return res.status(400).json({ message: 'Either forgot chatroom_id, senderUsername, message, deleted, or senderUid' });
             }
             console.log("point 2");
+
             const messageData =
             {
                 chatroomId: chatroom_id,
@@ -94,6 +136,13 @@ module.exports = {
                 senderUid: senderUid,
                 message: message,
                 deleted: deleted,
+            }
+
+            const { user } = token;
+            const { _id } = user;
+
+            if (_id != senderUid) {
+                return res.status(400).json({ message: 'You cannot send/delete this message' });
             }
 
             const chatroom = await Chatroom.findByIdAndUpdate(
@@ -108,11 +157,11 @@ module.exports = {
         }
     },
 
-    getChatrooms: async (req, res) => {
+    getChatrooms: async (req, res) => { // no need to authenticate
         try {
 
-            if (!authorize(req)) {
-                return res.status(400).json({ message: 'Api key is incorrect!' });
+            if (!authenticateToken(req, res)) {
+                return;
             }
 
             const chatrooms = await Chatroom.find({}, { chatroomName: 1, creatorUsername: 1, creatorUid: 1 });
@@ -126,8 +175,8 @@ module.exports = {
     getChatroom: async (req, res) => {
         try {
 
-            if (!authorize(req)) {
-                return res.status(400).json({ message: 'Api key is incorrect!' });
+            if (!authenticateToken(req, res)) {
+                return;
             }
 
             const { chatroom_id } = req.params;
@@ -153,8 +202,8 @@ module.exports = {
     doesChatroomExist: async (req, res) => {
         try {
 
-            if (!authorize(req)) {
-                return res.status(400).json({ message: 'Api key is incorrect!' });
+            if (!authenticateToken(req, res)) {
+                return;
             }
 
             const { chatroom_id } = req.params;
@@ -181,18 +230,27 @@ module.exports = {
 
     deleteChatroom: async (req, res) => {
         try {
-
-            if (!authorize(req)) {
-                return res.status(400).json({ message: 'Api key is incorrect!' });
+            const token = authenticateToken(req, res);
+            if (!token) {
+                return;
             }
+
+            const { user } = token;
+            const { _id } = user
 
             const { chatroom_id } = req.params;
 
-            const chatroom = await Chatroom.findByIdAndDelete(chatroom_id);
+            const chatroom = await Chatroom.findById(chatroom_id);
 
             if (!chatroom) {
                 return res.status(400).json({ message: 'No chatroom exists with that id!' });
             }
+
+            if (_id != chatroom.creatorUid) {
+                return res.status(400).json({ message: 'You are not authorized to delete this chatroom!' });
+            }
+
+            await Chatroom.findByIdAndDelete(chatroom_id);
 
             res.status(200).json({ message: 'Deleted Successfully' });
 

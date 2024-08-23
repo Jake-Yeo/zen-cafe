@@ -1,5 +1,5 @@
 import { Box, Button, Dialog, Slide, Stack, TextField, Typography } from "@mui/material";
-import { createChatroom, getChatrooms } from "../functions/zenCafeChatroomsApi"
+import { getChatrooms } from "../functions/zenCafeChatroomsApi"
 import { JsxElement } from "typescript";
 import { ReactElement, useContext, useEffect, useRef, useState } from "react";
 import Chatroom from "../objects/Chatroom";
@@ -32,14 +32,14 @@ const ChatroomsPage = () => {
     const [chatrooms, setChatrooms] = useState<ChatroomMetadata[]>([]);
 
     const fetchChatrooms = async () => {
-        const chatrooms = await getChatrooms();
-
-        if (!chatrooms) {
-            console.error('ChatroomsPage Error:', 'Failed to get Chatrooms with getChatrooms()');
-            return;
+        try {
+            const chatrooms = await getChatrooms();
+            setChatrooms(chatrooms);
+        } catch (error) {
+            if (error instanceof Error && error.message === 'Token Expired') {
+                navigate("/loginSignupPage");
+            }
         }
-
-        setChatrooms(chatrooms);
     }
 
     useEffect(() => {
