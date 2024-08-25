@@ -53,8 +53,11 @@ Zen-Cafe is a minamalistic web messaging app that provides calm music of many va
 ## User Stories
 As a user I want to be able to:
 * Create an account and login
-* Send messages
 * Listen to music via the web app
+* Pause and resume music
+* Play next and previous music
+* Listen to music from different playlists
+* Send messages
 * Create a chatroom
 * Delete chatrooms I create
 * Send messages
