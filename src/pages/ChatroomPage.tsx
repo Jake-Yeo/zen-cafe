@@ -61,6 +61,11 @@ const ChatroomPage = () => {
 
             setChatroom(new Chatroom(statelessChatroom.getChatroomName(), statelessChatroom.getCreatorUsername(), statelessChatroom.getCreatorUid(), statelessChatroom.getMessages(), statelessChatroom.getChatroomId()));
         };
+
+        return (() => {
+            eventSource.close();
+        })
+
     }, [])
 
     useEffect(() => {
