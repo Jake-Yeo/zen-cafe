@@ -1,6 +1,6 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { logout, signInWithGoogle, SingletonUserContext } from "../firebase/FirebaseApi";
-import { SetStateAction, useContext, useEffect, useState } from "react";
+import { ReactElement, SetStateAction, useContext, useEffect, useState } from "react";
 import { getChatrooms } from "../functions/zenCafeChatroomsApi";
 import { useNavigate, useParams } from "react-router-dom";
 import Background from "../components/sharedComponents/Background";
@@ -18,7 +18,13 @@ const LoginSignupPage = () => {
     const { expired } = useParams();
     const [openExpiredSnack, setOpenExpiredSnack] = useState(false);
 
+    const [buttonToShow, setButtonToShow] = useState<ReactElement>(<></>);
+
     const singletonUserContext = useContext(SingletonUserContext);
+
+    const loggedInDisplay = <>[<FrostedButton key={uuidv4()} text={"logout"} onClick={logout} marginBottom="20px" marginTop="20px" />, <FrostedButton key={uuidv4()} text={"Go to Chatroom List"} onClick={() => { navigate("/ChatroomsPage") }} />]</>;
+    const loggedOutDisplay = <FrostedButton text={"Login With Google"} onClick={signInWithGoogle} marginBottom="20px" marginTop="20px" />;
+
 
     useEffect(() => {
         const helper = async () => {
@@ -29,6 +35,7 @@ const LoginSignupPage = () => {
                 if (error instanceof Error && error.message === 'Token Expired') {
                     setOpenExpiredSnack(true);
                     logout();
+                    setButtonToShow(loggedOutDisplay);
                 }
             }
         }
@@ -37,10 +44,15 @@ const LoginSignupPage = () => {
 
     const navigate = useNavigate();
 
-    // Here we will pick which button to show based on if user is logged in or not, if they are logged out in show login button, else show logout button
-    var buttonToShow = !singletonUserContext.user ? // basically if (singltonUserContext.user)
-        <FrostedButton text={"Login With Google"} onClick={signInWithGoogle} marginBottom="20px" marginTop="20px" /> :
-        [<FrostedButton key={uuidv4()} text={"logout"} onClick={logout} marginBottom="20px" marginTop="20px" />, <FrostedButton key={uuidv4()} text={"Go to Chatroom List"} onClick={() => { navigate("/ChatroomsPage") }} />];   // else use this button
+    useEffect(() => {
+        if (!singletonUserContext.user) {
+            setButtonToShow(loggedOutDisplay);
+        } else {
+            setButtonToShow(loggedInDisplay);
+        }
+    }, [singletonUserContext.user])
+
+
     return (<>
         <Background useVignette={true} useBlur={true}>
             <CustomSnackbar open={openExpiredSnack} setOpen={setOpenExpiredSnack} message={"Session token expired, please login again!"}></CustomSnackbar>

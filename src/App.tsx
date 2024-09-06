@@ -21,7 +21,6 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route index element={<LoginSignupPage />} />
-              <Route path="/loginSignupPage/:expired" element={<LoginSignupPage />} />
               <Route path="/loginSignupPage" element={<LoginSignupPage />} />
               <Route path="/ChatroomsPage" element={<ChatroomsPage />} />
               <Route path="/ChatroomPage/:chatroomId" element={<ChatroomPage />} />
